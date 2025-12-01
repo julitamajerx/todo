@@ -31,15 +31,15 @@ jobs:
 
     - name: Install Frontend Dependencies
       run: npm ci
-      working-directory: ./frontend/todo 
+      working-directory: ./frontend/todo
 
     - name: Run Eslint
-      run: ng lint
-      working-directory: ./frontend/todo 
+      run: npm run lint
+      working-directory: ./frontend/todo
       
     - name: Run Prettier
-      run: prettier --check \"**/*.{ts,html,css,js,json}\"
-      working-directory: ./frontend/todo 
+      run: npm run format:check
+      working-directory: ./frontend/todo
 
     - name: Build Angular Application
       run: npm run build
