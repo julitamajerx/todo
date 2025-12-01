@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [20.x, 22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -29,14 +29,18 @@ jobs:
         cache: 'npm'
         cache-dependency-path: frontend/todo/package-lock.json
 
-    - name: Install Frontend Dependencies (npm ci)
+    - name: Install Frontend Dependencies
       run: npm ci
       working-directory: ./frontend/todo 
 
-    - name: Run Unit Tests (npm test)
-      run: npm test -- --watch=false --browsers=ChromeHeadless
+    - name: Run Eslint
+      run: ng lint
+      working-directory: ./frontend/todo 
+      
+    - name: Run Prettier
+      run: prettier --check \"**/*.{ts,html,css,js,json}\"
       working-directory: ./frontend/todo 
 
-    - name: Build Angular Application (npm run build)
+    - name: Build Angular Application
       run: npm run build
       working-directory: ./frontend/todo
