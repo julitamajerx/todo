@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { TaskDetails } from './task-details/task-details';
 import { TasksList } from './tasks-list/tasks-list';
 
@@ -16,7 +16,7 @@ export class Tasks implements OnInit {
   private breakpointObserver = inject(BreakpointObserver);
 
   ngOnInit() {
-    this.breakpointObserver.observe([Breakpoints.Handset]).subscribe((result) => {
+    this.breakpointObserver.observe(['(max-width: 768px)']).subscribe((result) => {
       this.isMobile = result.matches;
     });
   }

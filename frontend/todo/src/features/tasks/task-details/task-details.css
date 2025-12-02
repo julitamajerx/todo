@@ -1,3 +1,12 @@
-p {
-  margin: 0;
+.upperbar {
+  border-bottom: 2px solid #171717;
+  height: 60px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    border-left: none;
+    height: 100%;
+  }
 }
