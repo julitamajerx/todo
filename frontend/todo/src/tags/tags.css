@@ -1,0 +1,33 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  margin: 20px 5px;
+}
+
+h3 {
+  margin: 0;
+}
+
+.tag-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.emoji {
+  font-size: 20px;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.tag-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  padding: 10px;
+  background-color: #252525;
+  border-radius: 5px;
+  font-size: 15px;
+}

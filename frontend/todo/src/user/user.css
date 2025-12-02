@@ -1,0 +1,42 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 20px;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.info-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.name {
+  font-weight: 600;
+}
+
+.logout {
+  font-weight: 200;
+  font-size: 15px;
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .avatar {
+    margin: 0;
+  }
+  .name {
+    display: none;
+  }
+
+  .logout {
+    display: none;
+  }
+}
