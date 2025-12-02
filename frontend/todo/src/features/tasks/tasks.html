@@ -1,0 +1,14 @@
+<div class="main-container" [class.mobile-details]="isMobile && isSelected">
+  <div class="left">
+    <app-tasks-list (taskSelected)="show()"></app-tasks-list>
+  </div>
+
+  @if (isSelected) {
+    <div class="right">
+      @if (isMobile) {
+        <button class="back-btn" (click)="hide()">Back</button>
+      }
+      <app-task-details></app-task-details>
+    </div>
+  }
+</div>
