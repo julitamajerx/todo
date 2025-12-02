@@ -10,20 +10,14 @@ import { TasksList } from './tasks-list/tasks-list';
   styleUrl: './tasks.css',
 })
 export class Tasks implements OnInit {
-  protected isSelected = false; // czy wyświetlać szczegóły
-  protected isMobile = false; // tryb mobile
+  protected isSelected = true;
+  protected isMobile = false;
 
   private breakpointObserver = inject(BreakpointObserver);
 
   ngOnInit() {
-    // obserwujemy breakpoint dla handset (telefony)
     this.breakpointObserver.observe([Breakpoints.Handset]).subscribe((result) => {
       this.isMobile = result.matches;
-
-      // jeśli przechodzimy z mobile → desktop, można przywrócić widok listy
-      if (!this.isMobile) {
-        this.isSelected = false; // lub true, jeśli chcesz od razu widok desktop
-      }
     });
   }
 

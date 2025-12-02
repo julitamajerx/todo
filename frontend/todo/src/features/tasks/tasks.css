@@ -4,26 +4,26 @@
   display: grid;
   grid-template-columns: 1fr 300px;
   height: 100vh;
+  position: relative;
 }
 
 @media (max-width: 768px) {
   .main-container {
     display: block;
-    position: relative;
   }
 
   .main-container.mobile-details .left {
-    display: none; 
+    display: none;
   }
 
   .main-container.mobile-details .right {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     background: white;
-    z-index: 100;
+    z-index: 10;
     overflow-y: auto;
     padding: 15px;
   }
