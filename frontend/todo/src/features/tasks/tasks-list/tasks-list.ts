@@ -1,10 +1,11 @@
 import { Component, effect, inject, input } from '@angular/core';
 import { Task } from '../../../shared/models/task-model';
 import { TaskDisplayService } from '../../../services/task-display-service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-tasks-list',
-  imports: [],
+  imports: [DatePipe],
   templateUrl: './tasks-list.html',
   styleUrl: './tasks-list.css',
 })

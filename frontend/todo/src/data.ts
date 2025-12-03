@@ -5,7 +5,7 @@ export const sample_tasks: Task[] = [
     id: 0,
     name: 'Kup mleko',
     description: 'Kupić mleko w pobliskim sklepie',
-    dueDate: new Date('2025-12-05T10:00:00'),
+    dueDate: new Date('2025-12-02T10:00:00'),
     isCompleted: false,
     isDeleted: false,
   },
@@ -55,6 +55,14 @@ export const sample_tasks: Task[] = [
     description: 'To zadanie zostało ukończone',
     dueDate: new Date('2025-12-01T09:00:00'),
     isCompleted: true,
+    isDeleted: false,
+  },
+  {
+    id: 7,
+    name: 'Week test',
+    description: 'Wyjść na 30-minutowy spacer po obiedzie',
+    dueDate: new Date('2025-12-07T17:00:00'),
+    isCompleted: false,
     isDeleted: false,
   },
 ];

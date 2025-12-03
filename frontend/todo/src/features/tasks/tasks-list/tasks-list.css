@@ -50,6 +50,19 @@ input::placeholder {
   gap: 10px;
 }
 
+.task-date {
+  margin-left: auto;
+  font-weight: 300;
+  opacity: 0.8;
+}
+
+.task-date-late {
+  margin-left: auto;
+  font-weight: 300;
+  opacity: 0.8;
+  color: red;
+}
+
 @media (max-width: 870px) {
   .wrapper {
     border-right: none;

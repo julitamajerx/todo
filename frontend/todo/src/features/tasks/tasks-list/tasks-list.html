@@ -19,6 +19,10 @@
         >
           {{ task.name }}
         </label>
+
+        <div class="task-date" [class.task-date-late]="taskDisplayService.checkDate(task.dueDate)">
+          {{ task.dueDate | date: 'dd.MM.yyyy' }}
+        </div>
       </div>
     }
   </div>
