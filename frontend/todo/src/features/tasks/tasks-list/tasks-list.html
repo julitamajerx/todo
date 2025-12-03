@@ -1,5 +1,7 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+
 <div class="wrapper">
-  <h2>Header</h2>
+  <h2>{{ listHeader }}</h2>
   <div class="add-task">
     <input for="text" id="newTask" name="newTask" placeholder=" + Add task..." />
   </div>
@@ -7,8 +9,16 @@
   <div class="task-container">
     @for (task of tasks() || []; track task.id) {
       <div class="task-box">
-        <input type="checkbox" class="task-check" />
-        <label for="checkbox" (click)="showTaskDescription(task.id)"> {{ task.name }}</label>
+        <input type="checkbox" [id]="'checkbox' + task.id" class="task-check" />
+
+        <label
+          tabindex="0"
+          (click)="showTaskDescription(task.id)"
+          (keydown.enter)="showTaskDescription(task.id)"
+          (keydown.space)="showTaskDescription(task.id)"
+        >
+          {{ task.name }}
+        </label>
       </div>
     }
   </div>

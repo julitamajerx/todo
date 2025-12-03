@@ -23,6 +23,9 @@ export class Tasks implements OnInit {
   constructor() {
     effect(() => {
       this.isSelected = this.taskDisplayService.isSelected();
+
+      const sort = this.taskDisplayService.currentSort();
+      this.tasks = this.taskDisplayService.sortTasks(sort);
     });
   }
 
@@ -30,8 +33,6 @@ export class Tasks implements OnInit {
     this.breakpointObserver.observe(['(max-width: 870px)']).subscribe((result) => {
       this.isMobile = result.matches;
     });
-
-    this.tasks = this.taskDisplayService.getAllTasks();
   }
 
   hide() {

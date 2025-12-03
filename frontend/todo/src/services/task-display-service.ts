@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { Task } from '../shared/models/task-model';
 import { sample_tasks } from '../data';
+import { TaskSort } from '../shared/enums/task-sort-enums';
 
 @Injectable({
   providedIn: 'root',
@@ -8,12 +9,40 @@ import { sample_tasks } from '../data';
 export class TaskDisplayService {
   public isSelected = signal(false);
   public selectedTaskId = signal<number>(0);
+  public currentSort = signal<TaskSort>(TaskSort.Inbox);
+
   getAllTasks(): Task[] {
     return sample_tasks;
   }
 
   getTask(taskId: number): Task {
     return this.getAllTasks().find((task) => task.id == taskId) ?? new Task();
+  }
+
+  sortTasks(sortBy: TaskSort): Task[] {
+    const today = new Date();
+    const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(endOfWeek.getDate() + 7);
+
+    const tasks = this.getAllTasks();
+
+    switch (sortBy) {
+      case TaskSort.Today:
+        return tasks.filter((task) => task.dueDate >= startOfToday && task.dueDate < endOfToday);
+
+      case TaskSort.Week:
+        return tasks.filter((task) => task.dueDate >= startOfWeek && task.dueDate < endOfWeek);
+
+      case TaskSort.Inbox:
+      default:
+        return tasks;
+    }
   }
 
   showTaskDescription() {

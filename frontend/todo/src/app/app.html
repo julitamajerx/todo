@@ -4,19 +4,40 @@
     <div class="line"></div>
 
     <div class="list">
-      <div class="list-element">
+      <div
+        class="list-element"
+        tabindex="0"
+        (click)="sortTask(taskSort.Today)"
+        (keydown.enter)="sortTask(taskSort.Today)"
+        (keydown.space)="sortTask(taskSort.Today)"
+      >
         <img src="calendar.png" alt="calendar" />
         <div class="list-description">Today</div>
       </div>
-      <div class="list-element">
+
+      <div
+        class="list-element"
+        tabindex="0"
+        (click)="sortTask(taskSort.Week)"
+        (keydown.enter)="sortTask(taskSort.Week)"
+        (keydown.space)="sortTask(taskSort.Week)"
+      >
         <img src="calendar-weeks.png" alt="calendar weeks" />
         <div class="list-description">Week</div>
       </div>
-      <div class="list-element">
+
+      <div
+        class="list-element"
+        tabindex="0"
+        (click)="sortTask(taskSort.Inbox)"
+        (keydown.enter)="sortTask(taskSort.Inbox)"
+        (keydown.space)="sortTask(taskSort.Inbox)"
+      >
         <img src="inbox.png" alt="inbox" />
         <div class="list-description">Inbox</div>
       </div>
     </div>
+
     <div class="line"></div>
 
     <app-tags></app-tags>
