@@ -35,6 +35,27 @@
   border-radius: 4px;
 }
 
+.tags-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+h4 {
+  margin: 0;
+}
+
+.tag-box {
+  box-sizing: border-box;
+  background-color: #171717;
+  padding: 10px 15px;
+  border-radius: 5px;
+  max-width: 100%;
+  word-wrap: break-word;
+}
+
 @media (max-width: 870px) {
   .wrapper {
     border-left: none;
