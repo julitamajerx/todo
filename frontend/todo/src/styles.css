@@ -29,8 +29,8 @@ body {
   appearance: none;
   -webkit-appearance: none;
   cursor: pointer;
-  width: 20px;
-  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
   background: transparent;
   border: 2px solid white;
   border-radius: 4px;
