@@ -1,9 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import Quill from 'quill';
 
 @Component({
   selector: 'app-task-details',
-  imports: [],
+  standalone: true,
   templateUrl: './task-details.html',
-  styleUrl: './task-details.css',
+  styleUrls: ['./task-details.css'],
 })
-export class TaskDetails {}
+export class TaskDetails implements OnInit {
+  @ViewChild('editorContainer', { static: true }) editorContainer!: ElementRef;
+  public editor!: Quill;
+
+  ngOnInit() {
+    this.editor = new Quill(this.editorContainer.nativeElement, {
+      modules: {
+        toolbar: [[{ header: [1, 2, 3, false] }], [{ list: 'bullet' }]],
+      },
+      theme: 'snow',
+    });
+  }
+
+  getEditorContent() {
+    return this.editor.root.innerHTML;
+  }
+}

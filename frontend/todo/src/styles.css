@@ -1,7 +1,26 @@
+@import 'quill/dist/quill.snow.css';
+
 body {
   margin: 0;
   background-color: #171717;
   color: white;
   font-family: 'Inter', sans-serif;
   font-size: 18px;
+}
+
+.ql-toolbar.ql-snow .ql-stroke,
+.ql-toolbar.ql-snow .ql-fill,
+.ql-toolbar.ql-snow button,
+.ql-toolbar.ql-snow select {
+  color: white;
+  fill: white;
+  stroke: white;
+}
+
+.ql-tooltip {
+  color: white;
+}
+
+.ql-toolbar.ql-snow .ql-picker-label {
+  color: white;
 }

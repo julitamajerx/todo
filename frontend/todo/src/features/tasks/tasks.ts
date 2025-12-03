@@ -10,7 +10,7 @@ import { TasksList } from './tasks-list/tasks-list';
   styleUrl: './tasks.css',
 })
 export class Tasks implements OnInit {
-  protected isSelected = false;
+  protected isSelected = true;
   protected isMobile = false;
 
   private breakpointObserver = inject(BreakpointObserver);
