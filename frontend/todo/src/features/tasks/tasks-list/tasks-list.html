@@ -9,7 +9,12 @@
   <div class="task-container">
     @for (task of tasks() || []; track task.id) {
       <div class="task-box">
-        <input type="checkbox" [id]="'checkbox' + task.id" class="task-check" />
+        <input
+          type="checkbox"
+          [id]="'checkbox' + task.id"
+          class="task-check"
+          [checked]="task.isCompleted"
+        />
 
         <label
           tabindex="0"
