@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
+import { Task } from '../../../shared/models/task-model';
+import { TaskDisplayService } from '../../../services/task-display-service';
 
 @Component({
   selector: 'app-tasks-list',
@@ -6,4 +8,12 @@ import { Component } from '@angular/core';
   templateUrl: './tasks-list.html',
   styleUrl: './tasks-list.css',
 })
-export class TasksList {}
+export class TasksList {
+  public tasks = input<Task[]>();
+  protected taskDisplayService = inject(TaskDisplayService);
+
+  showTaskDescription(taskId: number) {
+    this.taskDisplayService.setSelectedTag(taskId);
+    this.taskDisplayService.showTaskDescription();
+  }
+}

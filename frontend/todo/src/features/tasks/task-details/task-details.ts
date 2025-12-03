@@ -1,15 +1,32 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, inject, effect } from '@angular/core';
 import Quill from 'quill';
+import { TaskDisplayService } from '../../../services/task-display-service';
+import { Task } from '../../../shared/models/task-model';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-task-details',
-  standalone: true,
+  imports: [DatePipe],
   templateUrl: './task-details.html',
-  styleUrls: ['./task-details.css'],
+  styleUrl: './task-details.css',
 })
 export class TaskDetails implements OnInit {
   @ViewChild('editorContainer', { static: true }) editorContainer!: ElementRef;
   public editor!: Quill;
+
+  protected task: Task = new Task();
+
+  private taskDisplayService = inject(TaskDisplayService);
+
+  constructor() {
+    effect(() => {
+      this.task = this.taskDisplayService.getTask(this.taskDisplayService.selectedTaskId());
+
+      if (this.task.description != null || '') {
+        this.editor.setText(this.task.description);
+      }
+    });
+  }
 
   ngOnInit() {
     this.editor = new Quill(this.editorContainer.nativeElement, {

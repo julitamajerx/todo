@@ -5,17 +5,11 @@
   </div>
 
   <div class="task-container">
-    <div class="task-box">
-      <input type="checkbox" class="task-check" />
-      <label for="vehicle1"> I have a bike</label>
-    </div>
-    <div class="task-box">
-      <input type="checkbox" class="task-check" />
-      <label for="vehicle1"> I have a bike</label>
-    </div>
-    <div class="task-box">
-      <input type="checkbox" class="task-check" />
-      <label for="vehicle1"> I have a bike</label>
-    </div>
+    @for (task of tasks() || []; track task.id) {
+      <div class="task-box">
+        <input type="checkbox" class="task-check" />
+        <label for="checkbox" (click)="showTaskDescription(task.id)"> {{ task.name }}</label>
+      </div>
+    }
   </div>
 </div>

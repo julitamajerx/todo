@@ -6,14 +6,16 @@
         <li>
           <img src="calendar-weeks.png" alt="calendar" width="29px" height="29px" />
         </li>
-        <li><span>01.01.2026</span></li>
+        <li>
+          <span>{{ task.dueDate | date: 'dd.MM.yyyy' }}</span>
+        </li>
         <li><img src="delete.png" alt="calendar" width="29px" height="29px" /></li>
       </ul>
     </div>
   </div>
 
   <div class="description-container">
-    <h3>Task Name</h3>
+    <h3>{{ task.name }}</h3>
     <div #editorContainer class="editor-container"></div>
   </div>
 </div>
