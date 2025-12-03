@@ -34,14 +34,32 @@ export class TaskDisplayService {
 
     switch (sortBy) {
       case TaskSort.Today:
-        return tasks.filter((task) => task.dueDate >= startOfToday && task.dueDate < endOfToday);
+        return tasks.filter(
+          (task) =>
+            task.dueDate >= startOfToday &&
+            task.dueDate < endOfToday &&
+            task.isCompleted === false &&
+            task.isDeleted === false,
+        );
 
       case TaskSort.Week:
-        return tasks.filter((task) => task.dueDate >= startOfWeek && task.dueDate < endOfWeek);
+        return tasks.filter(
+          (task) =>
+            task.dueDate >= startOfWeek &&
+            task.dueDate < endOfWeek &&
+            task.isCompleted === false &&
+            task.isDeleted === false,
+        );
+
+      case TaskSort.Completed:
+        return tasks.filter((task) => task.isCompleted === true);
+
+      case TaskSort.Deleted:
+        return tasks.filter((task) => task.isDeleted === true);
 
       case TaskSort.Inbox:
       default:
-        return tasks;
+        return tasks.filter((task) => task.isCompleted === false && task.isDeleted === false);
     }
   }
 

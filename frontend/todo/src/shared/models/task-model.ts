@@ -4,4 +4,5 @@ export class Task {
   description = '';
   dueDate = new Date();
   isCompleted = false;
+  isDeleted = false;
 }

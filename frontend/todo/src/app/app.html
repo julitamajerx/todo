@@ -44,11 +44,23 @@
     <div class="line"></div>
 
     <div class="list">
-      <div class="list-element">
+      <div
+        class="list-element"
+        tabindex="0"
+        (click)="sortTask(taskSort.Completed)"
+        (keydown.enter)="sortTask(taskSort.Completed)"
+        (keydown.space)="sortTask(taskSort.Completed)"
+      >
         <img src="check-mark.png" alt="check mark" />
         <div class="list-description">Completed</div>
       </div>
-      <div class="list-element">
+      <div
+        class="list-element"
+        tabindex="0"
+        (click)="sortTask(taskSort.Deleted)"
+        (keydown.enter)="sortTask(taskSort.Deleted)"
+        (keydown.space)="sortTask(taskSort.Deleted)"
+      >
         <img src="delete.png" alt="trash" />
         <div class="list-description">Trash</div>
       </div>
