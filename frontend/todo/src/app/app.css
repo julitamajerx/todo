@@ -38,7 +38,7 @@
   height: 29px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 870px) {
   .wrapper {
     grid-template-columns: 100px 1fr;
   }

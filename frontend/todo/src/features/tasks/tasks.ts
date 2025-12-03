@@ -16,7 +16,7 @@ export class Tasks implements OnInit {
   private breakpointObserver = inject(BreakpointObserver);
 
   ngOnInit() {
-    this.breakpointObserver.observe(['(max-width: 768px)']).subscribe((result) => {
+    this.breakpointObserver.observe(['(max-width: 870px)']).subscribe((result) => {
       this.isMobile = result.matches;
     });
   }

@@ -49,7 +49,7 @@ input::placeholder {
   gap: 10px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 870px) {
   .wrapper {
     border-right: none;
     height: 100%;
