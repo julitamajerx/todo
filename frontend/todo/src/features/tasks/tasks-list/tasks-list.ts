@@ -11,19 +11,22 @@ import { DatePipe } from '@angular/common';
 })
 export class TasksList {
   public tasks = input<Task[]>();
-  protected taskDisplayService = inject(TaskService);
+  protected taskService = inject(TaskService);
   protected listHeader = '';
+  protected tagName = '';
 
   constructor() {
     effect(() => {
-      const currentSort = this.taskDisplayService.currentSort();
+      const currentSort = this.taskService.currentSort();
       this.listHeader = this.capitalize(currentSort);
+
+      this.tagName = this.taskService.currentTag() || '';
     });
   }
 
   showTaskDescription(taskId: number) {
-    this.taskDisplayService.setSelectedTag(taskId);
-    this.taskDisplayService.showTaskDescription();
+    this.taskService.setSelectedTag(taskId);
+    this.taskService.showTaskDescription();
   }
 
   private capitalize(text: string): string {

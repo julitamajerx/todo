@@ -1,7 +1,13 @@
 <!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
 
 <div class="wrapper">
-  <h2>{{ listHeader }}</h2>
+  <h2>
+    {{ listHeader }}
+  </h2>
+  @if (tagName?.length) {
+    <span> - {{ tagName }}</span>
+  }
+
   <div class="add-task">
     <input for="text" id="newTask" name="newTask" placeholder=" + Add task..." />
   </div>
@@ -25,7 +31,7 @@
           {{ task.name }}
         </label>
 
-        <div class="task-date" [class.task-date-late]="taskDisplayService.checkDate(task.dueDate)">
+        <div class="task-date" [class.task-date-late]="taskService.checkDate(task.dueDate)">
           {{ task.dueDate | date: 'dd.MM.yyyy' }}
         </div>
       </div>

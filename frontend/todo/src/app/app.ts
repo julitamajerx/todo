@@ -15,10 +15,10 @@ import { TaskSort } from '../shared/enums/task-sort-enum';
 export class App {
   protected readonly title = signal('todo');
   protected taskSort = TaskSort;
-  private taskDisplayService = inject(TaskService);
+  private taskService = inject(TaskService);
 
   sortTask(sortType: TaskSort) {
-    this.taskDisplayService.currentSort.set(sortType);
-    this.taskDisplayService.hideTaskDescription();
+    this.taskService.currentSort.set(sortType);
+    this.taskService.hideTaskDescription();
   }
 }

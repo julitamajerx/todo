@@ -16,11 +16,11 @@ export class TaskDetails implements OnInit {
 
   protected task: Task = new Task();
 
-  private taskDisplayService = inject(TaskService);
+  private taskService = inject(TaskService);
 
   constructor() {
     effect(() => {
-      this.task = this.taskDisplayService.getTask(this.taskDisplayService.selectedTaskId());
+      this.task = this.taskService.getTask(this.taskService.selectedTaskId());
 
       if (this.task.description != null || '') {
         this.editor.setText(this.task.description);

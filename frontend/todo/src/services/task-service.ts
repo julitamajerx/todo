@@ -10,57 +10,64 @@ export class TaskService {
   public isSelected = signal(false);
   public selectedTaskId = signal<number>(0);
   public currentSort = signal<TaskSort>(TaskSort.Inbox);
+  public currentTag = signal<string | null>(null);
 
   getAllTasks(): Task[] {
     return sample_tasks;
   }
 
   getTask(taskId: number): Task {
-    return this.getAllTasks().find((task) => task.id == taskId) ?? new Task();
+    return this.getAllTasks().find((task) => task.id === taskId) ?? new Task();
   }
 
-  sortTasks(sortBy: TaskSort): Task[] {
-    const today = new Date();
-    const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+  private isActive(task: Task): boolean {
+    return !task.isCompleted && !task.isDeleted;
+  }
 
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - today.getDay());
-
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(endOfWeek.getDate() + 7);
-
+  sortTasks(): Task[] {
     const tasks = this.getAllTasks();
+    const tag = this.currentTag();
+    const sortBy = this.currentSort();
 
-    switch (sortBy) {
-      case TaskSort.Today:
-        return tasks.filter(
-          (task) =>
-            task.dueDate >= startOfToday &&
-            task.dueDate < endOfToday &&
-            task.isCompleted === false &&
-            task.isDeleted === false,
+    let filtered = tasks;
+
+    if (sortBy === TaskSort.Completed) {
+      filtered = filtered.filter((task) => task.isCompleted);
+    } else if (sortBy === TaskSort.Deleted) {
+      filtered = filtered.filter((task) => task.isDeleted);
+    } else {
+      filtered = filtered.filter((task) => this.isActive(task));
+
+      const today = new Date();
+      const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+      const startOfWeek = new Date(today);
+      startOfWeek.setDate(today.getDate() - today.getDay());
+
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(endOfWeek.getDate() + 7);
+
+      if (sortBy === TaskSort.Today) {
+        filtered = filtered.filter(
+          (task) => task.dueDate >= startOfToday && task.dueDate < endOfToday,
         );
-
-      case TaskSort.Week:
-        return tasks.filter(
-          (task) =>
-            task.dueDate >= startOfWeek &&
-            task.dueDate < endOfWeek &&
-            task.isCompleted === false &&
-            task.isDeleted === false,
+      } else if (sortBy === TaskSort.Week) {
+        filtered = filtered.filter(
+          (task) => task.dueDate >= startOfWeek && task.dueDate < endOfWeek,
         );
-
-      case TaskSort.Completed:
-        return tasks.filter((task) => task.isCompleted === true);
-
-      case TaskSort.Deleted:
-        return tasks.filter((task) => task.isDeleted === true);
-
-      case TaskSort.Inbox:
-      default:
-        return tasks.filter((task) => task.isCompleted === false && task.isDeleted === false);
+      }
     }
+
+    if (tag) {
+      filtered = filtered.filter((task) => task.tags?.some((t) => t.name === tag));
+    }
+
+    return filtered;
+  }
+
+  setTag(tagName: string | null) {
+    this.currentTag.set(tagName);
   }
 
   showTaskDescription() {
