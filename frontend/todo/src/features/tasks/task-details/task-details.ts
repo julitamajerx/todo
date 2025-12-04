@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, inject, effect } from '@angular/core';
 import Quill from 'quill';
-import { TaskDisplayService } from '../../../services/task-display-service';
-import { Task } from '../../../shared/models/task-model';
+import { TaskService } from '../../../services/task-service';
+import { Task } from '../../../shared/models/task';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -16,7 +16,7 @@ export class TaskDetails implements OnInit {
 
   protected task: Task = new Task();
 
-  private taskDisplayService = inject(TaskDisplayService);
+  private taskDisplayService = inject(TaskService);
 
   constructor() {
     effect(() => {

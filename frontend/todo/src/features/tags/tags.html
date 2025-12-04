@@ -1,17 +1,11 @@
 <div class="wrapper">
   <h3>Tags</h3>
   <div class="tag-container">
-    <div class="tag-box">
-      <div class="emoji">❤️</div>
-      <div class="tag-description">test tag</div>
-    </div>
-    <div class="tag-box">
-      <div class="emoji">❤️</div>
-      <div class="tag-description">test tag</div>
-    </div>
-    <div class="tag-box">
-      <div class="emoji">❤️</div>
-      <div class="tag-description">test tag</div>
-    </div>
+    @for (tag of tags; track tag.id) {
+      <div class="tag-box">
+        <div class="emoji">{{ tag.emoji }}</div>
+        <div class="tag-description">{{ tag.name }}</div>
+      </div>
+    }
   </div>
 </div>

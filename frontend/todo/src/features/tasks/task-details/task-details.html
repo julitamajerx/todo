@@ -18,10 +18,10 @@
     <h3>{{ task.name }}</h3>
     <div class="tags-container">
       <h4>Tags:</h4>
-      <div class="tag-box">testestset</div>
-      <div class="tag-box">testestset</div>
-      <div class="tag-box">testestset</div>
-      <div class="tag-box">testestset</div>
+      @for (tag of task.tags; track tag.id) {
+        <div class="tag-box">{{ tag.name }}</div>
+      }
+      <button class="add-tag">+ new tag</button>
     </div>
     <div #editorContainer class="editor-container"></div>
   </div>

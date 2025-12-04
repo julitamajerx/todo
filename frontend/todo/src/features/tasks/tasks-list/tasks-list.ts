@@ -1,6 +1,6 @@
 import { Component, effect, inject, input } from '@angular/core';
-import { Task } from '../../../shared/models/task-model';
-import { TaskDisplayService } from '../../../services/task-display-service';
+import { Task } from '../../../shared/models/task';
+import { TaskService } from '../../../services/task-service';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -11,7 +11,7 @@ import { DatePipe } from '@angular/common';
 })
 export class TasksList {
   public tasks = input<Task[]>();
-  protected taskDisplayService = inject(TaskDisplayService);
+  protected taskDisplayService = inject(TaskService);
   protected listHeader = '';
 
   constructor() {

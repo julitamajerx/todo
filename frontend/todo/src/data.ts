@@ -1,4 +1,12 @@
-import { Task } from './shared/models/task-model';
+import { Tag } from './shared/models/tag';
+import { Task } from './shared/models/task';
+
+export const sample_tags: Tag[] = [
+  { id: 0, emoji: '🛒', name: 'Zakupy' },
+  { id: 1, emoji: '📚', name: 'Nauka' },
+  { id: 2, emoji: '💼', name: 'Praca' },
+  { id: 3, emoji: '🏃', name: 'Zdrowie' },
+];
 
 export const sample_tasks: Task[] = [
   {
@@ -8,6 +16,7 @@ export const sample_tasks: Task[] = [
     dueDate: new Date('2025-12-02T10:00:00'),
     isCompleted: false,
     isDeleted: false,
+    tags: [sample_tags[0], sample_tags[3]],
   },
   {
     id: 1,
@@ -16,6 +25,7 @@ export const sample_tasks: Task[] = [
     dueDate: new Date('2025-12-04T18:00:00'),
     isCompleted: false,
     isDeleted: false,
+    tags: [sample_tags[3]],
   },
   {
     id: 2,
@@ -24,6 +34,7 @@ export const sample_tasks: Task[] = [
     dueDate: new Date('2025-12-06T14:00:00'),
     isCompleted: false,
     isDeleted: false,
+    tags: [sample_tags[2], sample_tags[1]],
   },
   {
     id: 3,
@@ -32,6 +43,7 @@ export const sample_tasks: Task[] = [
     dueDate: new Date('2025-12-10T20:00:00'),
     isCompleted: false,
     isDeleted: false,
+    tags: [sample_tags[1], sample_tags[3]],
   },
   {
     id: 4,
@@ -40,6 +52,7 @@ export const sample_tasks: Task[] = [
     dueDate: new Date('2025-12-03T17:00:00'),
     isCompleted: false,
     isDeleted: false,
+    tags: [sample_tags[3], sample_tags[0]],
   },
   {
     id: 5,
@@ -48,6 +61,7 @@ export const sample_tasks: Task[] = [
     dueDate: new Date('2025-12-02T12:00:00'),
     isCompleted: false,
     isDeleted: true,
+    tags: [sample_tags[2]],
   },
   {
     id: 6,
@@ -56,6 +70,7 @@ export const sample_tasks: Task[] = [
     dueDate: new Date('2025-12-01T09:00:00'),
     isCompleted: true,
     isDeleted: false,
+    tags: [sample_tags[1], sample_tags[0]],
   },
   {
     id: 7,
@@ -64,5 +79,6 @@ export const sample_tasks: Task[] = [
     dueDate: new Date('2025-12-07T17:00:00'),
     isCompleted: false,
     isDeleted: false,
+    tags: [sample_tags[3], sample_tags[2], sample_tags[1]],
   },
 ];

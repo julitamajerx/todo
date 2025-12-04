@@ -2,8 +2,8 @@ import { Component, effect, inject, OnInit } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { TaskDetails } from './task-details/task-details';
 import { TasksList } from './tasks-list/tasks-list';
-import { TaskDisplayService } from '../../services/task-display-service';
-import { Task } from '../../shared/models/task-model';
+import { TaskService } from '../../services/task-service';
+import { Task } from '../../shared/models/task';
 
 @Component({
   selector: 'app-tasks',
@@ -12,12 +12,11 @@ import { Task } from '../../shared/models/task-model';
   styleUrl: './tasks.css',
 })
 export class Tasks implements OnInit {
-  public tasks: Task[] = [];
-
+  protected tasks: Task[] = [];
   protected isSelected = false;
   protected isMobile = false;
+  protected taskDisplayService = inject(TaskService);
 
-  protected taskDisplayService = inject(TaskDisplayService);
   private breakpointObserver = inject(BreakpointObserver);
 
   constructor() {

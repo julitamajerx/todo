@@ -3,8 +3,8 @@ import { RouterOutlet } from '@angular/router';
 import { User } from '../features/user/user';
 import { Tags } from '../features/tags/tags';
 import { Tasks } from '../features/tasks/tasks';
-import { TaskDisplayService } from '../services/task-display-service';
-import { TaskSort } from '../shared/enums/task-sort-enums';
+import { TaskService } from '../services/task-service';
+import { TaskSort } from '../shared/enums/task-sort-enum';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +15,7 @@ import { TaskSort } from '../shared/enums/task-sort-enums';
 export class App {
   protected readonly title = signal('todo');
   protected taskSort = TaskSort;
-  private taskDisplayService = inject(TaskDisplayService);
+  private taskDisplayService = inject(TaskService);
 
   sortTask(sortType: TaskSort) {
     this.taskDisplayService.currentSort.set(sortType);

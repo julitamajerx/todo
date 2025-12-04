@@ -1,12 +1,12 @@
 import { Injectable, signal } from '@angular/core';
-import { Task } from '../shared/models/task-model';
+import { Task } from '../shared/models/task';
 import { sample_tasks } from '../data';
-import { TaskSort } from '../shared/enums/task-sort-enums';
+import { TaskSort } from '../shared/enums/task-sort-enum';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TaskDisplayService {
+export class TaskService {
   public isSelected = signal(false);
   public selectedTaskId = signal<number>(0);
   public currentSort = signal<TaskSort>(TaskSort.Inbox);

@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { Tag } from '../../shared/models/tag';
+import { TagService } from '../../services/tag-service';
 
 @Component({
   selector: 'app-tags',
@@ -6,4 +8,12 @@ import { Component } from '@angular/core';
   templateUrl: './tags.html',
   styleUrl: './tags.css',
 })
-export class Tags {}
+export class Tags implements OnInit {
+  protected tags: Tag[] = [];
+
+  private tagService = inject(TagService);
+
+  ngOnInit(): void {
+    this.tags = this.tagService.getAllTags();
+  }
+}

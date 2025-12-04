@@ -1,3 +1,5 @@
+import { Tag } from './tag';
+
 export class Task {
   id!: number;
   name!: string;
@@ -5,4 +7,5 @@ export class Task {
   dueDate = new Date();
   isCompleted = false;
   isDeleted = false;
+  tags?: Tag[];
 }
