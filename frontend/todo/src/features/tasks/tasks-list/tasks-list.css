@@ -48,6 +48,11 @@ input::placeholder {
   border-radius: 5px;
   font-size: 15px;
   gap: 10px;
+  cursor: pointer;
+}
+
+.task-box label {
+  cursor: pointer;
 }
 
 .task-date {

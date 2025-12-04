@@ -23,7 +23,6 @@ export class Tasks implements OnInit {
     effect(() => {
       this.isSelected = this.taskService.isSelected();
 
-      const sort = this.taskService.currentSort();
       this.tasks = this.taskService.sortTasks();
     });
   }

@@ -1,15 +1,26 @@
 <div class="wrapper">
   <h3>Tags</h3>
   <div class="tag-container">
-    <div class="tag-box" (click)="resetTags()">
+    <button
+      class="tag-box"
+      (click)="resetTags()"
+      (keydown.enter)="resetTags()"
+      (keydown.space)="resetTags()"
+    >
       <div class="emoji">🛇</div>
       <div class="tag-description">Reset</div>
-    </div>
+    </button>
+
     @for (tag of tags; track tag.id) {
-      <div class="tag-box" (click)="sortByTags(tag.name)">
+      <button
+        class="tag-box"
+        (click)="sortByTags(tag.name)"
+        (keydown.enter)="sortByTags(tag.name)"
+        (keydown.space)="sortByTags(tag.name)"
+      >
         <div class="emoji">{{ tag.emoji }}</div>
         <div class="tag-description">{{ tag.name }}</div>
-      </div>
+      </button>
     }
   </div>
 </div>

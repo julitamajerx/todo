@@ -1,14 +1,25 @@
 <div class="wrapper">
   <h3>Lists</h3>
   <div class="list-container">
-    <div class="list-box" (click)="resetLists()">
+    <button
+      class="list-box"
+      (click)="resetLists()"
+      (keydown.enter)="resetLists()"
+      (keydown.space)="resetLists()"
+    >
       <div class="emoji">🛇</div>
       <div class="list-description">Reset</div>
-    </div>
+    </button>
+
     @for (list of lists; track list.id) {
-      <div class="list-box" (click)="sortByList(list.name)">
+      <button
+        class="list-box"
+        (click)="sortByList(list.name)"
+        (keydown.enter)="sortByList(list.name)"
+        (keydown.space)="sortByList(list.name)"
+      >
         <div class="list-description">{{ list.name }}</div>
-      </div>
+      </button>
     }
   </div>
 </div>

@@ -30,6 +30,9 @@ h3 {
   background-color: #252525;
   border-radius: 5px;
   font-size: 15px;
+  cursor: pointer;
+  border: none;
+  color: white;
 }
 
 @media (max-width: 870px) {
