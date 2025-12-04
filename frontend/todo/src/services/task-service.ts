@@ -10,7 +10,8 @@ export class TaskService {
   public isSelected = signal(false);
   public selectedTaskId = signal<number>(0);
   public currentSort = signal<TaskSort>(TaskSort.Inbox);
-  public currentTag = signal<string | null>(null);
+  public currentTag = signal<string | null>(null); //Julitka, wroc tu ~ Julitka z przeszlosci
+  public currentList = signal<string | null>(null);
 
   getAllTasks(): Task[] {
     return sample_tasks;
@@ -28,6 +29,7 @@ export class TaskService {
     const tasks = this.getAllTasks();
     const tag = this.currentTag();
     const sortBy = this.currentSort();
+    const list = this.currentList();
 
     let filtered = tasks;
 
@@ -63,7 +65,16 @@ export class TaskService {
       filtered = filtered.filter((task) => task.tags?.some((t) => t.name === tag));
     }
 
+    if (list) {
+      filtered = filtered.filter((task) => task.list?.name === list);
+    }
+
     return filtered;
+  }
+
+  getListIdForTask(taskId: number): number | null {
+    const task = this.getTask(taskId);
+    return task.list?.id ?? null;
   }
 
   setTag(tagName: string | null) {
@@ -80,6 +91,10 @@ export class TaskService {
 
   setSelectedTag(taskId: number) {
     this.selectedTaskId.set(taskId);
+  }
+
+  setCurrentList(listName: string | null) {
+    this.currentList.set(listName);
   }
 
   checkDate(date: Date): boolean {

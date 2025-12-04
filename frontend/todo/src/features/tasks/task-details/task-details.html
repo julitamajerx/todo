@@ -16,12 +16,20 @@
 
   <div class="description-container">
     <h3>{{ task.name }}</h3>
-    <div class="tags-container">
+    <div class="flex-container">
       <h4>Tags:</h4>
       @for (tag of task.tags; track tag.id) {
         <div class="tag-box">{{ tag.name }}</div>
       }
-      <button class="add-tag">+ new tag</button>
+      <button class="add-tag">✚ new tag</button>
+    </div>
+    <div class="flex-container">
+      <h4>List: </h4>
+      <select [value]="taskList">
+        @for(list of lists; track list.id){
+          <option [value]="list.id">{{list.name}}</option>
+        }
+      </select>
     </div>
     <div #editorContainer class="editor-container"></div>
   </div>

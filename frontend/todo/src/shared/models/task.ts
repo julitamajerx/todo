@@ -1,4 +1,5 @@
 import { Tag } from './tag';
+import { List } from './list';
 
 export class Task {
   id!: number;
@@ -8,4 +9,5 @@ export class Task {
   isCompleted = false;
   isDeleted = false;
   tags?: Tag[];
+  list?: List;
 }

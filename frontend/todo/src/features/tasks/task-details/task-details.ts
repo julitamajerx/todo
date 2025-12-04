@@ -3,6 +3,8 @@ import Quill from 'quill';
 import { TaskService } from '../../../services/task-service';
 import { Task } from '../../../shared/models/task';
 import { DatePipe } from '@angular/common';
+import { List } from '../../../shared/models/list';
+import { ListService } from '../../../services/list-service';
 
 @Component({
   selector: 'app-task-details',
@@ -14,9 +16,12 @@ export class TaskDetails implements OnInit {
   @ViewChild('editorContainer', { static: true }) editorContainer!: ElementRef;
   public editor!: Quill;
 
+  protected lists: List[] = [];
   protected task: Task = new Task();
+  protected taskList: number | null = null;
 
   private taskService = inject(TaskService);
+  private listService = inject(ListService);
 
   constructor() {
     effect(() => {
@@ -35,6 +40,10 @@ export class TaskDetails implements OnInit {
       },
       theme: 'snow',
     });
+
+    this.lists = this.listService.getAllLists();
+          this.taskList = this.task.list ? this.task.list.id : null;
+
   }
 
   getEditorContent() {

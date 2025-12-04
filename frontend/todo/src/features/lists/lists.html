@@ -1,0 +1,14 @@
+<div class="wrapper">
+  <h3>Lists</h3>
+  <div class="list-container">
+    <div class="list-box" (click)="resetLists()">
+      <div class="emoji">🛇</div>
+      <div class="list-description">Reset</div>
+    </div>
+    @for (list of lists; track list.id) {
+      <div class="list-box" (click)="sortByList(list.name)">
+        <div class="list-description">{{ list.name }}</div>
+      </div>
+    }
+  </div>
+</div>

@@ -14,6 +14,7 @@ export class TasksList {
   protected taskService = inject(TaskService);
   protected listHeader = '';
   protected tagName = '';
+  protected listName = '';
 
   constructor() {
     effect(() => {
@@ -21,6 +22,7 @@ export class TasksList {
       this.listHeader = this.capitalize(currentSort);
 
       this.tagName = this.taskService.currentTag() || '';
+      this.listName = this.taskService.currentList() || '';
     });
   }
 

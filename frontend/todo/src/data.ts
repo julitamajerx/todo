@@ -1,5 +1,19 @@
 import { Tag } from './shared/models/tag';
 import { Task } from './shared/models/task';
+import { List } from './shared/models/list';
+
+export const sample_lists: List[] = [
+  {
+    id: 0,
+    name: 'Lista Testowa 2',
+    isPinned: true,
+  },
+  {
+    id: 1,
+    name: 'Lista Testowa',
+    isPinned: true,
+  },
+];
 
 export const sample_tags: Tag[] = [
   { id: 0, emoji: '🛒', name: 'Zakupy' },
@@ -17,6 +31,7 @@ export const sample_tasks: Task[] = [
     isCompleted: false,
     isDeleted: false,
     tags: [sample_tags[0], sample_tags[3]],
+    list: sample_lists[1],
   },
   {
     id: 1,
@@ -26,6 +41,7 @@ export const sample_tasks: Task[] = [
     isCompleted: false,
     isDeleted: false,
     tags: [sample_tags[3]],
+    list: sample_lists[0],
   },
   {
     id: 2,
@@ -53,6 +69,7 @@ export const sample_tasks: Task[] = [
     isCompleted: false,
     isDeleted: false,
     tags: [sample_tags[3], sample_tags[0]],
+    list: sample_lists[0],
   },
   {
     id: 5,

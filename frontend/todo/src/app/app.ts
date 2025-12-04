@@ -5,10 +5,11 @@ import { Tags } from '../features/tags/tags';
 import { Tasks } from '../features/tasks/tasks';
 import { TaskService } from '../services/task-service';
 import { TaskSort } from '../shared/enums/task-sort-enum';
+import { Lists } from '../features/lists/lists';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, User, Tags, Tasks],
+  imports: [RouterOutlet, User, Tags, Tasks, Lists],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

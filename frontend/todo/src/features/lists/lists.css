@@ -1,0 +1,43 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  margin: 20px 5px;
+}
+
+h3 {
+  margin: 0;
+}
+
+.list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.emoji {
+  font-size: 20px;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.list-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  padding: 10px;
+  background-color: #252525;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+@media (max-width: 870px) {
+  .list-description {
+    display: none;
+  }
+
+  .list-box {
+    justify-content: center;
+  }
+}

@@ -35,7 +35,7 @@
   border-radius: 4px;
 }
 
-.tags-container {
+.flex-container {
   display: flex;
   align-items: center;
   gap: 10px;
