@@ -54,6 +54,7 @@ h4 {
   border-radius: 5px;
   max-width: 100%;
   word-wrap: break-word;
+  font-size: 15px;
 }
 
 .add-tag {
@@ -64,6 +65,43 @@ h4 {
   border: none;
   color: white;
   font-size: 18px;
+  font-size: 15px;
+}
+
+.arrow {
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.select-wrapper select {
+  width: 150px;
+  padding: 8px 30px 8px 8px;
+  background-color: #1a1a1a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  appearance: none;
+  cursor: pointer;
+}
+
+.select-wrapper .arrow {
+  position: absolute;
+  right: 12px;
+  top: 45%;
+  transform: translateY(-50%) rotate(45deg);
+  pointer-events: none;
 }
 
 @media (max-width: 870px) {

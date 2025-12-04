@@ -5,10 +5,11 @@ import { Task } from '../../../shared/models/task';
 import { DatePipe } from '@angular/common';
 import { List } from '../../../shared/models/list';
 import { ListService } from '../../../services/list-service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-task-details',
-  imports: [DatePipe],
+  imports: [DatePipe, FormsModule],
   templateUrl: './task-details.html',
   styleUrl: './task-details.css',
 })
@@ -27,6 +28,8 @@ export class TaskDetails implements OnInit {
     effect(() => {
       this.task = this.taskService.getTask(this.taskService.selectedTaskId());
 
+      this.taskList = this.task.list ? this.task.list.id : null;
+
       if (this.task.description != null || '') {
         this.editor.setText(this.task.description);
       }
@@ -42,8 +45,6 @@ export class TaskDetails implements OnInit {
     });
 
     this.lists = this.listService.getAllLists();
-          this.taskList = this.task.list ? this.task.list.id : null;
-
   }
 
   getEditorContent() {

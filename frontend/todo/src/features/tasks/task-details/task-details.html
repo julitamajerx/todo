@@ -24,12 +24,15 @@
       <button class="add-tag">✚ new tag</button>
     </div>
     <div class="flex-container">
-      <h4>List: </h4>
-      <select [value]="taskList">
-        @for(list of lists; track list.id){
-          <option [value]="list.id">{{list.name}}</option>
-        }
-      </select>
+      <h4>List:</h4>
+      <div class="select-wrapper">
+        <select [ngModel]="taskList">
+          @for (list of lists; track list.id) {
+            <option [ngValue]="list.id">{{ list.name }}</option>
+          }
+        </select>
+        <span class="arrow down"></span>
+      </div>
     </div>
     <div #editorContainer class="editor-container"></div>
   </div>
