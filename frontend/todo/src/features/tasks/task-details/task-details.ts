@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, inject, effect } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, inject, effect, OnDestroy } from '@angular/core';
 import Quill from 'quill';
 import { TaskService } from '../../../services/task-service';
 import { Task } from '../../../shared/models/task';
@@ -6,6 +6,7 @@ import { DatePipe } from '@angular/common';
 import { List } from '../../../shared/models/list';
 import { ListService } from '../../../services/list-service';
 import { FormsModule } from '@angular/forms';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-task-details',
@@ -13,7 +14,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './task-details.html',
   styleUrl: './task-details.css',
 })
-export class TaskDetails implements OnInit {
+export class TaskDetails implements OnInit, OnDestroy {
   @ViewChild('editorContainer', { static: true }) editorContainer!: ElementRef;
   public editor!: Quill;
 
@@ -23,10 +24,16 @@ export class TaskDetails implements OnInit {
 
   private taskService = inject(TaskService);
   private listService = inject(ListService);
+  private destroy = new Subject<void>();
 
   constructor() {
     effect(() => {
-      this.task = this.taskService.getTask(this.taskService.selectedTaskId());
+      let taskObservable: Observable<Task>;
+      taskObservable = this.taskService.getTask(this.taskService.selectedTaskId());
+
+      taskObservable.subscribe((taskDbItem) => {
+        this.task = taskDbItem;
+      });
 
       this.taskList = this.task.list ? this.task.list.id : null;
 
@@ -44,10 +51,20 @@ export class TaskDetails implements OnInit {
       theme: 'snow',
     });
 
-    this.lists = this.listService.getAllLists();
+    let listsObservable: Observable<List[]>;
+    listsObservable = this.listService.getAllLists();
+
+    listsObservable.subscribe((listsDbItem) => {
+      this.lists = listsDbItem;
+    });
   }
 
   getEditorContent() {
     return this.editor.root.innerHTML;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
   }
 }

@@ -1,7 +1,8 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Task } from '../shared/models/task';
-import { sample_tasks } from '../data';
 import { TaskSort } from '../shared/enums/task-sort-enum';
+import { HttpClient } from '@angular/common/http';
+import { TASK_BY_URL, TASKS_URL } from '../shared/constants/urls';
 
 @Injectable({
   providedIn: 'root',
@@ -10,15 +11,25 @@ export class TaskService {
   public isSelected = signal(false);
   public selectedTaskId = signal<number>(0);
   public currentSort = signal<TaskSort>(TaskSort.Inbox);
-  public currentTag = signal<string | null>(null); //Julitka, wroc tu ~ Julitka z przeszlosci
+  public currentTag = signal<string | null>(null);
   public currentList = signal<string | null>(null);
 
-  getAllTasks(): Task[] {
-    return sample_tasks;
+  private http = inject(HttpClient);
+
+  private tasks = signal<Task[]>([]);
+
+  constructor() {
+    this.http.get<Task[]>(TASKS_URL).subscribe((data) => {
+      this.tasks.set(data);
+    });
   }
 
-  getTask(taskId: number): Task {
-    return this.getAllTasks().find((task) => task.id === taskId) ?? new Task();
+  getAllTasks(): Task[] {
+    return this.tasks();
+  }
+
+  getTask(taskId: number) {
+    return this.http.get<Task>(TASK_BY_URL + taskId);
   }
 
   private isActive(task: Task): boolean {
@@ -26,12 +37,10 @@ export class TaskService {
   }
 
   sortTasks(): Task[] {
-    const tasks = this.getAllTasks();
+    let filtered = this.getAllTasks();
     const tag = this.currentTag();
     const sortBy = this.currentSort();
     const list = this.currentList();
-
-    let filtered = tasks;
 
     if (sortBy === TaskSort.Completed) {
       filtered = filtered.filter((task) => task.isCompleted);
@@ -73,8 +82,8 @@ export class TaskService {
   }
 
   getListIdForTask(taskId: number): number | null {
-    const task = this.getTask(taskId);
-    return task.list?.id ?? null;
+    const task = this.tasks().find((t) => t.id === taskId);
+    return task?.list?.id ?? null;
   }
 
   setTag(tagName: string | null) {

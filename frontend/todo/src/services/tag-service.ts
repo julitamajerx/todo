@@ -1,11 +1,16 @@
-import { Injectable } from '@angular/core';
-import { sample_tags } from '../data';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Tag } from '../shared/models/tag';
+import { TAGS_URL } from '../shared/constants/urls';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TagService {
-  getAllTags() {
-    return sample_tags;
+  private http = inject(HttpClient);
+
+  getAllTags(): Observable<Tag[]> {
+    return this.http.get<Tag[]>(TAGS_URL);
   }
 }

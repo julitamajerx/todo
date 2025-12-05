@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Tag } from '../../shared/models/tag';
 import { TagService } from '../../services/tag-service';
 import { TaskService } from '../../services/task-service';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-tags',
@@ -14,9 +15,15 @@ export class Tags implements OnInit {
 
   private tagService = inject(TagService);
   private taskService = inject(TaskService);
+  private destroy = new Subject<void>();
 
   ngOnInit(): void {
-    this.tags = this.tagService.getAllTags();
+    let tagsObservable: Observable<Tag[]>;
+    tagsObservable = this.tagService.getAllTags();
+
+    tagsObservable.subscribe((tagsDbItem) => {
+      this.tags = tagsDbItem;
+    });
   }
 
   sortByTags(tag: string) {
@@ -27,5 +34,10 @@ export class Tags implements OnInit {
   resetTags() {
     this.taskService.currentTag.set(null);
     this.taskService.hideTaskDescription();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
   }
 }

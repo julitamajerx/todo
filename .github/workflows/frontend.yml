@@ -2,9 +2,9 @@ name: Angular Frontend CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 permissions:
   contents: read
@@ -13,47 +13,46 @@ permissions:
 
 jobs:
   build-and-deploy:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [20.x]
-        
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: frontend/todo/package-lock.json
+      - uses: actions/checkout@v4
 
-    - name: Install Frontend Dependencies
-      run: npm ci
-      working-directory: ./frontend/todo
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: frontend/todo/package-lock.json
 
-    - name: Run Eslint
-      run: npm run lint
-      working-directory: ./frontend/todo
-      
-    - name: Run Prettier
-      run: npm run format:check
-      working-directory: ./frontend/todo
+      - name: Install Frontend Dependencies
+        run: npm ci
+        working-directory: ./frontend/todo
 
-    - name: Build Angular Application for GH Pages
-      run: npm run build:gh-pages
-      working-directory: ./frontend/todo
+      - name: Run Eslint
+        run: npm run lint
+        working-directory: ./frontend/todo
 
-    - name: Setup Pages
-      uses: actions/configure-pages@v5
+      - name: Run Prettier
+        run: npm run format:check
+        working-directory: ./frontend/todo
 
-    - name: Upload Build Artifacts
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: frontend/todo/dist/todo/browser
+      - name: Build Angular Application for GH Pages
+        run: npm run build:gh-pages
+        working-directory: ./frontend/todo
 
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/todo/dist/todo/browser
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
