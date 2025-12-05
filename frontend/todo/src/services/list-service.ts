@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { sample_lists } from '../data';
 import { HttpClient } from '@angular/common/http';
 import { List } from '../shared/models/list';
 import { LISTS_URL } from '../shared/constants/urls';

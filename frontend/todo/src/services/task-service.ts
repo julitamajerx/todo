@@ -19,8 +19,12 @@ export class TaskService {
   private tasks = signal<Task[]>([]);
 
   constructor() {
-    this.http.get<Task[]>(TASKS_URL).subscribe((data) => {
-      this.tasks.set(data);
+    this.http.get<Task[]>(TASKS_URL + '?page=1&limit=15').subscribe((data) => {
+      const tasksWithParsedDates = data.map((task) => ({
+        ...task,
+        dueDate: new Date(task.dueDate),
+      }));
+      this.tasks.set(tasksWithParsedDates);
     });
   }
 
@@ -82,7 +86,7 @@ export class TaskService {
   }
 
   getListIdForTask(taskId: number): number | null {
-    const task = this.tasks().find((t) => t.id === taskId);
+    const task = this.tasks().find((task) => task.id === taskId);
     return task?.list?.id ?? null;
   }
 
