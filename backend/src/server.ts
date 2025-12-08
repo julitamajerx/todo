@@ -13,7 +13,7 @@ app.use(
   })
 );
 
-//tasks?page=1
+//tasks?page=1&limit=15&sortBy=Zakupy
 app.get("/api/tasks", (req, res) => {
   const { page, limit } = getPagination(req);
 

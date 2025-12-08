@@ -25,12 +25,12 @@ export class Lists implements OnInit, OnDestroy {
     });
   }
 
-  sortByList(list: string) {
+  protected sortByList(list: string) {
     this.taskService.setList(list);
     this.taskService.hideTaskDescription();
   }
 
-  resetLists() {
+  protected resetLists() {
     this.taskService.setList(null);
     this.taskService.hideTaskDescription();
   }

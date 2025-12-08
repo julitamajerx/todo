@@ -25,12 +25,12 @@ export class Tags implements OnInit, OnDestroy {
     });
   }
 
-  sortByTags(tag: string) {
+  protected sortByTags(tag: string) {
     this.taskService.setTag(tag);
     this.taskService.hideTaskDescription();
   }
 
-  resetTags() {
+  protected resetTags() {
     this.taskService.setTag(null);
     this.taskService.hideTaskDescription();
   }

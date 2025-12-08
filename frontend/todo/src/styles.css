@@ -2,10 +2,18 @@
 
 body {
   margin: 0;
-  background-color: #171717;
+  background-color: var(--primary-color);
   color: white;
   font-family: 'Inter', sans-serif;
   font-size: 18px;
+}
+
+:root {
+  --primary-color: #171717;
+  --secondary-color: #1a1a1a;
+  --button-color: #0c0c0c;
+  --accent-color: #252525;
+  --task-color: #1f1f1f;
 }
 
 .ql-toolbar.ql-snow .ql-stroke,
@@ -46,4 +54,24 @@ body {
   border: solid white;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
+}
+
+.icon {
+  font-size: 20px;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.sidebar-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  padding: 10px;
+  background-color: var(--accent-color);
+  border-radius: 5px;
+  font-size: 15px;
+  cursor: pointer;
+  border: none;
+  color: white;
 }

@@ -64,10 +64,6 @@ export class TaskDetails implements OnInit, OnDestroy {
     });
   }
 
-  getEditorContent() {
-    return this.editor.root.innerHTML;
-  }
-
   ngOnDestroy(): void {
     this.destroy.next();
     this.destroy.complete();

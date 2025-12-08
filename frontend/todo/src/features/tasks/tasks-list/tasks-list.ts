@@ -26,7 +26,7 @@ export class TasksList {
     });
   }
 
-  showTaskDescription(taskId: number) {
+  protected showTaskDescription(taskId: number) {
     this.taskService.setSelectedTag(taskId);
     this.taskService.showTaskDescription();
   }

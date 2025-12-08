@@ -33,7 +33,7 @@ export class Tasks implements OnInit {
     });
   }
 
-  hide() {
+  protected hide() {
     this.taskService.hideTaskDescription();
   }
 }

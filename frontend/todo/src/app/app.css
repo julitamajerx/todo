@@ -10,7 +10,7 @@
 }
 
 .content {
-  background-color: #252525;
+  background-color: var(--accent-color);
   box-sizing: border-box;
   margin: 20px 20px 20px 0;
   border-radius: 25px;

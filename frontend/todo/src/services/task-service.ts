@@ -24,7 +24,7 @@ export class TaskService {
     this.loadTasks();
   }
 
-  loadTasks(page = 1, limit = 15) {
+  private loadTasks(page = 1, limit = 15) {
     const params: TaskQueryParams = {
       page,
       limit,
@@ -47,42 +47,42 @@ export class TaskService {
     });
   }
 
-  getAllTasks(): Task[] {
+  public getAllTasks(): Task[] {
     return this.tasks();
   }
 
-  getTask(taskId: number) {
+  public getTask(taskId: number) {
     return this.http.get<Task>(TASK_BY_URL + taskId);
   }
 
-  setTag(tagName: string | null) {
+  public setTag(tagName: string | null) {
     this.currentTag.set(tagName);
     this.loadTasks();
   }
 
-  setList(listName: string | null) {
+  public setList(listName: string | null) {
     this.currentList.set(listName);
     this.loadTasks();
   }
 
-  setSort(sort: TaskSort) {
+  public setSort(sort: TaskSort) {
     this.currentSort.set(sort);
     this.loadTasks();
   }
 
-  showTaskDescription() {
+  public showTaskDescription() {
     this.isSelected.set(true);
   }
 
-  hideTaskDescription() {
+  public hideTaskDescription() {
     this.isSelected.set(false);
   }
 
-  setSelectedTag(taskId: number) {
+  public setSelectedTag(taskId: number) {
     this.selectedTaskId.set(taskId);
   }
 
-  checkDate(date: Date): boolean {
+  public checkDate(date: Date): boolean {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 

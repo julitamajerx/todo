@@ -32,7 +32,7 @@
     margin-bottom: 15px;
     padding: 12px;
     width: 100%;
-    background: #171717;
+    background: var(--primary-color);
     color: white;
     border-radius: 6px;
     border: none;

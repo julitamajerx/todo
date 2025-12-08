@@ -9,7 +9,7 @@ import { LISTS_URL } from '../shared/constants/urls';
 export class ListService {
   private http = inject(HttpClient);
 
-  getAllLists() {
+  public getAllLists() {
     return this.http.get<List[]>(LISTS_URL);
   }
 }

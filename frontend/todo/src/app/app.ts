@@ -16,9 +16,10 @@ import { Lists } from '../features/lists/lists';
 export class App {
   protected readonly title = signal('todo');
   protected taskSort = TaskSort;
+
   private taskService = inject(TaskService);
 
-  sortTask(sortType: TaskSort) {
+  protected sortTask(sortType: TaskSort) {
     this.taskService.setSort(sortType);
     this.taskService.hideTaskDescription();
   }

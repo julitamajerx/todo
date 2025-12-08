@@ -2,22 +2,23 @@
   <h3>Lists</h3>
   <div class="list-container">
     <button
-      class="list-box"
+      class="sidebar-box"
       (click)="resetLists()"
       (keydown.enter)="resetLists()"
       (keydown.space)="resetLists()"
     >
-      <div class="emoji">🛇</div>
+      <div class="icon">🛇</div>
       <div class="list-description">Reset</div>
     </button>
 
     @for (list of lists; track list.id) {
       <button
-        class="list-box"
+        class="sidebar-box"
         (click)="sortByList(list.name)"
         (keydown.enter)="sortByList(list.name)"
         (keydown.space)="sortByList(list.name)"
       >
+        <div class="icon">{{ list.id + 1 }}</div>
         <div class="list-description">{{ list.name }}</div>
       </button>
     }

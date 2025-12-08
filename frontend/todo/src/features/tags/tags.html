@@ -2,23 +2,23 @@
   <h3>Tags</h3>
   <div class="tag-container">
     <button
-      class="tag-box"
+      class="sidebar-box"
       (click)="resetTags()"
       (keydown.enter)="resetTags()"
       (keydown.space)="resetTags()"
     >
-      <div class="emoji">🛇</div>
+      <div class="icon">🛇</div>
       <div class="tag-description">Reset</div>
     </button>
 
     @for (tag of tags; track tag.id) {
       <button
-        class="tag-box"
+        class="sidebar-box"
         (click)="sortByTags(tag.name)"
         (keydown.enter)="sortByTags(tag.name)"
         (keydown.space)="sortByTags(tag.name)"
       >
-        <div class="emoji">{{ tag.emoji }}</div>
+        <div class="icon">{{ tag.emoji }}</div>
         <div class="tag-description">{{ tag.name }}</div>
       </button>
     }

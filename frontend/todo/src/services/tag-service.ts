@@ -10,7 +10,7 @@ import { TAGS_URL } from '../shared/constants/urls';
 export class TagService {
   private http = inject(HttpClient);
 
-  getAllTags(): Observable<Tag[]> {
+  public getAllTags(): Observable<Tag[]> {
     return this.http.get<Tag[]>(TAGS_URL);
   }
 }
