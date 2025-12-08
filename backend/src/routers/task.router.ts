@@ -1,9 +1,52 @@
-import { Router } from 'express';
-import { TaskSort } from '../enums/task-sort-enum';
-import { sample_tasks } from '../data';
+import { Router } from "express";
+import { TaskSort } from "../enums/task-sort-enum";
+import { sample_tasks } from "../data";
+import asyncHandler from "express-async-handler";
+import { TaskModel } from "../models/task.model";
+import { ListModel } from "../models/list.model";
+import { TagModel } from "../models/tag.model";
+import { TaskTagModel } from "../models/tasktag.model";
 
 const router = Router();
 const isActive = (t: any) => !t.isDeleted && !t.isCompleted;
+
+router.get(
+  "/seed",
+  asyncHandler(async (req, res) => {
+    const taskCount = await TaskModel.countDocuments();
+
+    if (taskCount > 0) {
+      res.send("Tasks have already been seeded.");
+      return;
+    }
+
+    const tags = await TagModel.find();
+    const lists = await ListModel.find();
+
+    const createdTasks = await TaskModel.create(
+      sample_tasks.map((task) => {
+        return {
+          ...task,
+          list: task.list !== undefined ? lists[task.list]._id : null,
+          tags: task.tags
+            ? task.tags.map((tagIndex: number) => tags[tagIndex]._id)
+            : [],
+        };
+      })
+    );
+
+    for (const task of createdTasks) {
+      for (const tagId of task.tags) {
+        await TaskTagModel.create({
+          taskId: task._id.toString(),
+          tagId: tagId.toString(),
+        });
+      }
+    }
+
+    res.send("Tasks seed is done.");
+  })
+);
 
 //tasks?page=1&limit=15&sortBy=Zakupy
 router.get("/", (req, res) => {
@@ -57,7 +100,7 @@ router.get("/", (req, res) => {
   }
 
   if (tag) {
-    tasks = tasks.filter((t) => t.tags?.some((x:any) => x.name === tag));
+    tasks = tasks.filter((t) => t.tags?.some((x: any) => x.name === tag));
   }
 
   if (list) {
