@@ -19,7 +19,7 @@ export class App {
   private taskService = inject(TaskService);
 
   sortTask(sortType: TaskSort) {
-    this.taskService.currentSort.set(sortType);
+    this.taskService.setSort(sortType);
     this.taskService.hideTaskDescription();
   }
 }

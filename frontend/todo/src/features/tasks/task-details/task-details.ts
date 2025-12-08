@@ -28,18 +28,30 @@ export class TaskDetails implements OnInit, OnDestroy {
 
   constructor() {
     effect(() => {
-      let taskObservable: Observable<Task>;
-      taskObservable = this.taskService.getTask(this.taskService.selectedTaskId());
+      const taskObservable: Observable<Task> = this.taskService.getTask(
+        this.taskService.selectedTaskId(),
+      );
 
-      taskObservable.subscribe((taskDbItem) => {
-        this.task = taskDbItem;
+      const listsObservable: Observable<List[]> = this.listService.getAllLists();
+
+      listsObservable.subscribe((listsDbItem) => {
+        this.lists = listsDbItem;
+
+        taskObservable.subscribe((taskDbItem) => {
+          this.task = taskDbItem;
+
+          if (this.task.list) {
+            const found = this.lists.find((l) => l.id === this.task.list!.id);
+            this.taskList = found ? found.id : null;
+          } else {
+            this.taskList = null;
+          }
+
+          if (this.task.description) {
+            this.editor.setText(this.task.description);
+          }
+        });
       });
-
-      this.taskList = this.task.list ? this.task.list.id : null;
-
-      if (this.task.description != null || '') {
-        this.editor.setText(this.task.description);
-      }
     });
   }
 
@@ -49,13 +61,6 @@ export class TaskDetails implements OnInit, OnDestroy {
         toolbar: [[{ header: [1, 2, 3, false] }], [{ list: 'bullet' }]],
       },
       theme: 'snow',
-    });
-
-    let listsObservable: Observable<List[]>;
-    listsObservable = this.listService.getAllLists();
-
-    listsObservable.subscribe((listsDbItem) => {
-      this.lists = listsDbItem;
     });
   }
 

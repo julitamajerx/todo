@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TaskService } from '../../services/task-service';
 import { ListService } from '../../services/list-service';
 import { List } from '../../shared/models/list';
@@ -10,29 +10,28 @@ import { Observable, Subject } from 'rxjs';
   templateUrl: './lists.html',
   styleUrl: './lists.css',
 })
-export class Lists implements OnInit {
+export class Lists implements OnInit, OnDestroy {
   protected lists: List[] = [];
+
   private destroy = new Subject<void>();
+  private listService = inject(ListService);
+  private taskService = inject(TaskService);
 
   ngOnInit(): void {
-    let listsObservable: Observable<List[]>;
-    listsObservable = this.listService.getAllLists();
+    const listsObservable: Observable<List[]> = this.listService.getAllLists();
 
     listsObservable.subscribe((listsDbItem) => {
       this.lists = listsDbItem;
     });
   }
 
-  private listService = inject(ListService);
-  private taskService = inject(TaskService);
-
   sortByList(list: string) {
-    this.taskService.currentList.set(list);
+    this.taskService.setList(list);
     this.taskService.hideTaskDescription();
   }
 
   resetLists() {
-    this.taskService.currentList.set(null);
+    this.taskService.setList(null);
     this.taskService.hideTaskDescription();
   }
 

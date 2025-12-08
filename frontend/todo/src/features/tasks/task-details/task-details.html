@@ -27,10 +27,12 @@
       <h4>List:</h4>
       <div class="select-wrapper">
         <select [ngModel]="taskList">
+          <option [ngValue]="null">-- brak listy --</option>
           @for (list of lists; track list.id) {
             <option [ngValue]="list.id">{{ list.name }}</option>
           }
         </select>
+
         <span class="arrow down"></span>
       </div>
     </div>

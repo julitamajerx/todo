@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { sample_lists, sample_tags, sample_tasks } from "./data";
+import { TaskSort } from "./enums/task-sort-enum";
 
 const app = express();
 const isActive = (t: any) => !t.isDeleted && !t.isCompleted;
@@ -16,73 +17,69 @@ app.use(
 app.get("/api/tasks", (req, res) => {
   const { page, limit } = getPagination(req);
 
-  res.send(paginate(sample_tasks, page, limit));
-});
+  const sortBy = req.query.sortBy || TaskSort.Inbox;
+  const tag = req.query.tag || null;
+  const list = req.query.list || null;
 
-app.get("/api/tasks/today", (req, res) => {
-  const { page, limit } = getPagination(req);
+  let tasks = [...sample_tasks];
 
-  const today = new Date();
-  const start = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate()
-  );
+  if (sortBy === TaskSort.Completed) {
+    tasks = tasks.filter((t) => t.isCompleted);
+  } else if (sortBy === TaskSort.Deleted) {
+    tasks = tasks.filter((t) => t.isDeleted);
+  } else {
+    tasks = tasks.filter((t) => isActive(t));
 
-  const end = new Date(start);
-  end.setDate(start.getDate() + 1);
+    const today = new Date();
+    const startOfToday = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+    const endOfToday = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() + 1
+    );
 
-  const tasks = sample_tasks.filter(
-    (t) => t.dueDate >= start && t.dueDate < end && isActive(t)
-  );
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
 
-  res.send(paginate(tasks, page, limit));
-});
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(endOfWeek.getDate() + 7);
 
-app.get("/api/tasks/week", (req, res) => {
-  const { page, limit } = getPagination(req);
+    tasks = tasks.map((t) => ({
+      ...t,
+      dueDate: new Date(t.dueDate),
+    }));
 
-  const today = new Date();
-  const start = new Date(today);
-  start.setDate(today.getDate() - today.getDay());
-  const end = new Date(start);
-  end.setDate(start.getDate() + 7);
+    if (sortBy === TaskSort.Today) {
+      tasks = tasks.filter(
+        (t) => t.dueDate >= startOfToday && t.dueDate < endOfToday
+      );
+    } else if (sortBy === TaskSort.Week) {
+      tasks = tasks.filter(
+        (t) => t.dueDate >= startOfWeek && t.dueDate < endOfWeek
+      );
+    }
+  }
 
-  const tasks = sample_tasks.filter(
-    (t) => t.dueDate >= start && t.dueDate < end && isActive(t)
-  );
+  if (tag) {
+    tasks = tasks.filter((t) => t.tags?.some((x:any) => x.name === tag));
+  }
 
-  res.send(paginate(tasks, page, limit));
-});
+  if (list) {
+    tasks = tasks.filter((t) => t.list?.name === list);
+  }
 
-app.get("/api/tasks/deleted", (req, res) => {
-  const { page, limit } = getPagination(req);
+  const paginated = paginate(tasks, page, limit);
 
-  const tasks = sample_tasks.filter((t) => t.isDeleted);
-  res.send(paginate(tasks, page, limit));
-});
-
-app.get("/api/tasks/tag/:tagName", (req, res) => {
-  const { page, limit } = getPagination(req);
-
-  const tagName = req.params.tagName;
-
-  const tasks = sample_tasks.filter(
-    (t) =>
-      t.tags?.some((tagItem: any) => tagItem.name === tagName) && isActive(t)
-  );
-
-  res.send(paginate(tasks, page, limit));
-});
-
-app.get("/api/tasks/list/:listName", (req, res) => {
-  const { page, limit } = getPagination(req);
-
-  const list = req.params.listName;
-  const tasks = sample_tasks.filter(
-    (t) => t.list?.name === list && isActive(t)
-  );
-  res.send(paginate(tasks, page, limit));
+  res.send({
+    total: tasks.length,
+    page,
+    limit,
+    tasks: paginated,
+  });
 });
 
 app.get("/api/tasks/:taskId", (req, res) => {

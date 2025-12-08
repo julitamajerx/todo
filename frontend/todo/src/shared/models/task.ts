@@ -11,3 +11,10 @@ export class Task {
   tags?: Tag[];
   list?: List;
 }
+
+export interface TasksResponse {
+  total: number;
+  page: number;
+  limit: number;
+  tasks: Task[];
+}

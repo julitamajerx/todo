@@ -23,10 +23,9 @@ export const sample_tasks: any[] = [
     id: 0,
     name: "Kup mleko",
     description: "Kupić mleko w pobliskim sklepie",
-    dueDate: new Date("2025-12-02T10:00:00"),
+    dueDate: new Date("2025-12-08T10:00:00"),
     isCompleted: false,
     isDeleted: false,
-    tags: [sample_tags[0], sample_tags[3]],
     list: sample_lists[1],
   },
   {

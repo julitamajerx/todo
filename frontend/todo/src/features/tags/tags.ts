@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Tag } from '../../shared/models/tag';
 import { TagService } from '../../services/tag-service';
 import { TaskService } from '../../services/task-service';
@@ -10,7 +10,7 @@ import { Observable, Subject } from 'rxjs';
   templateUrl: './tags.html',
   styleUrl: './tags.css',
 })
-export class Tags implements OnInit {
+export class Tags implements OnInit, OnDestroy {
   protected tags: Tag[] = [];
 
   private tagService = inject(TagService);
@@ -18,8 +18,7 @@ export class Tags implements OnInit {
   private destroy = new Subject<void>();
 
   ngOnInit(): void {
-    let tagsObservable: Observable<Tag[]>;
-    tagsObservable = this.tagService.getAllTags();
+    const tagsObservable: Observable<Tag[]> = this.tagService.getAllTags();
 
     tagsObservable.subscribe((tagsDbItem) => {
       this.tags = tagsDbItem;
@@ -27,12 +26,12 @@ export class Tags implements OnInit {
   }
 
   sortByTags(tag: string) {
-    this.taskService.currentTag.set(tag);
+    this.taskService.setTag(tag);
     this.taskService.hideTaskDescription();
   }
 
   resetTags() {
-    this.taskService.currentTag.set(null);
+    this.taskService.setTag(null);
     this.taskService.hideTaskDescription();
   }
 
