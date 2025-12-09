@@ -2,6 +2,7 @@ import { Router } from "express";
 import { sample_lists } from "../data";
 import asyncHandler from "express-async-handler";
 import { ListModel } from "../models/list.model";
+import { AppError } from "../errors/app-error";
 
 const router = Router();
 
@@ -25,6 +26,11 @@ router.get(
   asyncHandler(async (req, res) => {
     const lists = await ListModel.find();
     const all = req.query.all === "true";
+
+    if (lists.length === 0) {
+      throw new AppError(404, "Lists not found");
+    }
+
     if (all) {
       res.send(lists);
     } else {

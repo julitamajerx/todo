@@ -6,6 +6,7 @@ import { TaskModel } from "../models/task.model";
 import { ListModel } from "../models/list.model";
 import { TagModel } from "../models/tag.model";
 import { TaskTagModel } from "../models/tasktag.model";
+import { AppError } from "../errors/app-error";
 
 const router = Router();
 const isActive = (t: any) => !t.isDeleted && !t.isCompleted;
@@ -58,6 +59,10 @@ router.get(
     const listName = req.query.list || null;
 
     let tasks = await TaskModel.find().populate("list").populate("tags").lean();
+
+    if (tasks.length === 0) {
+      throw new AppError(404, "Tasks not found.");
+    }
 
     if (sortBy === TaskSort.Completed) {
       tasks = tasks.filter((t) => t.isCompleted);
@@ -124,6 +129,11 @@ router.get(
       .populate("tags")
       .populate("list")
       .lean();
+
+    if (!task) {
+      throw new AppError(404, "Task not found");
+    }
+
     res.send(task);
   })
 );

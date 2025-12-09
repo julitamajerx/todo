@@ -20,8 +20,13 @@ export class Tags implements OnInit, OnDestroy {
   ngOnInit(): void {
     const tagsObservable: Observable<Tag[]> = this.tagService.getAllTags();
 
-    tagsObservable.subscribe((tagsDbItem) => {
-      this.tags = tagsDbItem;
+    tagsObservable.subscribe({
+      next: (tagsDbItem) => {
+        this.tags = tagsDbItem;
+      },
+      error: (err: Error) => {
+        console.log('Error fetching tags:', err.message);
+      },
     });
   }
 

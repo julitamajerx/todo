@@ -20,8 +20,13 @@ export class Lists implements OnInit, OnDestroy {
   ngOnInit(): void {
     const listsObservable: Observable<List[]> = this.listService.getAllLists();
 
-    listsObservable.subscribe((listsDbItem) => {
-      this.lists = listsDbItem;
+    listsObservable.subscribe({
+      next: (listsDbItem) => {
+        this.lists = listsDbItem;
+      },
+      error: (err: Error) => {
+        console.log('Error fetching lists:', err.message);
+      },
     });
   }
 

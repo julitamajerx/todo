@@ -7,6 +7,7 @@ import { dbConnect } from "./configs/database.config";
 import taskRouter from "./routers/task.router";
 import listRouter from "./routers/list.router";
 import tagRouter from "./routers/tag.router";
+import { errorMiddleware } from "./middlewares/errorHandler";
 
 dbConnect();
 
@@ -28,3 +29,5 @@ const port = 5000;
 app.listen(port, () => {
   console.log("Served on http://localhost:" + port);
 });
+
+app.use(errorMiddleware);

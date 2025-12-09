@@ -35,23 +35,33 @@ export class TaskDetails implements OnInit, OnDestroy {
 
       const listsObservable: Observable<List[]> = this.listService.getAllLists();
 
-      listsObservable.subscribe((listsDbItem) => {
-        this.lists = listsDbItem;
+      listsObservable.subscribe({
+        next: (listsDbItem) => {
+          this.lists = listsDbItem;
 
-        taskObservable.subscribe((taskDbItem) => {
-          this.task = taskDbItem;
+          taskObservable.subscribe({
+            next: (taskDbItem) => {
+              this.task = taskDbItem;
 
-          if (this.task.list) {
-            const found = this.lists.find((l) => l._id === this.task.list!._id);
-            this.taskList = found ? found._id : null;
-          } else {
-            this.taskList = null;
-          }
+              if (this.task.list) {
+                const found = this.lists.find((l) => l._id === this.task.list!._id);
+                this.taskList = found ? found._id : null;
+              } else {
+                this.taskList = null;
+              }
 
-          if (this.task.description) {
-            this.editor.setText(this.task.description);
-          }
-        });
+              if (this.task.description) {
+                this.editor.setText(this.task.description);
+              }
+            },
+            error: (err: Error) => {
+              console.log('Error fetching task:', err.message);
+            },
+          });
+        },
+        error: (err: Error) => {
+          console.log('Error fetching lists:', err.message);
+        },
       });
     });
   }
