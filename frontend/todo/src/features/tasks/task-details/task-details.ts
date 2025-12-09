@@ -7,10 +7,11 @@ import { List } from '../../../shared/models/list';
 import { ListService } from '../../../services/list-service';
 import { FormsModule } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
+import { Spinner } from '../../../core/spinner/spinner';
 
 @Component({
   selector: 'app-task-details',
-  imports: [DatePipe, FormsModule],
+  imports: [DatePipe, FormsModule, Spinner],
   templateUrl: './task-details.html',
   styleUrl: './task-details.css',
 })

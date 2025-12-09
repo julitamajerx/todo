@@ -1,9 +1,10 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { TaskDetails } from './task-details/task-details';
 import { TaskService } from '../../services/task-service';
 import { Task } from '../../shared/models/task';
 import { TasksList } from './tasks-list/tasks-list';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-tasks',
@@ -11,12 +12,13 @@ import { TasksList } from './tasks-list/tasks-list';
   templateUrl: './tasks.html',
   styleUrl: './tasks.css',
 })
-export class Tasks implements OnInit {
+export class Tasks implements OnInit, OnDestroy {
   protected tasks: Task[] = [];
   protected isSelected = false;
   protected isMobile = false;
   protected taskService = inject(TaskService);
 
+  private destroy = new Subject<void>();
   private breakpointObserver = inject(BreakpointObserver);
 
   constructor() {
@@ -35,5 +37,10 @@ export class Tasks implements OnInit {
 
   protected hide() {
     this.taskService.hideTaskDescription();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
   }
 }
