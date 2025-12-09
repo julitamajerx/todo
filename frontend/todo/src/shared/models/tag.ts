@@ -1,5 +1,5 @@
 export class Tag {
-  id!: number;
+  _id!: string;
   emoji!: string;
   name!: string;
 }

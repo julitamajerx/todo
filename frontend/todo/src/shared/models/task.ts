@@ -2,7 +2,7 @@ import { Tag } from './tag';
 import { List } from './list';
 
 export class Task {
-  id!: number;
+  _id!: string;
   name!: string;
   description = '';
   dueDate = new Date();

@@ -1,5 +1,5 @@
 export class List {
-  id!: number;
+  _id!: string;
   name!: string;
   isPinned = false;
 }

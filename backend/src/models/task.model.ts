@@ -8,7 +8,7 @@ export interface Task {
   isCompleted: boolean;
   isDeleted: boolean;
   list: Types.ObjectId;
-  tags: Schema.Types.ObjectId[];
+  tags: Types.ObjectId[];
 }
 
 export const TaskSchema = new Schema<Task>(
@@ -18,8 +18,8 @@ export const TaskSchema = new Schema<Task>(
     dueDate: { type: Date },
     isCompleted: { type: Boolean },
     isDeleted: { type: Boolean },
-    list: { type: Schema.Types.ObjectId, ref: "List" },
-    tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
+    list: { type: Types.ObjectId, ref: "list" },
+    tags: [{ type: Types.ObjectId, ref: "tag" }],
   },
   {
     toJSON: {

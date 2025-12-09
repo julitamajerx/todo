@@ -20,7 +20,7 @@ export class TaskDetails implements OnInit, OnDestroy {
 
   protected lists: List[] = [];
   protected task: Task = new Task();
-  protected taskList: number | null = null;
+  protected taskList: string | null = null;
 
   private taskService = inject(TaskService);
   private listService = inject(ListService);
@@ -41,8 +41,8 @@ export class TaskDetails implements OnInit, OnDestroy {
           this.task = taskDbItem;
 
           if (this.task.list) {
-            const found = this.lists.find((l) => l.id === this.task.list!.id);
-            this.taskList = found ? found.id : null;
+            const found = this.lists.find((l) => l._id === this.task.list!._id);
+            this.taskList = found ? found._id : null;
           } else {
             this.taskList = null;
           }

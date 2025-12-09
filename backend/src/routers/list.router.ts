@@ -20,15 +20,18 @@ router.get(
   })
 );
 
-router.get("/", (req, res) => {
-  //?all=true
-  const all = req.query.all === "true";
-  if (all) {
-    res.send(sample_lists);
-  } else {
-    const limit = 3;
-    return res.send(sample_lists.slice(0, limit));
-  }
-});
+router.get(
+  "/",
+  asyncHandler(async (req, res) => {
+    const lists = await ListModel.find();
+    const all = req.query.all === "true";
+    if (all) {
+      res.send(lists);
+    } else {
+      const limit = 3;
+      res.send(lists.slice(0, limit));
+    }
+  })
+);
 
 export default router;

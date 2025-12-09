@@ -11,7 +11,7 @@ type TaskQueryParams = Record<string, string | number | boolean>;
 })
 export class TaskService {
   public isSelected = signal(false);
-  public selectedTaskId = signal<number>(0);
+  public selectedTaskId = signal<string>('');
 
   public currentSort = signal<TaskSort>(TaskSort.Inbox);
   public currentTag = signal<string | null>(null);
@@ -51,7 +51,7 @@ export class TaskService {
     return this.tasks();
   }
 
-  public getTask(taskId: number) {
+  public getTask(taskId: string) {
     return this.http.get<Task>(TASK_BY_URL + taskId);
   }
 
@@ -78,7 +78,7 @@ export class TaskService {
     this.isSelected.set(false);
   }
 
-  public setSelectedTag(taskId: number) {
+  public setSelectedTag(taskId: string) {
     this.selectedTaskId.set(taskId);
   }
 

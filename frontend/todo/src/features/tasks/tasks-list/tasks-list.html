@@ -16,20 +16,20 @@
   </div>
 
   <div class="task-container">
-    @for (task of tasks() || []; track task.id) {
+    @for (task of tasks() || []; track task._id) {
       <div class="task-box">
         <input
           type="checkbox"
-          [id]="'checkbox' + task.id"
+          [id]="'checkbox' + task._id"
           class="task-check"
           [checked]="task.isCompleted"
         />
 
         <label
           tabindex="0"
-          (click)="showTaskDescription(task.id)"
-          (keydown.enter)="showTaskDescription(task.id)"
-          (keydown.space)="showTaskDescription(task.id)"
+          (click)="showTaskDescription(task._id)"
+          (keydown.enter)="showTaskDescription(task._id)"
+          (keydown.space)="showTaskDescription(task._id)"
         >
           {{ task.name }}
         </label>

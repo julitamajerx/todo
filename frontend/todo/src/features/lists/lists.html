@@ -11,14 +11,14 @@
       <div class="list-description">Reset</div>
     </button>
 
-    @for (list of lists; track list.id) {
+    @for (list of lists; track list._id; let i = $index) {
       <button
         class="sidebar-box"
         (click)="sortByList(list.name)"
         (keydown.enter)="sortByList(list.name)"
         (keydown.space)="sortByList(list.name)"
       >
-        <div class="icon">{{ list.id + 1 }}</div>
+        <div class="icon">{{ i + 1 }}</div>
         <div class="list-description">{{ list.name }}</div>
       </button>
     }
