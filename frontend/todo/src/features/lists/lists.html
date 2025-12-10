@@ -23,9 +23,19 @@
       </button>
     }
 
-    <button class="sidebar-box" style="background-color: var(--button-color)">
+    <button
+      class="sidebar-box"
+      style="background-color: var(--button-color)"
+      (click)="openModal()"
+      (keydown.enter)="openModal()"
+      (keydown.space)="openModal()"
+    >
       <div class="icon">+</div>
       <div class="description">New List</div>
     </button>
   </div>
 </div>
+
+<ng-template #dialogContent>
+  <app-list-management></app-list-management>
+</ng-template>
