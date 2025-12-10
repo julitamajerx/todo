@@ -9,7 +9,7 @@ export class LoadingService {
 
   public readonly loading$: Observable<boolean> = this.loading.asObservable().pipe(delay(1));
 
-  private startTime: number = 0;
+  private startTime = 0;
   private readonly MIN_DURATION_MS = 1000;
 
   public show(): void {

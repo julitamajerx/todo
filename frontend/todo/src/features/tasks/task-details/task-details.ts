@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { List } from '../../../shared/models/list';
 import { ListService } from '../../../services/list-service';
 import { FormsModule } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
+import { Subject, forkJoin, takeUntil } from 'rxjs';
 import { Spinner } from '../../../core/spinner/spinner';
 
 @Component({
@@ -29,40 +29,38 @@ export class TaskDetails implements OnInit, OnDestroy {
 
   constructor() {
     effect(() => {
-      const taskObservable: Observable<Task> = this.taskService.getTask(
-        this.taskService.selectedTaskId(),
-      );
+      const taskId = this.taskService.selectedTaskId();
 
-      const listsObservable: Observable<List[]> = this.listService.getAllLists();
+      if (!taskId) return;
 
-      listsObservable.subscribe({
-        next: (listsDbItem) => {
-          this.lists = listsDbItem;
+      const taskDetails$ = this.taskService.getTask(taskId);
+      const lists$ = this.listService.getAllLists();
 
-          taskObservable.subscribe({
-            next: (taskDbItem) => {
-              this.task = taskDbItem;
+      forkJoin({
+        task: taskDetails$,
+        lists: lists$,
+      })
+        .pipe(takeUntil(this.destroy))
+        .subscribe({
+          next: ({ task, lists }) => {
+            this.lists = lists;
+            this.task = task;
 
-              if (this.task.list) {
-                const found = this.lists.find((l) => l._id === this.task.list!._id);
-                this.taskList = found ? found._id : null;
-              } else {
-                this.taskList = null;
-              }
+            if (this.task.list) {
+              const found = this.lists.find((l) => l._id === this.task.list!._id);
+              this.taskList = found ? found._id : null;
+            } else {
+              this.taskList = null;
+            }
 
-              if (this.task.description) {
-                this.editor.setText(this.task.description);
-              }
-            },
-            error: (err: Error) => {
-              console.log('Error fetching task:', err.message);
-            },
-          });
-        },
-        error: (err: Error) => {
-          console.log('Error fetching lists:', err.message);
-        },
-      });
+            if (this.editor && this.task.description) {
+              this.editor.setText(this.task.description);
+            }
+          },
+          error: (err: Error) => {
+            console.error('Error fetching task details or lists:', err.message);
+          },
+        });
     });
   }
 
@@ -73,6 +71,10 @@ export class TaskDetails implements OnInit, OnDestroy {
       },
       theme: 'snow',
     });
+
+    if (this.task.description) {
+      this.editor.setText(this.task.description);
+    }
   }
 
   ngOnDestroy(): void {
