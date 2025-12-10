@@ -8,7 +8,7 @@
       (keydown.space)="resetTags()"
     >
       <div class="icon">🛇</div>
-      <div class="tag-description">Reset</div>
+      <div class="description">Reset</div>
     </button>
 
     @for (tag of tags; track tag._id) {
@@ -19,7 +19,7 @@
         (keydown.space)="sortByTags(tag.name)"
       >
         <div class="icon">{{ tag.emoji }}</div>
-        <div class="tag-description">{{ tag.name }}</div>
+        <div class="description">{{ tag.name }}</div>
       </button>
     }
     <button
@@ -30,11 +30,11 @@
       (keydown.space)="openModal()"
     >
       <div class="icon">+</div>
-      <div>New Tag</div>
+      <div class="description">New Tag</div>
     </button>
   </div>
 </div>
 
 <ng-template #dialogContent>
-<app-tags-management></app-tags-management>
+  <app-tags-management></app-tags-management>
 </ng-template>

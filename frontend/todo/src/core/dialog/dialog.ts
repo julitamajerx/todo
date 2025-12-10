@@ -11,7 +11,7 @@ import { DialogData } from '../../shared/interfaces/dialog-data.interface';
 })
 export class Dialog {
   private data: DialogData = inject(DIALOG_DATA);
-  
+
   public title: string = this.data.title;
   public contentTemplate: TemplateRef<any> = this.data.contentTemplate;
 }

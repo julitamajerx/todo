@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
   templateUrl: './tags-management.html',
   styleUrl: './tags-management.css',
 })
-export class TagsManagement {
-
-}
+export class TagsManagement {}

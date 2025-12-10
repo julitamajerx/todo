@@ -75,3 +75,13 @@ body {
   border: none;
   color: white;
 }
+
+@media (max-width: 870px) {
+  .description {
+    display: none;
+  }
+
+  .sidebar-box {
+    justify-content: center;
+  }
+}

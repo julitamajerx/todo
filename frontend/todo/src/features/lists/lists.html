@@ -8,7 +8,7 @@
       (keydown.space)="resetLists()"
     >
       <div class="icon">🛇</div>
-      <div class="list-description">Reset</div>
+      <div class="description">Reset</div>
     </button>
 
     @for (list of lists; track list._id; let i = $index) {
@@ -19,16 +19,13 @@
         (keydown.space)="sortByList(list.name)"
       >
         <div class="icon">{{ i + 1 }}</div>
-        <div class="list-description">{{ list.name }}</div>
+        <div class="description">{{ list.name }}</div>
       </button>
     }
 
-    <button
-      class="sidebar-box"
-      style="background-color: var(--button-color);"
-    >
+    <button class="sidebar-box" style="background-color: var(--button-color)">
       <div class="icon">+</div>
-      <div>New List</div>
+      <div class="description">New List</div>
     </button>
   </div>
 </div>
