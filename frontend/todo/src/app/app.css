@@ -16,10 +16,6 @@
   border-radius: 25px;
 }
 
-.line {
-  border-bottom: 1px solid #ccc;
-}
-
 .list {
   display: flex;
   flex-direction: column;

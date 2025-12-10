@@ -24,7 +24,7 @@ export class Lists implements OnInit, OnDestroy {
   private dialog = inject(Dialog);
 
   ngOnInit(): void {
-    const listsObservable: Observable<List[]> = this.listService.getAllLists();
+    const listsObservable: Observable<List[]> = this.listService.getLists();
 
     listsObservable.subscribe({
       next: (listsDbItem) => {

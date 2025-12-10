@@ -8,6 +8,10 @@ body {
   font-size: 18px;
 }
 
+h3 {
+  margin: 0;
+}
+
 :root {
   --primary-color: #171717;
   --secondary-color: #1a1a1a;
@@ -65,6 +69,7 @@ body {
 .sidebar-box {
   display: flex;
   align-items: center;
+  flex-grow: 1;
   gap: 10px;
   box-sizing: border-box;
   padding: 10px;
@@ -73,6 +78,31 @@ body {
   font-size: 15px;
   cursor: pointer;
   border: none;
+  color: white;
+}
+
+.line {
+  border-bottom: 1px solid #ccc;
+}
+
+.add input {
+  width: 100%;
+  height: 40px;
+  padding: 12px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--primary-color);
+  color: white;
+}
+
+input:focus {
+  outline: none;
+}
+
+input::placeholder {
+  opacity: 0.8;
+  font-style: italic;
   color: white;
 }
 

@@ -10,7 +10,11 @@ import { Observable } from 'rxjs';
 export class ListService {
   private http = inject(HttpClient);
 
-  public getAllLists(): Observable<List[]> {
+  public getLists(): Observable<List[]> {
     return this.http.get<List[]>(LISTS_URL);
+  }
+
+  public getAllLists(): Observable<List[]> {
+    return this.http.get<List[]>(LISTS_URL + '?all=true');
   }
 }

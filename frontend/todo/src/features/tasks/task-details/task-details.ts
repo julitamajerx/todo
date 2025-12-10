@@ -34,7 +34,7 @@ export class TaskDetails implements OnInit, OnDestroy {
       if (!taskId) return;
 
       const taskDetails$ = this.taskService.getTask(taskId);
-      const lists$ = this.listService.getAllLists();
+      const lists$ = this.listService.getLists();
 
       forkJoin({
         task: taskDetails$,

@@ -1,0 +1,16 @@
+.wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.delete-list {
+  background: none;
+  border: none;
+  cursor: pointer;
+}

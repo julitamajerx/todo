@@ -1,17 +1,19 @@
 <!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
 
 <div class="wrapper">
-  <h2>
-    {{ listHeader }}
-  </h2>
-  @if (tagName.length) {
-    <span> - {{ tagName }}</span>
-  }
-  @if (listName.length) {
-    <span> - {{ listName }}</span>
-  }
+  <div>
+    <h2>
+      {{ listHeader }}
+    </h2>
+    @if (tagName.length) {
+      <span> - {{ tagName }}</span>
+    }
+    @if (listName.length) {
+      <span> - {{ listName }}</span>
+    }
+  </div>
 
-  <div class="add-task">
+  <div class="add">
     <input for="text" id="newTask" name="newTask" placeholder=" ✚ Add task..." />
   </div>
 

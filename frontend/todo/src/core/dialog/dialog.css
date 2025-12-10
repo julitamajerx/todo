@@ -1,11 +1,16 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  min-width: 300px;
-  min-height: 100px;
+  gap: 20px;
+  width: 500px;
   box-sizing: border-box;
   background-color: black;
   border-radius: 25px;
   padding: 20px;
+}
+
+@media (max-width: 870px) {
+  .wrapper {
+    width: 300px;
+  }
 }

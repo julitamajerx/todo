@@ -24,7 +24,7 @@ export class Tags implements OnInit, OnDestroy {
   private destroy = new Subject<void>();
 
   ngOnInit(): void {
-    const tagsObservable: Observable<Tag[]> = this.tagService.getAllTags();
+    const tagsObservable: Observable<Tag[]> = this.tagService.getTags();
 
     tagsObservable.subscribe({
       next: (tagsDbItem) => {

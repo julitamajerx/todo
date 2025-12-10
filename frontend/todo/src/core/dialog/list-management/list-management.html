@@ -1,1 +1,22 @@
-<p>list-management works!</p>
+<div class="wrapper">
+  <div class="add">
+    <input for="text" id="newlist" name="newlist" placeholder=" ✚ Add list..." />
+  </div>
+
+  @for (list of lists; track list._id; let i = $index) {
+    <div class="flex-container">
+      <button
+        class="sidebar-box"
+        (click)="sortByLists(list.name)"
+        (keydown.enter)="sortByLists(list.name)"
+        (keydown.space)="sortByLists(list.name)"
+      >
+        <div class="icon">{{ i + 1 }}</div>
+        <div class="description">{{ list.name }}</div>
+      </button>
+      <button class="delete-list">
+        <img src="delete.png" alt="trash" width="29px" height="29px" />
+      </button>
+    </div>
+  }
+</div>

@@ -1,1 +1,22 @@
-<p>tags-management works!</p>
+<div class="wrapper">
+  <div class="add">
+    <input for="text" id="newTag" name="newTag" placeholder=" ✚ Add task..." />
+  </div>
+
+  @for (tag of tags; track tag._id) {
+    <div class="flex-container">
+      <button
+        class="sidebar-box"
+        (click)="sortByTags(tag.name)"
+        (keydown.enter)="sortByTags(tag.name)"
+        (keydown.space)="sortByTags(tag.name)"
+      >
+        <div class="icon">{{ tag.emoji }}</div>
+        <div class="description">{{ tag.name }}</div>
+      </button>
+      <button class="delete-tag">
+        <img src="delete.png" alt="trash" width="29px" height="29px" />
+      </button>
+    </div>
+  }
+</div>
