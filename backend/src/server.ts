@@ -12,6 +12,7 @@ import { errorMiddleware } from "./middlewares/errorHandler";
 dbConnect();
 
 const app = express();
+app.use(express.json());
 
 app.use(
   cors({

@@ -2,7 +2,6 @@ import { Router } from "express";
 import { sample_tags } from "../data";
 import asyncHandler from "express-async-handler";
 import { TagModel } from "../models/tag.model";
-import { TaskTagModel } from "../models/tasktag.model";
 import { AppError } from "../errors/app-error";
 
 const router = Router();
@@ -38,6 +37,24 @@ router.get(
       const limit = 3;
       res.send(tags.slice(0, limit));
     }
+  })
+);
+
+router.post(
+  "/create",
+  asyncHandler(async (req, res) => {
+    const newTag = new TagModel(req.body);
+
+    if (!newTag.name || !newTag.emoji) {
+      throw new AppError(400, "Name and emoji are required.");
+    }
+
+    const savedTag = await newTag.save();
+
+    res.status(201).json({
+      message: "New tag created.",
+      tag: savedTag,
+    });
   })
 );
 

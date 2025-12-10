@@ -1,7 +1,38 @@
 <div class="wrapper">
-  <div class="add">
-    <input for="text" id="newTag" name="newTag" placeholder=" ✚ Add task..." />
-  </div>
+  <form (ngSubmit)="onSubmit()" #tagForm="ngForm">
+    <div class="add">
+      <input
+        id="newEmoji"
+        name="newEmoji"
+        placeholder=" ✚ emoji..."
+        (click)="openEmojiPicker = !openEmojiPicker"
+        [readonly]="true"
+        [value]="newEmoji"
+        required
+        [(ngModel)]="model.emoji"
+      />
+      @if (openEmojiPicker) {
+        <emoji-mart
+          (emojiClick)="onEmojiSelect($event)"
+          [style]="{ position: 'absolute', zIndex: 9999 }"
+          [set]="'apple'"
+        >
+        </emoji-mart>
+      }
+
+      <input
+        for="text"
+        id="newTag"
+        name="newTag"
+        placeholder=" ✚ tag name..."
+        required
+        [(ngModel)]="model.name"
+      />
+      <button class="tag-button" type="submit" [disabled]="!tagForm.form.valid">
+        <img src="save.png" alt="trash" width="29px" height="29px" />
+      </button>
+    </div>
+  </form>
 
   @for (tag of tags; track tag._id) {
     <div class="flex-container">
@@ -14,7 +45,7 @@
         <div class="icon">{{ tag.emoji }}</div>
         <div class="description">{{ tag.name }}</div>
       </button>
-      <button class="delete-tag">
+      <button class="tag-button">
         <img src="delete.png" alt="trash" width="29px" height="29px" />
       </button>
     </div>
