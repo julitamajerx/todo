@@ -1,8 +1,9 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Task, TasksResponse } from '../shared/models/task';
+import { Task } from '../shared/models/task';
 import { TaskSort } from '../shared/enums/task-sort-enum';
 import { HttpClient } from '@angular/common/http';
 import { TASK_BY_URL, TASKS_URL } from '../shared/constants/urls';
+import { TasksResponse } from '../shared/interfaces/task-response.interface';
 
 type TaskQueryParams = Record<string, string | number | boolean>;
 

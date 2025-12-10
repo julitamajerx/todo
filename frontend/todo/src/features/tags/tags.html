@@ -22,5 +22,19 @@
         <div class="tag-description">{{ tag.name }}</div>
       </button>
     }
+    <button
+      class="sidebar-box"
+      style="background-color: var(--button-color)"
+      (click)="openModal()"
+      (keydown.enter)="openModal()"
+      (keydown.space)="openModal()"
+    >
+      <div class="icon">+</div>
+      <div>New Tag</div>
+    </button>
   </div>
 </div>
+
+<ng-template #dialogContent>
+<app-tags-management></app-tags-management>
+</ng-template>
