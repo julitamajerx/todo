@@ -6,7 +6,10 @@ import { TaskService } from '../../../services/task-service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CreateTagResponse } from '../../../shared/interfaces/tag-response.interface';
+import {
+  CreateTagResponse,
+  DeleteTagResponse,
+} from '../../../shared/interfaces/tag-response.interface';
 
 @Component({
   selector: 'app-tags-management',
@@ -76,6 +79,18 @@ export class TagsManagement implements OnInit {
       },
       error: (err) => {
         console.log('Error creating tag:', err);
+      },
+    });
+  }
+
+  deleteTag(tagId: string) {
+    this.tagService.deleteTag(tagId).subscribe({
+      next: (response: DeleteTagResponse) => {
+        console.log('Tag deleted:', response.message);
+        this.tags = this.tags.filter((tag) => tag._id !== tagId);
+      },
+      error: (err) => {
+        console.log('Error deleting tag:', err);
       },
     });
   }

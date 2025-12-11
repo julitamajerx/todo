@@ -2,8 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Tag } from '../shared/models/tag';
-import { TAGS_URL, TAGS_URL_CREATE } from '../shared/constants/urls';
-import { CreateTagResponse } from '../shared/interfaces/tag-response.interface';
+import { TAGS_URL, TAGS_URL_CREATE, TAGS_URL_DELETE } from '../shared/constants/urls';
+import { CreateTagResponse, DeleteTagResponse } from '../shared/interfaces/tag-response.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -21,5 +21,9 @@ export class TagService {
 
   public createTag(tag: Tag): Observable<CreateTagResponse> {
     return this.http.post<CreateTagResponse>(TAGS_URL_CREATE, tag);
+  }
+
+  public deleteTag(tagId: string): Observable<DeleteTagResponse> {
+    return this.http.delete<DeleteTagResponse>(`${TAGS_URL_DELETE}/${tagId}`);
   }
 }

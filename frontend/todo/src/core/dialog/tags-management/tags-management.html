@@ -45,7 +45,7 @@
         <div class="icon">{{ tag.emoji }}</div>
         <div class="description">{{ tag.name }}</div>
       </button>
-      <button class="tag-button">
+      <button class="tag-button" (click)="deleteTag(tag._id)">
         <img src="delete.png" alt="trash" width="29px" height="29px" />
       </button>
     </div>

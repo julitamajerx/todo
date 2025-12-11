@@ -4,3 +4,7 @@ export interface CreateTagResponse {
   tag: Tag;
   message?: string;
 }
+
+export interface DeleteTagResponse {
+  message?: string;
+}

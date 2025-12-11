@@ -5,7 +5,6 @@ import asyncHandler from "express-async-handler";
 import { TaskModel } from "../models/task.model";
 import { ListModel } from "../models/list.model";
 import { TagModel } from "../models/tag.model";
-import { TaskTagModel } from "../models/tasktag.model";
 import { AppError } from "../errors/app-error";
 
 const router = Router();
@@ -35,15 +34,6 @@ router.get(
         };
       })
     );
-
-    for (const task of createdTasks) {
-      for (const tagId of task.tags) {
-        await TaskTagModel.create({
-          taskId: task._id.toString(),
-          tagId: tagId.toString(),
-        });
-      }
-    }
 
     res.send("Tasks seed is done.");
   })
