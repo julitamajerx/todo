@@ -1,8 +1,18 @@
 <div class="wrapper">
-  <div class="add">
-    <input for="text" id="newlist" name="newlist" placeholder=" ✚ Add list..." />
-  </div>
-
+  <form (ngSubmit)="onSubmit()" #listForm="ngForm">
+    <div class="add">
+      <input
+        for="text"
+        id="newlist"
+        name="newlist"
+        placeholder=" ✚ Add list..."
+        [(ngModel)]="model.name"
+      />
+      <button class="list-button" type="submit" [disabled]="!listForm.form.valid">
+        <img src="save.png" alt="trash" width="29px" height="29px" />
+      </button>
+    </div>
+  </form>
   @for (list of lists; track list._id; let i = $index) {
     <div class="flex-container">
       <button
@@ -14,7 +24,7 @@
         <div class="icon">{{ i + 1 }}</div>
         <div class="description">{{ list.name }}</div>
       </button>
-      <button class="delete-list">
+      <button class="list-button" (click)="deleteList(list._id)">
         <img src="delete.png" alt="trash" width="29px" height="29px" />
       </button>
     </div>

@@ -3,6 +3,7 @@ import { sample_lists } from "../data";
 import asyncHandler from "express-async-handler";
 import { ListModel } from "../models/list.model";
 import { AppError } from "../errors/app-error";
+import { TaskModel } from "../models/task.model";
 
 const router = Router();
 
@@ -37,6 +38,49 @@ router.get(
       const limit = 3;
       res.send(lists.slice(0, limit));
     }
+  })
+);
+
+router.post(
+  "/create",
+  asyncHandler(async (req, res) => {
+    const newList = new ListModel(req.body);
+
+    if (!newList.name) {
+      throw new AppError(400, "Name is required.");
+    }
+
+    const savedList = await newList.save();
+
+    res.status(201).json({
+      message: "New list created.",
+      list: savedList,
+    });
+  })
+);
+
+router.delete(
+  "/delete/:listId",
+  asyncHandler(async (req, res) => {
+    const listId = req.params.listId;
+
+    if (!listId) {
+      throw new AppError(400, "List id is required.");
+    }
+
+    const listDelete = await ListModel.findById(listId);
+
+    if (!listDelete) {
+      throw new AppError(404, "List not found.");
+    }
+
+    await TaskModel.updateMany({ lists: listId }, { $pull: { lists: listId } });
+
+    await listDelete.deleteOne();
+
+    res.status(200).json({
+      messege: "List was succsessfully deleted.",
+    });
   })
 );
 

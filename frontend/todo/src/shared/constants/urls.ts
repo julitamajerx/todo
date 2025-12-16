@@ -6,3 +6,5 @@ export const TAGS_URL = BASE_URL + '/api/tags';
 export const TAGS_URL_CREATE = TAGS_URL + '/create';
 export const TAGS_URL_DELETE = TAGS_URL + '/delete';
 export const LISTS_URL = BASE_URL + '/api/lists';
+export const LISTS_URL_CREATE = LISTS_URL + '/create';
+export const LISTS_URL_DELETE = LISTS_URL + '/delete';

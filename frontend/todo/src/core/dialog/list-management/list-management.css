@@ -9,8 +9,13 @@
   display: flex;
 }
 
-.delete-list {
+.list-button {
   background: none;
   border: none;
   cursor: pointer;
+}
+
+.add {
+  display: flex;
+  gap: 10px;
 }
