@@ -26,6 +26,17 @@ h2 {
   color: white;
 }
 
+.task-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.add {
+  display: flex;
+  gap: 10px;
+}
+
 input:focus {
   outline: none;
 }

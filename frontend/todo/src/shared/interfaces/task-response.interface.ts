@@ -6,3 +6,8 @@ export interface TasksResponse {
   limit: number;
   tasks: Task[];
 }
+
+export interface CreateTaskResponse {
+  task: Task;
+  message?: string;
+}

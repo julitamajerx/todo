@@ -2,10 +2,11 @@ import { Component, effect, inject, input } from '@angular/core';
 import { Task } from '../../../shared/models/task';
 import { TaskService } from '../../../services/task-service';
 import { DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-tasks-list',
-  imports: [DatePipe],
+  imports: [DatePipe, FormsModule],
   templateUrl: './tasks-list.html',
   styleUrl: './tasks-list.css',
 })
@@ -15,6 +16,8 @@ export class TasksList {
   protected listHeader = '';
   protected tagName = '';
   protected listName = '';
+  protected model = new Task();
+  protected submitted = false;
 
   constructor() {
     effect(() => {
@@ -24,6 +27,13 @@ export class TasksList {
       this.tagName = this.taskService.currentTag() || '';
       this.listName = this.taskService.currentList() || '';
     });
+  }
+
+  protected onSubmit() {
+    this.submitted = true;
+
+    this.taskService.createTask(this.model);
+    this.model = new Task();
   }
 
   protected showTaskDescription(taskId: string) {

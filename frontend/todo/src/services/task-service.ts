@@ -2,8 +2,8 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Task } from '../shared/models/task';
 import { TaskSort } from '../shared/enums/task-sort-enum';
 import { HttpClient } from '@angular/common/http';
-import { TASK_BY_URL, TASKS_URL } from '../shared/constants/urls';
-import { TasksResponse } from '../shared/interfaces/task-response.interface';
+import { TASK_BY_URL, TASK_URL_CREATE, TASKS_URL } from '../shared/constants/urls';
+import { CreateTaskResponse, TasksResponse } from '../shared/interfaces/task-response.interface';
 import { Observable, filter, switchMap, tap } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 
@@ -98,6 +98,15 @@ export class TaskService {
   public setSelectedTask(taskId: string) {
     this.selectedTaskId.set(taskId);
     this.isSelected.set(true);
+  }
+
+  public createTask(task: Task) {
+    this.http.post<CreateTaskResponse>(TASK_URL_CREATE, task).subscribe({
+      next: (response) => {
+        this.tasks.update((current) => [...current, response.task]);
+      },
+      error: (err) => console.log('Error creating task:', err),
+    });
   }
 
   public checkDate(date: Date): boolean {

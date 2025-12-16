@@ -13,9 +13,20 @@
     }
   </div>
 
-  <div class="add">
-    <input for="text" id="newTask" name="newTask" placeholder=" ✚ Add task..." />
-  </div>
+  <form (ngSubmit)="onSubmit()" #taskForm="ngForm">
+    <div class="add">
+      <input
+        for="text"
+        id="newTask"
+        name="newTask"
+        placeholder=" ✚ Add task..."
+        [(ngModel)]="model.name"
+      />
+      <button class="task-button" type="submit" [disabled]="!taskForm.form.valid">
+        <img src="save.png" alt="trash" width="29px" height="29px" />
+      </button>
+    </div>
+  </form>
 
   <div class="task-container">
     @for (task of tasks() || []; track task._id) {

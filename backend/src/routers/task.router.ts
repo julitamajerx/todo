@@ -128,6 +128,24 @@ router.get(
   })
 );
 
+router.post(
+  "/create",
+  asyncHandler(async (req, res) => {
+    const newTask = new TaskModel(req.body);
+
+    if (!newTask.name) {
+      throw new AppError(400, "Name is required.");
+    }
+
+    const savedTask = await newTask.save();
+
+    res.status(201).json({
+      messege: "New task created.",
+      task: savedTask,
+    });
+  })
+);
+
 function paginate<T>(items: T[], page: number, limit: number): T[] {
   const startIndex = (page - 1) * limit;
   const endIndex = startIndex + limit;
