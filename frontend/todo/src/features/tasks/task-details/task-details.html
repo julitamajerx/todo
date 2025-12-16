@@ -2,12 +2,12 @@
   <div class="upperbar">
     <div class="container">
       <ul>
-        <li><input type="checkbox" class="task-check" [checked]="task.isCompleted" /></li>
+        <li><input type="checkbox" class="task-check" [checked]="task()?.isCompleted" /></li>
         <li>
           <img src="calendar-weeks.png" alt="calendar" width="29px" height="29px" />
         </li>
         <li>
-          <span>{{ task.dueDate | date: 'dd.MM.yyyy' }}</span>
+          <span>{{ task()?.dueDate | date: 'dd.MM.yyyy' }}</span>
         </li>
         <li><img src="delete.png" alt="calendar" width="29px" height="29px" /></li>
       </ul>
@@ -16,10 +16,10 @@
 
   <div class="description-container">
     <app-spinner></app-spinner>
-    <h3>{{ task.name }}</h3>
+    <h3>{{ task()?.name }}</h3>
     <div class="flex-container">
       <h4>Tags:</h4>
-      @for (tag of task.tags; track tag._id) {
+      @for (tag of task()?.tags; track tag._id) {
         <div class="tag-box">{{ tag.name }}</div>
       }
       <button class="add-tag">✚ new tag</button>
@@ -28,7 +28,7 @@
       <h4>List:</h4>
       <div class="select-wrapper">
         <select [ngModel]="taskList">
-          <option [ngValue]="null">-- brak listy --</option>
+          <option [ngValue]="null">-- null --</option>
           @for (list of lists(); track list._id) {
             <option [ngValue]="list._id">{{ list.name }}</option>
           }

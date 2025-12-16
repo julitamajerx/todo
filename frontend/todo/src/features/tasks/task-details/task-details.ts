@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import Quill from 'quill';
 import { TaskService } from '../../../services/task-service';
-import { Task } from '../../../shared/models/task';
 import { List } from '../../../shared/models/list';
 import { ListService } from '../../../services/list-service';
 import { FormsModule } from '@angular/forms';
@@ -29,33 +28,30 @@ export class TaskDetails implements OnInit, OnDestroy {
   public editor!: Quill;
 
   protected lists = signal<List[]>([]);
-  protected task: Task = new Task();
   protected taskList: string | null = null;
 
   private taskService = inject(TaskService);
   private listService = inject(ListService);
   private destroy = new Subject<void>();
 
+  protected task = this.taskService.selectedTask;
+
   constructor() {
     effect(() => {
-      const taskId = this.taskService.selectedTaskId();
-      if (!taskId) return;
-
-      this.taskService.getTask(taskId).subscribe({
-        next: (task) => {
-          this.task = task;
-
-          const found = this.lists().find((l) => l._id === this.task.list?._id);
-          this.taskList = found ? found._id : null;
-
-          if (this.editor && this.task.description) {
-            this.editor.setText(this.task.description);
-          }
-        },
-        error: (err: Error) => console.error('Error fetching task:', err.message),
-      });
+      const currentTask = this.task();
 
       this.lists.set(this.listService.lists());
+
+      const found = this.lists().find((l) => l._id === currentTask?.list?._id);
+      this.taskList = found ? found._id : null;
+
+      if (this.editor) {
+        if (currentTask && currentTask.description) {
+          this.editor.setText(currentTask.description);
+        } else {
+          this.editor.setText('');
+        }
+      }
     });
   }
 
@@ -67,8 +63,8 @@ export class TaskDetails implements OnInit, OnDestroy {
       theme: 'snow',
     });
 
-    if (this.task.description) {
-      this.editor.setText(this.task.description);
+    if (this.task()?.description) {
+      this.editor.setText(this.task()!.description);
     }
   }
 

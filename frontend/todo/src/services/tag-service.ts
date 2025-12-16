@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Tag } from '../shared/models/tag';
 import { TAGS_URL, TAGS_URL_CREATE, TAGS_URL_DELETE } from '../shared/constants/urls';
 import { CreateTagResponse, DeleteTagResponse } from '../shared/interfaces/tag-response.interface';
+import { TaskService } from './task-service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ export class TagService {
   public tags = signal<Tag[]>([]);
 
   private http = inject(HttpClient);
+  private taskService = inject(TaskService);
 
   public getAllTags() {
     this.http.get<Tag[]>(TAGS_URL + '?all=true').subscribe({
@@ -32,6 +34,7 @@ export class TagService {
     this.http.delete<DeleteTagResponse>(`${TAGS_URL_DELETE}/${tagId}`).subscribe({
       next: () => {
         this.tags.update((current) => current.filter((t) => t._id !== tagId));
+        this.taskService.forceTaskRefresh();
       },
       error: (err) => console.log('Error deleting tag:', err),
     });

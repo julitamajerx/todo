@@ -1,6 +1,6 @@
 <div class="main-container" [class.mobile-details]="isMobile && isSelected">
   <div class="left">
-    <app-tasks-list [tasks]="tasks"></app-tasks-list>
+    <app-tasks-list [tasks]="tasks()"></app-tasks-list>
   </div>
 
   @if (isSelected) {

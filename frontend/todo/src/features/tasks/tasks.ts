@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { TaskDetails } from './task-details/task-details';
 import { TaskService } from '../../services/task-service';
@@ -13,7 +13,7 @@ import { Subject } from 'rxjs';
   styleUrl: './tasks.css',
 })
 export class Tasks implements OnInit, OnDestroy {
-  protected tasks: Task[] = [];
+  protected tasks = signal<Task[]>([]);
   protected isSelected = false;
   protected isMobile = false;
   protected taskService = inject(TaskService);
@@ -22,10 +22,11 @@ export class Tasks implements OnInit, OnDestroy {
   private breakpointObserver = inject(BreakpointObserver);
 
   constructor() {
+    this.taskService.getAllTasks();
+
     effect(() => {
       this.isSelected = this.taskService.isSelected();
-
-      this.tasks = this.taskService.getAllTasks();
+      this.tasks.set(this.taskService.tasks());
     });
   }
 
