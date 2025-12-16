@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ListService } from '../../../services/list-service';
 import { Subject, Observable } from 'rxjs';
 import { TaskService } from '../../../services/task-service';
@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './list-management.html',
   styleUrl: './list-management.css',
 })
-export class ListManagement {
+export class ListManagement implements OnInit, OnDestroy {
   protected lists: List[] = [];
   protected submitted = false;
   protected model = new List();

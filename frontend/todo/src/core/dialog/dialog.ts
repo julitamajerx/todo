@@ -1,4 +1,4 @@
-import { Component, inject, input, TemplateRef } from '@angular/core';
+import { Component, inject, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { DialogData } from '../../shared/interfaces/dialog-data.interface';
@@ -13,5 +13,5 @@ export class Dialog {
   private data: DialogData = inject(DIALOG_DATA);
 
   public title: string = this.data.title;
-  public contentTemplate: TemplateRef<any> = this.data.contentTemplate;
+  public contentTemplate: TemplateRef<unknown> = this.data.contentTemplate;
 }

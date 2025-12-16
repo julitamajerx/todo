@@ -14,7 +14,7 @@ import { ListManagement } from '../../core/dialog/list-management/list-managemen
   styleUrl: './lists.css',
 })
 export class Lists implements OnInit, OnDestroy {
-  @ViewChild('dialogContent') dialogContentTemplate!: TemplateRef<any>;
+  @ViewChild('dialogContent') dialogContentTemplate!: TemplateRef<unknown>;
 
   protected lists: List[] = [];
 

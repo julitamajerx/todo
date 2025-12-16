@@ -14,7 +14,7 @@ import { TagsManagement } from '../../core/dialog/tags-management/tags-managemen
   styleUrl: './tags.css',
 })
 export class Tags implements OnInit, OnDestroy {
-  @ViewChild('dialogContent') dialogContentTemplate!: TemplateRef<any>;
+  @ViewChild('dialogContent') dialogContentTemplate!: TemplateRef<unknown>;
 
   protected tags: Tag[] = [];
 
