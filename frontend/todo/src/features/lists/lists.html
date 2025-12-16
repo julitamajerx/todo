@@ -11,7 +11,7 @@
       <div class="description">Reset</div>
     </button>
 
-    @for (list of lists; track list._id; let i = $index) {
+    @for (list of lists(); track list._id; let i = $index) {
       <button
         class="sidebar-box"
         (click)="sortByList(list.name)"

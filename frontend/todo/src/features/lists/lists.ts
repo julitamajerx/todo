@@ -1,8 +1,7 @@
-import { Component, inject, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, computed, effect, inject, signal, TemplateRef, ViewChild } from '@angular/core';
 import { TaskService } from '../../services/task-service';
 import { ListService } from '../../services/list-service';
 import { List } from '../../shared/models/list';
-import { Observable, Subject } from 'rxjs';
 import { Dialog } from '@angular/cdk/dialog';
 import { Dialog as DialogWindow } from '../../core/dialog/dialog';
 import { ListManagement } from '../../core/dialog/list-management/list-management';
@@ -13,26 +12,22 @@ import { ListManagement } from '../../core/dialog/list-management/list-managemen
   templateUrl: './lists.html',
   styleUrl: './lists.css',
 })
-export class Lists implements OnInit, OnDestroy {
+export class Lists {
   @ViewChild('dialogContent') dialogContentTemplate!: TemplateRef<unknown>;
 
-  protected lists: List[] = [];
+  protected lists = signal<List[]>([]);
 
-  private destroy = new Subject<void>();
   private listService = inject(ListService);
   private taskService = inject(TaskService);
   private dialog = inject(Dialog);
 
-  ngOnInit(): void {
-    const listsObservable: Observable<List[]> = this.listService.getLists();
+  constructor() {
+    this.listService.getAllLists();
 
-    listsObservable.subscribe({
-      next: (listsDbItem) => {
-        this.lists = listsDbItem;
-      },
-      error: (err: Error) => {
-        console.log('Error fetching lists:', err.message);
-      },
+    const sidebarLists = computed(() => this.listService.lists().slice(0, 3));
+
+    effect(() => {
+      this.lists.set(sidebarLists());
     });
   }
 
@@ -55,10 +50,5 @@ export class Lists implements OnInit, OnDestroy {
         },
       });
     }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy.next();
-    this.destroy.complete();
   }
 }

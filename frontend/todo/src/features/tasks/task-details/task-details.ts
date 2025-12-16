@@ -1,17 +1,26 @@
-import { Component, OnInit, ViewChild, ElementRef, inject, effect, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  inject,
+  effect,
+  OnDestroy,
+  signal,
+} from '@angular/core';
 import Quill from 'quill';
 import { TaskService } from '../../../services/task-service';
 import { Task } from '../../../shared/models/task';
-import { DatePipe } from '@angular/common';
 import { List } from '../../../shared/models/list';
 import { ListService } from '../../../services/list-service';
 import { FormsModule } from '@angular/forms';
-import { Subject, forkJoin, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Spinner } from '../../../core/spinner/spinner';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-task-details',
-  imports: [DatePipe, FormsModule, Spinner],
+  imports: [FormsModule, Spinner, DatePipe],
   templateUrl: './task-details.html',
   styleUrl: './task-details.css',
 })
@@ -19,7 +28,7 @@ export class TaskDetails implements OnInit, OnDestroy {
   @ViewChild('editorContainer', { static: true }) editorContainer!: ElementRef;
   public editor!: Quill;
 
-  protected lists: List[] = [];
+  protected lists = signal<List[]>([]);
   protected task: Task = new Task();
   protected taskList: string | null = null;
 
@@ -30,37 +39,23 @@ export class TaskDetails implements OnInit, OnDestroy {
   constructor() {
     effect(() => {
       const taskId = this.taskService.selectedTaskId();
-
       if (!taskId) return;
 
-      const taskDetails$ = this.taskService.getTask(taskId);
-      const lists$ = this.listService.getLists();
+      this.taskService.getTask(taskId).subscribe({
+        next: (task) => {
+          this.task = task;
 
-      forkJoin({
-        task: taskDetails$,
-        lists: lists$,
-      })
-        .pipe(takeUntil(this.destroy))
-        .subscribe({
-          next: ({ task, lists }) => {
-            this.lists = lists;
-            this.task = task;
+          const found = this.lists().find((l) => l._id === this.task.list?._id);
+          this.taskList = found ? found._id : null;
 
-            if (this.task.list) {
-              const found = this.lists.find((l) => l._id === this.task.list!._id);
-              this.taskList = found ? found._id : null;
-            } else {
-              this.taskList = null;
-            }
+          if (this.editor && this.task.description) {
+            this.editor.setText(this.task.description);
+          }
+        },
+        error: (err: Error) => console.error('Error fetching task:', err.message),
+      });
 
-            if (this.editor && this.task.description) {
-              this.editor.setText(this.task.description);
-            }
-          },
-          error: (err: Error) => {
-            console.error('Error fetching task details or lists:', err.message);
-          },
-        });
+      this.lists.set(this.listService.lists());
     });
   }
 

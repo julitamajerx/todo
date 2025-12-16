@@ -29,7 +29,7 @@
       <div class="select-wrapper">
         <select [ngModel]="taskList">
           <option [ngValue]="null">-- brak listy --</option>
-          @for (list of lists; track list._id) {
+          @for (list of lists(); track list._id) {
             <option [ngValue]="list._id">{{ list.name }}</option>
           }
         </select>
