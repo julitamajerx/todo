@@ -2,8 +2,12 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Task } from '../shared/models/task';
 import { TaskSort } from '../shared/enums/task-sort-enum';
 import { HttpClient } from '@angular/common/http';
-import { TASK_BY_URL, TASK_URL_CREATE, TASKS_URL } from '../shared/constants/urls';
-import { CreateTaskResponse, TasksResponse } from '../shared/interfaces/task-response.interface';
+import { TASK_BY_URL, TASK_URL_CREATE, TASK_URL_DELETE, TASKS_URL } from '../shared/constants/urls';
+import {
+  CreateTaskResponse,
+  DeleteTaskResponse,
+  TasksResponse,
+} from '../shared/interfaces/task-response.interface';
 import { Observable, filter, switchMap, tap } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 
@@ -106,6 +110,15 @@ export class TaskService {
         this.tasks.update((current) => [...current, response.task]);
       },
       error: (err) => console.log('Error creating task:', err),
+    });
+  }
+
+  public deleteTask(taskId: string) {
+    this.http.delete<DeleteTaskResponse>(`${TASK_URL_DELETE}/${taskId}`).subscribe({
+      next: () => {
+        this.tasks.update((current) => current.filter((t) => t._id !== taskId));
+      },
+      error: (err) => console.log('Error deleting task:', err),
     });
   }
 

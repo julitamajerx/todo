@@ -68,6 +68,17 @@ export class TaskDetails implements OnInit, OnDestroy {
     }
   }
 
+  protected deleteTask() {
+    const taskId = this.task()?._id;
+    if (!taskId) {
+      console.error('No task selected or task has no ID');
+      return;
+    }
+
+    this.taskService.deleteTask(taskId);
+    this.taskService.hideTaskDescription();
+  }
+
   ngOnDestroy(): void {
     this.destroy.next();
     this.destroy.complete();

@@ -146,6 +146,30 @@ router.post(
   })
 );
 
+router.delete(
+  "/delete/:taskId",
+  asyncHandler(async (req, res) => {
+    const taskId = req.params.taskId;
+
+    if (!taskId) {
+      throw new AppError(400, "Task id is required.");
+    }
+
+    const taskDelete = await TaskModel.findById(taskId);
+
+    if (!taskDelete) {
+      throw new AppError(404, "Task not found.");
+    }
+
+    taskDelete.isDeleted = true;
+    await taskDelete.save();
+
+    res.status(200).json({
+      messege: "Task was successfully deleted.",
+    });
+  })
+);
+
 function paginate<T>(items: T[], page: number, limit: number): T[] {
   const startIndex = (page - 1) * limit;
   const endIndex = startIndex + limit;

@@ -9,7 +9,11 @@
         <li>
           <span>{{ task()?.dueDate | date: 'dd.MM.yyyy' }}</span>
         </li>
-        <li><img src="delete.png" alt="calendar" width="29px" height="29px" /></li>
+        <li>
+          <button (click)="deleteTask()">
+            <img src="delete.png" alt="calendar" width="29px" height="29px" />
+          </button>
+        </li>
       </ul>
     </div>
   </div>
