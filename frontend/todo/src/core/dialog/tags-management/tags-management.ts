@@ -1,16 +1,11 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { Tag } from '../../../shared/models/tag';
 import { TagService } from '../../../services/tag-service';
-import { Observable, Subject } from 'rxjs';
 import { TaskService } from '../../../services/task-service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiEvent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {
-  CreateTagResponse,
-  DeleteTagResponse,
-} from '../../../shared/interfaces/tag-response.interface';
 
 @Component({
   selector: 'app-tags-management',
@@ -18,8 +13,8 @@ import {
   templateUrl: './tags-management.html',
   styleUrl: './tags-management.css',
 })
-export class TagsManagement implements OnInit, OnDestroy {
-  protected tags: Tag[] = [];
+export class TagsManagement {
+  protected tags = signal<Tag[]>([]);
   protected openEmojiPicker = false;
   protected selectedEmoji = '';
   protected newEmoji = '';
@@ -28,18 +23,12 @@ export class TagsManagement implements OnInit, OnDestroy {
 
   private tagService = inject(TagService);
   private taskService = inject(TaskService);
-  private destroy = new Subject<void>();
 
-  ngOnInit(): void {
-    const tagObservable: Observable<Tag[]> = this.tagService.getAllTags();
+  constructor() {
+    this.tagService.getAllTags();
 
-    tagObservable.subscribe({
-      next: (tagsDbItem) => {
-        this.tags = tagsDbItem;
-      },
-      error: (err: Error) => {
-        console.log('Error fetching tags:', err.message);
-      },
+    effect(() => {
+      this.tags.set(this.tagService.tags());
     });
   }
 
@@ -69,32 +58,11 @@ export class TagsManagement implements OnInit, OnDestroy {
   onSubmit() {
     this.submitted = true;
 
-    this.tagService.createTag(this.model).subscribe({
-      next: (response: CreateTagResponse) => {
-        this.tags.push(response.tag);
-        this.model = new Tag();
-        this.openEmojiPicker = false;
-      },
-      error: (err) => {
-        console.log('Error creating tag:', err);
-      },
-    });
+    this.tagService.createTag(this.model);
+    this.model = new Tag();
   }
 
   deleteTag(tagId: string) {
-    this.tagService.deleteTag(tagId).subscribe({
-      next: (response: DeleteTagResponse) => {
-        console.log(response);
-        this.tags = this.tags.filter((tag) => tag._id !== tagId);
-      },
-      error: (err) => {
-        console.log('Error deleting tag:', err);
-      },
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy.next();
-    this.destroy.complete();
+    this.tagService.deleteTag(tagId);
   }
 }

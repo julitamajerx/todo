@@ -16,7 +16,7 @@ export class ListService {
   private http = inject(HttpClient);
 
   public getAllLists() {
-    return this.http.get<List[]>(LISTS_URL + '?all=true').subscribe({
+    this.http.get<List[]>(LISTS_URL + '?all=true').subscribe({
       next: (lists) => this.lists.set(lists),
       error: (err) => console.log('Error loading lists:', err),
     });
@@ -27,7 +27,7 @@ export class ListService {
       next: (response) => {
         this.lists.update((current) => [...current, response.list]);
       },
-      error: (err) => console.error('Error creating list:', err),
+      error: (err) => console.log('Error creating list:', err),
     });
   }
 
@@ -36,7 +36,7 @@ export class ListService {
       next: () => {
         this.lists.update((current) => current.filter((l) => l._id !== listId));
       },
-      error: (err) => console.error('Error deleting list:', err),
+      error: (err) => console.log('Error deleting list:', err),
     });
   }
 }

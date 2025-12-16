@@ -11,7 +11,7 @@
       <div class="description">Reset</div>
     </button>
 
-    @for (tag of tags; track tag._id) {
+    @for (tag of tags(); track tag._id) {
       <button
         class="sidebar-box"
         (click)="sortByTags(tag.name)"

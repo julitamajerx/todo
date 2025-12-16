@@ -1,8 +1,7 @@
-import { Component, inject, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, computed, effect, inject, signal, TemplateRef, ViewChild } from '@angular/core';
 import { Tag } from '../../shared/models/tag';
 import { TagService } from '../../services/tag-service';
 import { TaskService } from '../../services/task-service';
-import { Observable, Subject } from 'rxjs';
 import { Dialog } from '@angular/cdk/dialog';
 import { Dialog as DialogWindow } from '../../core/dialog/dialog';
 import { TagsManagement } from '../../core/dialog/tags-management/tags-management';
@@ -13,26 +12,22 @@ import { TagsManagement } from '../../core/dialog/tags-management/tags-managemen
   templateUrl: './tags.html',
   styleUrl: './tags.css',
 })
-export class Tags implements OnInit, OnDestroy {
+export class Tags {
   @ViewChild('dialogContent') dialogContentTemplate!: TemplateRef<unknown>;
 
-  protected tags: Tag[] = [];
+  protected tags = signal<Tag[]>([]);
 
   private tagService = inject(TagService);
   private taskService = inject(TaskService);
   private dialog = inject(Dialog);
-  private destroy = new Subject<void>();
 
-  ngOnInit(): void {
-    const tagsObservable: Observable<Tag[]> = this.tagService.getTags();
+  constructor() {
+    this.tagService.getAllTags();
 
-    tagsObservable.subscribe({
-      next: (tagsDbItem) => {
-        this.tags = tagsDbItem;
-      },
-      error: (err: Error) => {
-        console.log('Error fetching tags:', err.message);
-      },
+    const sidebarTags = computed(() => this.tagService.tags().slice(0, 3));
+
+    effect(() => {
+      this.tags.set(sidebarTags());
     });
   }
 
@@ -55,10 +50,5 @@ export class Tags implements OnInit, OnDestroy {
         },
       });
     }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy.next();
-    this.destroy.complete();
   }
 }

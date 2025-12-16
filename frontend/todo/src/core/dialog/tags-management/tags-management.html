@@ -34,7 +34,7 @@
     </div>
   </form>
 
-  @for (tag of tags; track tag._id) {
+  @for (tag of tags(); track tag._id) {
     <div class="flex-container">
       <button
         class="sidebar-box"
