@@ -25,6 +25,8 @@ import { DatePipe } from '@angular/common';
 })
 export class TaskDetails implements OnInit, OnDestroy {
   @ViewChild('editorContainer', { static: true }) editorContainer!: ElementRef;
+  @ViewChild('dateInput') dateInput!: ElementRef<HTMLInputElement>;
+
   public editor!: Quill;
 
   protected lists = signal<List[]>([]);
@@ -92,6 +94,16 @@ export class TaskDetails implements OnInit, OnDestroy {
 
       this.taskService.completeTask(taskId);
       this.taskService.hideTaskDescription();
+    }
+  }
+
+  protected openDatePicker() {
+    const input = this.dateInput.nativeElement;
+
+    if (input.showPicker) {
+      input.showPicker();
+    } else {
+      input.click();
     }
   }
 

@@ -57,6 +57,28 @@ h3 {
   cursor: pointer;
 }
 
+input[type='date'] {
+  padding: 10px 0;
+  box-sizing: border-box;
+  font-size: 15px;
+  border: none;
+  color: white;
+  background-color: var(--accent-color);
+}
+
+input[type='date']::-webkit-inner-spin-button,
+input[type='date']::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
 .tag-box {
   box-sizing: border-box;
   background-color: var(--primary-color);
