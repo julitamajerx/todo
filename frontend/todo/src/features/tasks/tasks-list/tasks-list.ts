@@ -41,6 +41,15 @@ export class TasksList {
     this.taskService.showTaskDescription();
   }
 
+  protected completeTask(event: Event, taskId: string) {
+    const isChecked = (event.target as HTMLInputElement).checked;
+
+    if (isChecked) {
+      this.taskService.completeTask(taskId);
+      this.taskService.hideTaskDescription();
+    }
+  }
+
   private capitalize(text: string): string {
     if (!text) return '';
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();

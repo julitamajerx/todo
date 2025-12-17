@@ -79,6 +79,22 @@ export class TaskDetails implements OnInit, OnDestroy {
     this.taskService.hideTaskDescription();
   }
 
+  protected completeTask(event: Event) {
+    const isChecked = (event.target as HTMLInputElement).checked;
+
+    if (isChecked) {
+      const taskId = this.task()?._id;
+
+      if (!taskId) {
+        console.error('No task selected or task has no ID');
+        return;
+      }
+
+      this.taskService.completeTask(taskId);
+      this.taskService.hideTaskDescription();
+    }
+  }
+
   ngOnDestroy(): void {
     this.destroy.next();
     this.destroy.complete();

@@ -51,6 +51,12 @@ h3 {
   margin: 20px 0;
 }
 
+.delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
 .tag-box {
   box-sizing: border-box;
   background-color: var(--primary-color);

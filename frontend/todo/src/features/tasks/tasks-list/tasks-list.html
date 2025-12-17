@@ -35,7 +35,7 @@
           type="checkbox"
           [id]="'checkbox' + task._id"
           class="task-check"
-          [checked]="task.isCompleted"
+          (change)="completeTask($event, task._id)"
         />
 
         <label

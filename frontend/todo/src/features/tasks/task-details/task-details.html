@@ -2,7 +2,7 @@
   <div class="upperbar">
     <div class="container">
       <ul>
-        <li><input type="checkbox" class="task-check" [checked]="task()?.isCompleted" /></li>
+        <li><input type="checkbox" class="task-check" (change)="completeTask($event)" /></li>
         <li>
           <img src="calendar-weeks.png" alt="calendar" width="29px" height="29px" />
         </li>
@@ -10,8 +10,8 @@
           <span>{{ task()?.dueDate | date: 'dd.MM.yyyy' }}</span>
         </li>
         <li>
-          <button (click)="deleteTask()">
-            <img src="delete.png" alt="calendar" width="29px" height="29px" />
+          <button class="delete-button" (click)="deleteTask()">
+            <img src="delete.png" alt="delete" width="29px" height="29px" />
           </button>
         </li>
       </ul>

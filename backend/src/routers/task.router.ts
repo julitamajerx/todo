@@ -170,6 +170,30 @@ router.delete(
   })
 );
 
+router.patch(
+  "/complete/:taskId",
+  asyncHandler(async (req, res) => {
+    const taskId = req.params.taskId;
+
+    if (!taskId) {
+      throw new AppError(400, "Task id is required.");
+    }
+
+    const taskComplete = await TaskModel.findById(taskId);
+
+    if (!taskComplete) {
+      throw new AppError(404, "Task not found.");
+    }
+
+    taskComplete.isCompleted = true;
+    await taskComplete.save();
+
+    res.status(200).json({
+      messege: "Task was successfully completed.",
+    });
+  })
+);
+
 function paginate<T>(items: T[], page: number, limit: number): T[] {
   const startIndex = (page - 1) * limit;
   const endIndex = startIndex + limit;

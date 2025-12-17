@@ -2,8 +2,15 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Task } from '../shared/models/task';
 import { TaskSort } from '../shared/enums/task-sort-enum';
 import { HttpClient } from '@angular/common/http';
-import { TASK_BY_URL, TASK_URL_CREATE, TASK_URL_DELETE, TASKS_URL } from '../shared/constants/urls';
 import {
+  TASK_BY_URL,
+  TASK_URL_COMPLETE,
+  TASK_URL_CREATE,
+  TASK_URL_DELETE,
+  TASKS_URL,
+} from '../shared/constants/urls';
+import {
+  CompleteTaskResponse,
   CreateTaskResponse,
   DeleteTaskResponse,
   TasksResponse,
@@ -119,6 +126,15 @@ export class TaskService {
         this.tasks.update((current) => current.filter((t) => t._id !== taskId));
       },
       error: (err) => console.log('Error deleting task:', err),
+    });
+  }
+
+  public completeTask(taskId: string) {
+    this.http.patch<CompleteTaskResponse>(`${TASK_URL_COMPLETE}/${taskId}`, {}).subscribe({
+      next: () => {
+        this.tasks.update((current) => current.filter((t) => t._id !== taskId));
+      },
+      error: (err) => console.log('Error completing task:', err),
     });
   }
 

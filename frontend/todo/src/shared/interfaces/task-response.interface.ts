@@ -15,3 +15,8 @@ export interface CreateTaskResponse {
 export interface DeleteTaskResponse {
   message?: string;
 }
+
+export interface CompleteTaskResponse {
+  task: Task;
+  message?: string;
+}
