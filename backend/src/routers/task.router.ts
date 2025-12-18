@@ -194,6 +194,34 @@ router.patch(
   })
 );
 
+router.patch(
+  "/update/:taskId",
+  asyncHandler(async (req, res) => {
+    const { taskId } = req.params;
+
+    if (!taskId) {
+      throw new AppError(400, "Task id is required.");
+    }
+
+    const updatedTask = await TaskModel.findByIdAndUpdate(
+      taskId,
+      { $set: req.body },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!updatedTask) {
+      throw new AppError(404, "Task not found.");
+    }
+
+    res
+      .status(200)
+      .json({ task: updatedTask, messege: "Task was successfully updated." });
+  })
+);
+
 function paginate<T>(items: T[], page: number, limit: number): T[] {
   const startIndex = (page - 1) * limit;
   const endIndex = startIndex + limit;

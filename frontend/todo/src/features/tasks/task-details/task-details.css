@@ -18,6 +18,10 @@
   gap: 20px;
 }
 
+.title {
+  display: flex;
+  gap: 10px;
+}
 .container ul li:last-child {
   margin-left: auto;
 }

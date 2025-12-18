@@ -20,3 +20,16 @@ export interface CompleteTaskResponse {
   task: Task;
   message?: string;
 }
+
+export interface UpdateTaskResponse {
+  task: Task;
+  message?: string;
+}
+
+export interface UpdateTaskPayload {
+  _id: string;
+  dueDate?: Date;
+  description?: string;
+  list?: string | null;
+  tags?: string[];
+}

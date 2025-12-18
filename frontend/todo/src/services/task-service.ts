@@ -7,6 +7,7 @@ import {
   TASK_URL_COMPLETE,
   TASK_URL_CREATE,
   TASK_URL_DELETE,
+  TASK_URL_UPDATE,
   TASKS_URL,
 } from '../shared/constants/urls';
 import {
@@ -14,6 +15,8 @@ import {
   CreateTaskResponse,
   DeleteTaskResponse,
   TasksResponse,
+  UpdateTaskPayload,
+  UpdateTaskResponse,
 } from '../shared/interfaces/task-response.interface';
 import { Observable, filter, switchMap, tap } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
@@ -133,6 +136,24 @@ export class TaskService {
     this.http.patch<CompleteTaskResponse>(`${TASK_URL_COMPLETE}/${taskId}`, {}).subscribe({
       next: () => {
         this.tasks.update((current) => current.filter((t) => t._id !== taskId));
+      },
+      error: (err) => console.log('Error completing task:', err),
+    });
+  }
+
+  public updateTask(task: UpdateTaskPayload) {
+    this.http.patch<UpdateTaskResponse>(`${TASK_URL_UPDATE}/${task._id}`, task).subscribe({
+      next: (response) => {
+        this.selectedTask.set(response.task);
+        this.tasks.update((current) => {
+          return current.map((t) => (t._id === response.task._id ? response.task : t));
+        });
+        if (
+          (this.currentList() && response.task.list?._id !== this.currentList()) ||
+          (this.currentTag() && !response.task.tags?.some((t) => t._id === this.currentTag()))
+        ) {
+          this.getAllTasks();
+        }
       },
       error: (err) => console.log('Error completing task:', err),
     });

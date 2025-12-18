@@ -15,11 +15,11 @@ import { ListService } from '../../../services/list-service';
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { Spinner } from '../../../core/spinner/spinner';
-import { DatePipe } from '@angular/common';
+import { UpdateTaskPayload } from '../../../shared/interfaces/task-response.interface';
 
 @Component({
   selector: 'app-task-details',
-  imports: [FormsModule, Spinner, DatePipe],
+  imports: [FormsModule, Spinner],
   templateUrl: './task-details.html',
   styleUrl: './task-details.css',
 })
@@ -31,6 +31,9 @@ export class TaskDetails implements OnInit, OnDestroy {
 
   protected lists = signal<List[]>([]);
   protected taskList: string | null = null;
+  protected formDate = '';
+  protected formDescription = '';
+  protected submitted = false;
 
   private taskService = inject(TaskService);
   private listService = inject(ListService);
@@ -41,11 +44,22 @@ export class TaskDetails implements OnInit, OnDestroy {
   constructor() {
     effect(() => {
       const currentTask = this.task();
+      if (!currentTask) return;
+
+      this.formDate = String(currentTask.dueDate).split('T')[0];
+
+      this.formDescription = currentTask.description ?? '';
 
       this.lists.set(this.listService.lists());
 
-      const found = this.lists().find((l) => l._id === currentTask?.list?._id);
-      this.taskList = found ? found._id : null;
+      const currentListId =
+        typeof currentTask.list === 'object' && currentTask.list !== null
+          ? (currentTask.list as List)._id
+          : currentTask.list;
+
+      const found = this.lists().find((l) => l._id === currentListId);
+
+      this.taskList = found ? found._id : (currentListId as string) || null;
 
       if (this.editor) {
         if (currentTask && currentTask.description) {
@@ -63,6 +77,10 @@ export class TaskDetails implements OnInit, OnDestroy {
         toolbar: [[{ header: [1, 2, 3, false] }], [{ list: 'bullet' }]],
       },
       theme: 'snow',
+    });
+
+    this.editor.on('text-change', () => {
+      this.formDescription = this.editor.getText();
     });
 
     if (this.task()?.description) {
@@ -105,6 +123,24 @@ export class TaskDetails implements OnInit, OnDestroy {
     } else {
       input.click();
     }
+  }
+
+  protected onSubmit() {
+    const formTask = this.task();
+
+    if (!formTask) {
+      return;
+    }
+
+    const payload: UpdateTaskPayload = {
+      _id: formTask._id,
+      dueDate: this.formDate ? new Date(this.formDate) : undefined,
+      description: this.formDescription ?? '',
+      list: this.taskList ?? null,
+      tags: formTask.tags?.map((t) => t._id) ?? [],
+    };
+
+    this.taskService.updateTask(payload);
   }
 
   ngOnDestroy(): void {

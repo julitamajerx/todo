@@ -1,60 +1,72 @@
 <div class="wrapper">
-  <div class="upperbar">
-    <div class="container">
-      <ul>
-        <li><input type="checkbox" class="task-check" (change)="completeTask($event)" /></li>
-        <li>
-          <button
-            type="button"
-            class="icon-button"
-            (click)="openDatePicker()"
-            (keydown.enter)="openDatePicker()"
-            (keydown.space)="openDatePicker()"
-            aria-label="Open date picker"
-          >
-            <img src="calendar-weeks.png" alt="" width="29" height="29" />
-          </button>
-        </li>
-        <li>
-          <input
-            #dateInput
-            type="date"
-            class="datepicker-input"
-            [value]="task()?.dueDate | date: 'yyyy-MM-dd'"
-          />
-        </li>
-        <li>
-          <button class="delete-button" (click)="deleteTask()">
-            <img src="delete.png" alt="delete" width="29px" height="29px" />
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="description-container">
-    <app-spinner></app-spinner>
-    <h3>{{ task()?.name }}</h3>
-    <div class="flex-container">
-      <h4>Tags:</h4>
-      @for (tag of task()?.tags; track tag._id) {
-        <div class="tag-box">{{ tag.name }}</div>
-      }
-      <button class="add-tag">✚ tag</button>
-    </div>
-    <div class="flex-container">
-      <h4>List:</h4>
-      <div class="select-wrapper">
-        <select [ngModel]="taskList">
-          <option [ngValue]="null">-- null --</option>
-          @for (list of lists(); track list._id) {
-            <option [ngValue]="list._id">{{ list.name }}</option>
-          }
-        </select>
-
-        <span class="arrow down"></span>
+  <form (ngSubmit)="onSubmit()" #taskForm="ngForm">
+    <div class="upperbar">
+      <div class="container">
+        <ul>
+          <li>
+            <input type="checkbox" class="task-check" (change)="completeTask($event)" />
+          </li>
+          <li>
+            <button
+              type="button"
+              class="icon-button"
+              (click)="openDatePicker()"
+              (keydown.enter)="openDatePicker()"
+              (keydown.space)="openDatePicker()"
+              aria-label="Open date picker"
+            >
+              <img src="calendar-weeks.png" alt="" width="29" height="29" />
+            </button>
+          </li>
+          <li>
+            <input
+              #dateInput
+              type="date"
+              class="datepicker-input"
+              [(ngModel)]="formDate"
+              name="dueDate"
+            />
+          </li>
+          <li>
+            <button type="button" class="delete-button" (click)="deleteTask()">
+              <img src="delete.png" alt="delete" width="29" height="29" />
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
-    <div #editorContainer class="editor-container"></div>
-  </div>
+
+    <div class="description-container">
+      <app-spinner></app-spinner>
+      <div class="title">
+        <h3>{{ task()?.name }}</h3>
+        <button class="icon-button" type="submit" [disabled]="!taskForm.form.valid">
+          <img src="save.png" alt="trash" width="29px" height="29px" />
+        </button>
+      </div>
+
+      <div class="flex-container">
+        <h4>Tags:</h4>
+        @for (tag of task()?.tags; track tag._id) {
+          <div class="tag-box">{{ tag.name }}</div>
+        }
+        <button type="button" class="add-tag">✚ tag</button>
+      </div>
+
+      <div class="flex-container">
+        <h4>List:</h4>
+        <div class="select-wrapper">
+          <select [(ngModel)]="taskList" name="list">
+            <option [ngValue]="null">-- null --</option>
+            @for (list of lists(); track list._id) {
+              <option [ngValue]="list._id">{{ list.name }}</option>
+            }
+          </select>
+          <span class="arrow down"></span>
+        </div>
+      </div>
+
+      <div #editorContainer class="editor-container"></div>
+    </div>
+  </form>
 </div>
