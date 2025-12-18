@@ -10,6 +10,7 @@ import { TaskService } from './task-service';
 })
 export class TagService {
   public tags = signal<Tag[]>([]);
+  public selectedTags = signal<string[]>([]);
 
   private http = inject(HttpClient);
   private taskService = inject(TaskService);
@@ -19,6 +20,10 @@ export class TagService {
       next: (tags) => this.tags.set(tags),
       error: (err) => console.log('Error loading tags:', err),
     });
+  }
+
+  public setSelectedTags(tags: string[]) {
+    this.selectedTags.set(tags);
   }
 
   public createTag(tag: Tag) {

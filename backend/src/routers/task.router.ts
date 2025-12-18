@@ -210,7 +210,11 @@ router.patch(
         new: true,
         runValidators: true,
       }
-    );
+    )
+      .populate("tags")
+      .populate("list");
+
+    console.log(updatedTask);
 
     if (!updatedTask) {
       throw new AppError(404, "Task not found.");

@@ -50,7 +50,7 @@
         @for (tag of task()?.tags; track tag._id) {
           <div class="tag-box">{{ tag.name }}</div>
         }
-        <button type="button" class="add-tag">✚ tag</button>
+        <button type="button" class="add-tag" (click)="openModal()">✚ tag</button>
       </div>
 
       <div class="flex-container">
@@ -70,3 +70,6 @@
     </div>
   </form>
 </div>
+<ng-template #dialogContent>
+  <app-add-tags></app-add-tags>
+</ng-template>

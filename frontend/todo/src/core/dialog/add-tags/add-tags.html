@@ -1,0 +1,11 @@
+@for (tag of tags(); track tag._id) {
+  <label>
+    <input
+      type="checkbox"
+      [checked]="localSelectedTags().includes(tag._id)"
+      (change)="onChange(tag._id)"
+    />
+    {{ tag.name }}
+  </label>
+}
+<button (click)="addTags()">Add</button>
