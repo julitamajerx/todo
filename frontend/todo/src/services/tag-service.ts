@@ -2,8 +2,8 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Tag } from '../shared/models/tag';
 import { TAGS_URL, TAGS_URL_CREATE, TAGS_URL_DELETE } from '../shared/constants/urls';
-import { CreateTagResponse, DeleteTagResponse } from '../shared/interfaces/tag-response.interface';
 import { TaskService } from './task-service';
+import { ActionResponse, DeleteResponse } from '../shared/interfaces/generic-response.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -27,16 +27,16 @@ export class TagService {
   }
 
   public createTag(tag: Tag) {
-    this.http.post<CreateTagResponse>(TAGS_URL_CREATE, tag).subscribe({
+    this.http.post<ActionResponse<Tag>>(TAGS_URL_CREATE, tag).subscribe({
       next: (response) => {
-        this.tags.update((current) => [...current, response.tag]);
+        this.tags.update((current) => [...current, response.data]);
       },
       error: (err) => console.log('Error creating tag:', err),
     });
   }
 
   public deleteTag(tagId: string) {
-    this.http.delete<DeleteTagResponse>(`${TAGS_URL_DELETE}/${tagId}`).subscribe({
+    this.http.delete<DeleteResponse>(`${TAGS_URL_DELETE}/${tagId}`).subscribe({
       next: () => {
         this.tags.update((current) => current.filter((t) => t._id !== tagId));
         this.taskService.forceTaskRefresh();

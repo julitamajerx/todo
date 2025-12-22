@@ -1,12 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "../errors/app-error";
 
-export const errorMiddleware = (
-  err: any,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const errorMiddleware = (err: any, res: Response) => {
   if (err.name === "CastError") {
     return res.status(400).json({
       message: "Invalid ID",

@@ -1,5 +1,5 @@
 <div class="wrapper">
-  <form (ngSubmit)="onSubmit()" #taskForm="ngForm">
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
     <div class="upperbar">
       <div class="container">
         <ul>
@@ -9,7 +9,7 @@
           <li>
             <button
               type="button"
-              class="icon-button"
+              class="img-button"
               (click)="openDatePicker()"
               (keydown.enter)="openDatePicker()"
               (keydown.space)="openDatePicker()"
@@ -19,16 +19,10 @@
             </button>
           </li>
           <li>
-            <input
-              #dateInput
-              type="date"
-              class="datepicker-input"
-              [(ngModel)]="formDate"
-              name="dueDate"
-            />
+            <input #dateInput type="date" class="datepicker-input" formControlName="dueDate" />
           </li>
           <li>
-            <button type="button" class="delete-button" (click)="deleteTask()">
+            <button type="button" class="img-button" (click)="deleteTask()">
               <img src="delete.png" alt="delete" width="29" height="29" />
             </button>
           </li>
@@ -40,8 +34,8 @@
       <app-spinner></app-spinner>
       <div class="title">
         <h3>{{ task()?.name }}</h3>
-        <button class="icon-button" type="submit" [disabled]="!taskForm.form.valid">
-          <img src="save.png" alt="trash" width="29px" height="29px" />
+        <button class="img-button" type="submit" [disabled]="taskForm.invalid">
+          <img src="save.png" alt="save" width="29px" height="29px" />
         </button>
       </div>
 
@@ -56,7 +50,7 @@
       <div class="flex-container">
         <h4>List:</h4>
         <div class="select-wrapper">
-          <select [(ngModel)]="taskList" name="list">
+          <select formControlName="list">
             <option [ngValue]="null">-- null --</option>
             @for (list of lists(); track list._id) {
               <option [ngValue]="list._id">{{ list.name }}</option>
@@ -70,6 +64,7 @@
     </div>
   </form>
 </div>
+
 <ng-template #dialogContent>
   <app-add-tags></app-add-tags>
 </ng-template>

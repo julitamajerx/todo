@@ -8,7 +8,7 @@
         placeholder=" ✚ Add list..."
         [(ngModel)]="model.name"
       />
-      <button class="list-button" type="submit" [disabled]="!listForm.form.valid">
+      <button class="img-button" type="submit" [disabled]="!listForm.form.valid">
         <img src="save.png" alt="trash" width="29px" height="29px" />
       </button>
     </div>
@@ -24,7 +24,7 @@
         <div class="icon">{{ i + 1 }}</div>
         <div class="description">{{ list.name }}</div>
       </button>
-      <button class="list-button" (click)="deleteList(list._id)">
+      <button class="img-button" (click)="deleteList(list._id)">
         <img src="delete.png" alt="trash" width="29px" height="29px" />
       </button>
     </div>

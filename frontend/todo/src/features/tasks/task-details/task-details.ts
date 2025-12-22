@@ -5,16 +5,15 @@ import {
   ElementRef,
   inject,
   effect,
-  OnDestroy,
   signal,
   TemplateRef,
   untracked,
 } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import Quill from 'quill';
 import { TaskService } from '../../../services/task-service';
 import { List } from '../../../shared/models/list';
 import { ListService } from '../../../services/list-service';
-import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { Spinner } from '../../../core/spinner/spinner';
 import { UpdateTaskPayload } from '../../../shared/interfaces/task-response.interface';
@@ -26,48 +25,53 @@ import { Tag } from '../../../shared/models/tag';
 
 @Component({
   selector: 'app-task-details',
-  imports: [FormsModule, Spinner, AddTags],
+  standalone: true,
+  imports: [ReactiveFormsModule, Spinner, AddTags],
   templateUrl: './task-details.html',
   styleUrl: './task-details.css',
 })
-export class TaskDetails implements OnInit, OnDestroy {
+export class TaskDetails implements OnInit {
   @ViewChild('editorContainer', { static: true }) editorContainer!: ElementRef;
   @ViewChild('dateInput') dateInput!: ElementRef<HTMLInputElement>;
   @ViewChild('dialogContent') dialogContentTemplate!: TemplateRef<unknown>;
 
   public editor!: Quill;
+  public taskForm!: FormGroup;
 
   protected lists = signal<List[]>([]);
-  protected taskList: string | null = null;
-  protected formDate = '';
-  protected formDescription = '';
   protected submitted = false;
 
   private taskService = inject(TaskService);
   private tagService = inject(TagService);
   private listService = inject(ListService);
   private dialog = inject(Dialog);
+  private fb = inject(FormBuilder);
 
   private destroy = new Subject<void>();
-
   protected task = this.taskService.selectedTask;
 
   constructor() {
+    this.initForm();
+
     effect(() => {
       const currentTask = this.task();
       if (!currentTask) return;
-
-      this.formDate = String(currentTask.dueDate).split('T')[0];
-      this.formDescription = currentTask.description ?? '';
-      this.lists.set(this.listService.lists());
 
       const currentListId =
         typeof currentTask.list === 'object' && currentTask.list !== null
           ? (currentTask.list as List)._id
           : currentTask.list;
 
-      const found = this.lists().find((l) => l._id === currentListId);
-      this.taskList = found ? found._id : (currentListId as string) || null;
+      this.taskForm.patchValue(
+        {
+          dueDate: currentTask.dueDate ? String(currentTask.dueDate).split('T')[0] : '',
+          description: currentTask.description ?? '',
+          list: currentListId || null,
+        },
+        { emitEvent: false },
+      );
+
+      this.lists.set(this.listService.lists());
 
       if (this.editor) {
         this.editor.setText(currentTask.description ?? '');
@@ -92,6 +96,14 @@ export class TaskDetails implements OnInit, OnDestroy {
     });
   }
 
+  private initForm() {
+    this.taskForm = this.fb.group({
+      dueDate: [''],
+      description: [''],
+      list: [null],
+    });
+  }
+
   ngOnInit() {
     this.editor = new Quill(this.editorContainer.nativeElement, {
       modules: {
@@ -101,7 +113,7 @@ export class TaskDetails implements OnInit, OnDestroy {
     });
 
     this.editor.on('text-change', () => {
-      this.formDescription = this.editor.getText();
+      this.taskForm.get('description')?.setValue(this.editor.getText(), { emitEvent: false });
     });
 
     const initialTask = this.task();
@@ -113,7 +125,6 @@ export class TaskDetails implements OnInit, OnDestroy {
   protected deleteTask() {
     const taskId = this.task()?._id;
     if (!taskId) return;
-
     this.taskService.deleteTask(taskId);
     this.taskService.hideTaskDescription();
   }
@@ -121,7 +132,6 @@ export class TaskDetails implements OnInit, OnDestroy {
   protected completeTask(event: Event) {
     const isChecked = (event.target as HTMLInputElement).checked;
     const taskId = this.task()?._id;
-
     if (isChecked && taskId) {
       this.taskService.completeTask(taskId);
       this.taskService.hideTaskDescription();
@@ -139,18 +149,19 @@ export class TaskDetails implements OnInit, OnDestroy {
 
   protected onSubmit() {
     const formTask = this.task();
-    if (!formTask) return;
+    if (!formTask || this.taskForm.invalid) return;
+
+    const formValues = this.taskForm.value;
 
     const payload: UpdateTaskPayload = {
       _id: formTask._id,
-      dueDate: this.formDate ? new Date(this.formDate) : undefined,
-      description: this.formDescription,
-      list: this.taskList,
+      dueDate: formValues.dueDate ? new Date(formValues.dueDate) : undefined,
+      description: formValues.description,
+      list: formValues.list,
       tags: this.tagService.selectedTags(),
     };
 
     this.taskService.updateTask(payload);
-    console.log(this.task()?.tags);
   }
 
   protected openModal() {
@@ -162,10 +173,5 @@ export class TaskDetails implements OnInit, OnDestroy {
         },
       });
     }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy.next();
-    this.destroy.complete();
   }
 }

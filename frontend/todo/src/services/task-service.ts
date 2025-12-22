@@ -10,16 +10,10 @@ import {
   TASK_URL_UPDATE,
   TASKS_URL,
 } from '../shared/constants/urls';
-import {
-  CompleteTaskResponse,
-  CreateTaskResponse,
-  DeleteTaskResponse,
-  TasksResponse,
-  UpdateTaskPayload,
-  UpdateTaskResponse,
-} from '../shared/interfaces/task-response.interface';
+import { TasksResponse, UpdateTaskPayload } from '../shared/interfaces/task-response.interface';
 import { Observable, filter, switchMap, tap } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { ActionResponse, DeleteResponse } from '../shared/interfaces/generic-response.interface';
 
 type TaskQueryParams = Record<string, string | number | boolean>;
 
@@ -115,16 +109,16 @@ export class TaskService {
   }
 
   public createTask(task: Task) {
-    this.http.post<CreateTaskResponse>(TASK_URL_CREATE, task).subscribe({
+    this.http.post<ActionResponse<Task>>(TASK_URL_CREATE, task).subscribe({
       next: (response) => {
-        this.tasks.update((current) => [...current, response.task]);
+        this.tasks.update((current) => [...current, response.data]);
       },
       error: (err) => console.log('Error creating task:', err),
     });
   }
 
   public deleteTask(taskId: string) {
-    this.http.delete<DeleteTaskResponse>(`${TASK_URL_DELETE}/${taskId}`).subscribe({
+    this.http.patch<DeleteResponse>(`${TASK_URL_DELETE}/${taskId}`, {}).subscribe({
       next: () => {
         this.tasks.update((current) => current.filter((t) => t._id !== taskId));
       },
@@ -133,7 +127,7 @@ export class TaskService {
   }
 
   public completeTask(taskId: string) {
-    this.http.patch<CompleteTaskResponse>(`${TASK_URL_COMPLETE}/${taskId}`, {}).subscribe({
+    this.http.patch<ActionResponse<Task>>(`${TASK_URL_COMPLETE}/${taskId}`, {}).subscribe({
       next: () => {
         this.tasks.update((current) => current.filter((t) => t._id !== taskId));
       },
@@ -142,20 +136,20 @@ export class TaskService {
   }
 
   public updateTask(task: UpdateTaskPayload) {
-    this.http.patch<UpdateTaskResponse>(`${TASK_URL_UPDATE}/${task._id}`, task).subscribe({
+    this.http.patch<ActionResponse<Task>>(`${TASK_URL_UPDATE}/${task._id}`, task).subscribe({
       next: (response) => {
-        this.selectedTask.set(response.task);
+        this.selectedTask.set(response.data);
         this.tasks.update((current) => {
-          return current.map((t) => (t._id === response.task._id ? response.task : t));
+          return current.map((t) => (t._id === response.data._id ? response.data : t));
         });
         if (
-          (this.currentList() && response.task.list?._id !== this.currentList()) ||
-          (this.currentTag() && !response.task.tags?.some((t) => t._id === this.currentTag()))
+          (this.currentList() && response.data.list?._id !== this.currentList()) ||
+          (this.currentTag() && !response.data.tags?.some((t) => t._id === this.currentTag()))
         ) {
           this.getAllTasks();
         }
       },
-      error: (err) => console.log('Error completing task:', err),
+      error: (err) => console.log('Error updating task:', err),
     });
   }
 

@@ -2,10 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { List } from '../shared/models/list';
 import { LISTS_URL, LISTS_URL_CREATE, LISTS_URL_DELETE } from '../shared/constants/urls';
-import {
-  CreateListResponse,
-  DeleteListResponse,
-} from '../shared/interfaces/list-response.interface';
+import { ActionResponse, DeleteResponse } from '../shared/interfaces/generic-response.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -23,16 +20,16 @@ export class ListService {
   }
 
   public createList(list: List): void {
-    this.http.post<CreateListResponse>(LISTS_URL_CREATE, list).subscribe({
+    this.http.post<ActionResponse<List>>(LISTS_URL_CREATE, list).subscribe({
       next: (response) => {
-        this.lists.update((current) => [...current, response.list]);
+        this.lists.update((current) => [...current, response.data]);
       },
       error: (err) => console.log('Error creating list:', err),
     });
   }
 
   public deleteList(listId: string): void {
-    this.http.delete<DeleteListResponse>(`${LISTS_URL_DELETE}/${listId}`).subscribe({
+    this.http.delete<DeleteResponse>(`${LISTS_URL_DELETE}/${listId}`).subscribe({
       next: () => {
         this.lists.update((current) => current.filter((l) => l._id !== listId));
       },

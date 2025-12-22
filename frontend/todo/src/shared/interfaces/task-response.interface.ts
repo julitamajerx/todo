@@ -7,25 +7,6 @@ export interface TasksResponse {
   tasks: Task[];
 }
 
-export interface CreateTaskResponse {
-  task: Task;
-  message?: string;
-}
-
-export interface DeleteTaskResponse {
-  message?: string;
-}
-
-export interface CompleteTaskResponse {
-  task: Task;
-  message?: string;
-}
-
-export interface UpdateTaskResponse {
-  task: Task;
-  message?: string;
-}
-
 export interface UpdateTaskPayload {
   _id: string;
   dueDate?: Date;

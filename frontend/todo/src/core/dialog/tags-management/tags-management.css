@@ -19,12 +19,6 @@
   font-size: 15px;
 }
 
-.tag-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
 .add {
   display: flex;
   gap: 10px;
