@@ -14,6 +14,14 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([spinnerInterceptor])),
+    provideHttpClient(
+      withInterceptors([
+        spinnerInterceptor,
+        (req, next) => {
+          const clonedReq = req.clone({ withCredentials: true });
+          return next(clonedReq);
+        },
+      ]),
+    ),
   ],
 };

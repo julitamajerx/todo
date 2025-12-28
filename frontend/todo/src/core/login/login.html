@@ -1,0 +1,17 @@
+<div class="container">
+  <div class="wrapper">
+    <h1>todo</h1>
+    <form [formGroup]="loginFrom" (ngSubmit)="onSubmit()">
+      <div class="form-element">
+        <label for="email">Email: </label>
+        <input id="email" type="text" formControlName="email" />
+      </div>
+      <div class="form-element">
+        <label for="password">Password: </label>
+        <input id="password" type="password" formControlName="password" />
+      </div>
+      <button type="submit" [disabled]="!loginFrom.valid">Submit</button>
+    </form>
+    <div class="sign-in">New user? Sign in here.</div>
+  </div>
+</div>

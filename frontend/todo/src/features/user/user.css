@@ -25,6 +25,11 @@
   font-weight: 200;
   font-size: 15px;
   opacity: 0.8;
+  border: none;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  padding: 0;
 }
 
 @media (max-width: 870px) {

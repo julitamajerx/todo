@@ -7,7 +7,10 @@ import { dbConnect } from "./configs/database.config";
 import taskRouter from "./routers/task.router";
 import listRouter from "./routers/list.router";
 import tagRouter from "./routers/tag.router";
+import userRouter from "./routers/user.router";
 import { errorMiddleware } from "./middlewares/errorHandler";
+import cookieParser from "cookie-parser";
+import { authHandler } from "./middlewares/authHandler";
 
 dbConnect();
 
@@ -21,9 +24,12 @@ app.use(
   })
 );
 
-app.use("/api/tasks", taskRouter);
-app.use("/api/lists", listRouter);
-app.use("/api/tags", tagRouter);
+app.use(cookieParser());
+
+app.use("/api/tasks", authHandler, taskRouter);
+app.use("/api/lists", authHandler, listRouter);
+app.use("/api/tags", authHandler, tagRouter);
+app.use("/api/user", userRouter);
 
 const port = 5000;
 
