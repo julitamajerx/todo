@@ -4,21 +4,20 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { USER_LOGIN_URL, USER_LOGOUT_URL } from '../shared/constants/urls';
 import { User } from '../shared/models/user';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService {
-  private http = inject(HttpClient);
-  private router = inject(Router);
-
   private userSignal = signal<User | null>(this.getUserFromStorage());
   public user = this.userSignal.asReadonly();
-  public loginError = signal<string | null>(null);
+
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private toastr = inject(ToastrService);
 
   public login(credentials: UserCredentials) {
-    this.loginError.set(null);
-
     this.http
       .post<LoginResponse>(USER_LOGIN_URL, credentials, { withCredentials: true })
       .subscribe({
@@ -32,10 +31,11 @@ export class LoginService {
           this.userSignal.set(userData);
           localStorage.setItem('User', JSON.stringify(userData));
           this.router.navigateByUrl('/');
+          this.toastr.success(response.message, 'Login');
         },
         error: (err) => {
-          console.error('Login error:', err);
-          this.loginError.set(err.error.message || 'Błąd logowania');
+          this.toastr.error(err.message, 'Login error');
+          console.log(err.message);
         },
       });
   }

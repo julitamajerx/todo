@@ -14,6 +14,7 @@ import { TasksResponse, UpdateTaskPayload } from '../shared/interfaces/task-resp
 import { Observable, filter, switchMap, tap } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { ActionResponse, DeleteResponse } from '../shared/interfaces/generic-response.interface';
+import { ToastrService } from 'ngx-toastr';
 
 type TaskQueryParams = Record<string, string | number | boolean>;
 
@@ -31,6 +32,7 @@ export class TaskService {
   public currentList = signal<string | null>(null);
 
   private http = inject(HttpClient);
+  private toastr = inject(ToastrService);
 
   constructor() {
     this.setupTaskLoading();
@@ -112,8 +114,9 @@ export class TaskService {
     this.http.post<ActionResponse<Task>>(TASK_URL_CREATE, task).subscribe({
       next: (response) => {
         this.tasks.update((current) => [...current, response.data]);
+        this.toastr.success(response.message, 'Task');
       },
-      error: (err) => console.log('Error creating task:', err),
+      error: (err) => this.toastr.error(err.message, 'Task'),
     });
   }
 
@@ -121,8 +124,9 @@ export class TaskService {
     this.http.patch<DeleteResponse>(`${TASK_URL_DELETE}/${taskId}`, {}).subscribe({
       next: () => {
         this.tasks.update((current) => current.filter((t) => t._id !== taskId));
+        this.toastr.success('Task successfully deleted.', 'Task');
       },
-      error: (err) => console.log('Error deleting task:', err),
+      error: (err) => this.toastr.error(err.message, 'Task'),
     });
   }
 
@@ -130,8 +134,9 @@ export class TaskService {
     this.http.patch<ActionResponse<Task>>(`${TASK_URL_COMPLETE}/${taskId}`, {}).subscribe({
       next: () => {
         this.tasks.update((current) => current.filter((t) => t._id !== taskId));
+        this.toastr.success('Task successfully completed.', 'Task');
       },
-      error: (err) => console.log('Error completing task:', err),
+      error: (err) => this.toastr.error(err.message, 'Task'),
     });
   }
 
@@ -148,8 +153,9 @@ export class TaskService {
         ) {
           this.getAllTasks();
         }
+        this.toastr.success(response.message, 'Task');
       },
-      error: (err) => console.log('Error updating task:', err),
+      error: (err) => this.toastr.error(err.message, 'Task'),
     });
   }
 

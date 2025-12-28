@@ -22,7 +22,11 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.css", "node_modules/@ctrl/ngx-emoji-mart/picker.css"]
+            "styles": [
+              "src/styles.css",
+              "node_modules/@ctrl/ngx-emoji-mart/picker.css",
+              "node_modules/ngx-toastr/toastr.css"
+            ]
           },
           "configurations": {
             "production": {

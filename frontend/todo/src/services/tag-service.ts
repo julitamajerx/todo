@@ -4,6 +4,7 @@ import { Tag } from '../shared/models/tag';
 import { TAGS_URL, TAGS_URL_CREATE, TAGS_URL_DELETE } from '../shared/constants/urls';
 import { TaskService } from './task-service';
 import { ActionResponse, DeleteResponse } from '../shared/interfaces/generic-response.interface';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,7 @@ export class TagService {
 
   private http = inject(HttpClient);
   private taskService = inject(TaskService);
+  private toastr = inject(ToastrService);
 
   public getAllTags() {
     this.http.get<Tag[]>(TAGS_URL + '?all=true').subscribe({
@@ -30,8 +32,9 @@ export class TagService {
     this.http.post<ActionResponse<Tag>>(TAGS_URL_CREATE, tag).subscribe({
       next: (response) => {
         this.tags.update((current) => [...current, response.data]);
+        this.toastr.success(response.message, 'Tag');
       },
-      error: (err) => console.log('Error creating tag:', err),
+      error: (err) => this.toastr.error(err.message, 'Tag'),
     });
   }
 
@@ -40,8 +43,9 @@ export class TagService {
       next: () => {
         this.tags.update((current) => current.filter((t) => t._id !== tagId));
         this.taskService.forceTaskRefresh();
+        this.toastr.success('Tag successfully deleted.', 'Tag');
       },
-      error: (err) => console.log('Error deleting tag:', err),
+      error: (err) => this.toastr.error(err.message, 'Tag'),
     });
   }
 }
