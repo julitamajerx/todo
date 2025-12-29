@@ -11,8 +11,10 @@ import userRouter from "./routers/user.router";
 import { errorMiddleware } from "./middlewares/errorHandler";
 import cookieParser from "cookie-parser";
 import { authHandler } from "./middlewares/authHandler";
+import { initCleanupJob } from "./cron/cleanup";
 
 dbConnect();
+initCleanupJob();
 
 const app = express();
 app.use(express.json());
