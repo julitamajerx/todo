@@ -24,7 +24,7 @@ export class Lists {
   constructor() {
     this.listService.getAllLists();
 
-    const sidebarLists = computed(() => this.listService.lists().slice(0, 3));
+    const sidebarLists = computed(() => this.listService.lists().slice(0, 2));
 
     effect(() => {
       this.lists.set(sidebarLists());

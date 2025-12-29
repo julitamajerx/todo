@@ -28,7 +28,7 @@ export const getTags = asyncHandler(async (req: any, res) => {
   if (all) {
     res.send(tags);
   } else {
-    const limit = 3;
+    const limit = 2;
     res.send(tags.slice(0, limit));
   }
 });
@@ -36,17 +36,26 @@ export const getTags = asyncHandler(async (req: any, res) => {
 export const createTag = asyncHandler(async (req: any, res) => {
   const userId = req.user.id;
 
+  const tagCount = await TagModel.countDocuments({ user: userId });
+
+  if (tagCount >= 5) {
+    throw new AppError(
+      403,
+      "Tag limit reached. You can only have up to 5 lists per account."
+    );
+  }
+
   const newTag = new TagModel({
     ...req.body,
     user: userId,
   });
 
   if (!newTag.name || newTag.name.trim() === "") {
-    throw new AppError(400, "Nazwa tagu jest wymagana.");
+    throw new AppError(400, "Tag name is required.");
   }
 
   if (!newTag.emoji || newTag.emoji.trim() === "") {
-    throw new AppError(400, "Musisz wybrać emoji dla tagu.");
+    throw new AppError(400, "You must select an emoji for the tag.");
   }
 
   const savedTag = await newTag.save();

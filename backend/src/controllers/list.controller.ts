@@ -29,13 +29,22 @@ export const getLists = asyncHandler(async (req: any, res) => {
   if (all) {
     res.send(lists);
   } else {
-    const limit = 3;
+    const limit = 2;
     res.send(lists.slice(0, limit));
   }
 });
 
 export const createList = asyncHandler(async (req: any, res) => {
   const userId = req.user.id;
+
+  const listCount = await ListModel.countDocuments({ user: userId });
+
+  if (listCount >= 5) {
+    throw new AppError(
+      403,
+      "List limit reached. You can only have up to 5 lists per account."
+    );
+  }
 
   const newList = new ListModel({
     ...req.body,

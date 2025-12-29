@@ -3,7 +3,7 @@
   <div class="info-wrapper">
     @if (loginService.user(); as user) {
       <span class="name">{{ user.name }}</span>
-      <button class="logout" (click)="loginService.logout()">Wyloguj</button>
+      <button class="logout" (click)="loginService.logout()">Log Out</button>
     } @else {
       <span class="name">Nie jesteś zalogowany</span>
     }

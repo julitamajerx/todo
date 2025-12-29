@@ -34,6 +34,7 @@
         <input
           type="checkbox"
           [id]="'checkbox' + task._id"
+          [checked]="task.isCompleted"
           class="task-check"
           (change)="completeTask($event, task._id)"
         />

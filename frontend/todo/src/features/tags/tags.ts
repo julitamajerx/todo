@@ -24,7 +24,7 @@ export class Tags {
   constructor() {
     this.tagService.getAllTags();
 
-    const sidebarTags = computed(() => this.tagService.tags().slice(0, 3));
+    const sidebarTags = computed(() => this.tagService.tags().slice(0, 2));
 
     effect(() => {
       this.tags.set(sidebarTags());
