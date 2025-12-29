@@ -8,7 +8,6 @@
         (click)="openEmojiPicker = !openEmojiPicker"
         [readonly]="true"
         [value]="newEmoji"
-        required
         [(ngModel)]="model.emoji"
       />
       @if (openEmojiPicker) {
@@ -25,10 +24,9 @@
         id="newTag"
         name="newTag"
         placeholder=" ✚ tag name..."
-        required
         [(ngModel)]="model.name"
       />
-      <button class="img-button" type="submit" [disabled]="!tagForm.form.valid">
+      <button class="img-button" type="submit">
         <img src="save.png" alt="trash" width="29px" height="29px" />
       </button>
     </div>

@@ -35,8 +35,12 @@ export const getTags = asyncHandler(async (req, res) => {
 export const createTag = asyncHandler(async (req, res) => {
   const newTag = new TagModel(req.body);
 
-  if (!newTag.name || !newTag.emoji) {
-    throw new AppError(400, "Name and emoji are required.");
+  if (!newTag.name || newTag.name.trim() === "") {
+    throw new AppError(400, "Nazwa tagu jest wymagana.");
+  }
+
+  if (!newTag.emoji || newTag.emoji.trim() === "") {
+    throw new AppError(400, "Musisz wybrać emoji dla tagu.");
   }
 
   const savedTag = await newTag.save();
