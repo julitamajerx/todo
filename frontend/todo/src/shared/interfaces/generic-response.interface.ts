@@ -3,6 +3,6 @@ export interface ActionResponse<T> {
   message?: string;
 }
 
-export interface DeleteResponse {
+export interface MessageResponse {
   message?: string;
 }

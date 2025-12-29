@@ -40,7 +40,10 @@
     display: none;
   }
 
+  .wrapper {
+    flex-direction: column;
+  }
   .logout {
-    display: none;
+    margin-top: 10px;
   }
 }

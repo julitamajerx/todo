@@ -2,7 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { List } from '../shared/models/list';
 import { LISTS_URL, LISTS_URL_CREATE, LISTS_URL_DELETE } from '../shared/constants/urls';
-import { ActionResponse, DeleteResponse } from '../shared/interfaces/generic-response.interface';
+import { ActionResponse, MessageResponse } from '../shared/interfaces/generic-response.interface';
 import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class ListService {
   public getAllLists() {
     this.http.get<List[]>(LISTS_URL + '?all=true').subscribe({
       next: (lists) => this.lists.set(lists),
-      error: (err) => console.log('Error loading lists:', err),
+      error: (err) => this.toastr.error(err.message, 'List'),
     });
   }
 
@@ -32,10 +32,10 @@ export class ListService {
   }
 
   public deleteList(listId: string): void {
-    this.http.delete<DeleteResponse>(`${LISTS_URL_DELETE}/${listId}`).subscribe({
-      next: () => {
+    this.http.delete<MessageResponse>(`${LISTS_URL_DELETE}/${listId}`).subscribe({
+      next: (response) => {
         this.lists.update((current) => current.filter((l) => l._id !== listId));
-        this.toastr.success('List successfully deleted.', 'List');
+        this.toastr.success(response.message, 'List');
       },
       error: (err) => this.toastr.error(err.message, 'List'),
     });

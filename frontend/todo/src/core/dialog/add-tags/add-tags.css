@@ -1,0 +1,22 @@
+.wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tags-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.add {
+  display: inline-block;
+  margin-bottom: 15px;
+  padding: 12px;
+  width: 100%;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 6px;
+  border: none;
+  font-size: 15px;
+}

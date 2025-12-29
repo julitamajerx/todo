@@ -14,7 +14,7 @@ import {
 import { TasksResponse, UpdateTaskPayload } from '../shared/interfaces/task-response.interface';
 import { Observable, filter, switchMap, tap } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { ActionResponse, DeleteResponse } from '../shared/interfaces/generic-response.interface';
+import { ActionResponse, MessageResponse } from '../shared/interfaces/generic-response.interface';
 import { ToastrService } from 'ngx-toastr';
 
 type TaskQueryParams = Record<string, string | number | boolean>;
@@ -47,7 +47,7 @@ export class TaskService {
         tap({
           next: (task) => this.selectedTask.set(task),
           error: (err) => {
-            console.error('Error fetching selected task:', err);
+            this.toastr.error(err.message, 'Task');
             this.selectedTask.set(null);
           },
         }),
@@ -122,10 +122,10 @@ export class TaskService {
   }
 
   public deleteTask(taskId: string) {
-    this.http.patch<DeleteResponse>(`${TASK_URL_DELETE}/${taskId}`, {}).subscribe({
-      next: () => {
+    this.http.patch<MessageResponse>(`${TASK_URL_DELETE}/${taskId}`, {}).subscribe({
+      next: (response) => {
         this.tasks.update((current) => current.filter((t) => t._id !== taskId));
-        this.toastr.success('Task successfully deleted.', 'Task');
+        this.toastr.success(response.message, 'Task');
       },
       error: (err) => this.toastr.error(err.message, 'Task'),
     });
@@ -133,9 +133,9 @@ export class TaskService {
 
   public completeTask(taskId: string) {
     this.http.patch<ActionResponse<Task>>(`${TASK_URL_COMPLETE}/${taskId}`, {}).subscribe({
-      next: () => {
+      next: (response) => {
         this.tasks.update((current) => current.filter((t) => t._id !== taskId));
-        this.toastr.success('Task successfully completed.', 'Task');
+        this.toastr.success(response.message, 'Task');
       },
       error: (err) => this.toastr.error(err.message, 'Task'),
     });
@@ -143,9 +143,9 @@ export class TaskService {
 
   public recoverTask(taskId: string) {
     this.http.patch<ActionResponse<Task>>(`${TASK_URL_RECOVER}/${taskId}`, {}).subscribe({
-      next: () => {
+      next: (response) => {
         this.tasks.update((current) => current.filter((t) => t._id !== taskId));
-        this.toastr.success('Task successfully recovered.', 'Task');
+        this.toastr.success(response.message, 'Task');
       },
       error: (err) => this.toastr.error(err.message, 'Task'),
     });

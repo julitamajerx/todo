@@ -1,11 +1,11 @@
-<div class="main-container" [class.mobile-details]="isMobile && isSelected">
+<div class="main-container" [class.mobile-details]="isMobile() && isSelected()">
   <div class="left">
     <app-tasks-list [tasks]="tasks()"></app-tasks-list>
   </div>
 
-  @if (isSelected) {
+  @if (isSelected()) {
     <div class="right">
-      @if (isMobile) {
+      @if (isMobile()) {
         <button class="back-btn" (click)="hide()">Back</button>
       }
       <app-task-details></app-task-details>
