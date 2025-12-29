@@ -57,6 +57,16 @@ export class TaskDetails implements OnInit {
       const currentTask = this.task();
       if (!currentTask) return;
 
+      const isReadOnly = currentTask.isCompleted || currentTask.isDeleted;
+
+      if (isReadOnly) {
+        this.taskForm.disable({ emitEvent: false });
+        if (this.editor) this.editor.disable();
+      } else {
+        this.taskForm.enable({ emitEvent: false });
+        if (this.editor) this.editor.enable();
+      }
+
       const currentListId =
         typeof currentTask.list === 'object' && currentTask.list !== null
           ? (currentTask.list as List)._id

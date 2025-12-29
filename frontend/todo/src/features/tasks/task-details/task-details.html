@@ -18,6 +18,7 @@
               (click)="openDatePicker()"
               (keydown.enter)="openDatePicker()"
               (keydown.space)="openDatePicker()"
+              [disabled]="task()?.isCompleted || task()?.isDeleted"
               aria-label="Open date picker"
             >
               <img src="calendar-weeks.png" alt="" width="29" height="29" />
@@ -55,7 +56,14 @@
         @for (tag of task()?.tags; track tag._id) {
           <div class="tag-box">{{ tag.name }}</div>
         }
-        <button type="button" class="add-tag" (click)="openModal()">✚ tag</button>
+        <button
+          type="button"
+          [disabled]="task()?.isCompleted || task()?.isDeleted"
+          class="add-tag"
+          (click)="openModal()"
+        >
+          ✚ tag
+        </button>
       </div>
 
       <div class="flex-container">
