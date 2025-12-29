@@ -16,12 +16,14 @@ export const seedList = asyncHandler(async (req, res) => {
   res.send("List seed is done.");
 });
 
-export const getLists = asyncHandler(async (req, res) => {
-  const lists = await ListModel.find();
+export const getLists = asyncHandler(async (req: any, res) => {
+  const userId = req.user.id;
+  const lists = await ListModel.find({ user: userId });
   const all = req.query.all === "true";
 
-  if (lists.length === 0) {
-    throw new AppError(404, "Lists not found");
+  if (!lists || lists.length === 0) {
+    res.send([]);
+    return;
   }
 
   if (all) {
@@ -32,10 +34,15 @@ export const getLists = asyncHandler(async (req, res) => {
   }
 });
 
-export const createList = asyncHandler(async (req, res) => {
-  const newList = new ListModel(req.body);
+export const createList = asyncHandler(async (req: any, res) => {
+  const userId = req.user.id;
 
-  if (!newList.name) {
+  const newList = new ListModel({
+    ...req.body,
+    user: userId,
+  });
+
+  if (!newList.name || newList.name.trim() === "") {
     throw new AppError(400, "Name is required.");
   }
 
@@ -47,24 +54,26 @@ export const createList = asyncHandler(async (req, res) => {
   });
 });
 
-export const deleteList = asyncHandler(async (req, res) => {
+export const deleteList = asyncHandler(async (req: any, res) => {
   const listId = req.params.listId;
+  const userId = req.user.id;
 
   if (!listId) {
     throw new AppError(400, "List id is required.");
   }
 
-  const listDelete = await ListModel.findById(listId);
+  const listDelete = await ListModel.findOne({ _id: listId, user: userId });
 
   if (!listDelete) {
-    throw new AppError(404, "List not found.");
+    throw new AppError(404, "List not found or unauthorized.");
   }
 
-  await TaskModel.updateMany({ list: listId }, { $set: { list: null } });
+  await TaskModel.updateMany(
+    { list: listId, user: userId },
+    { $set: { list: null } }
+  );
 
   await listDelete.deleteOne();
 
-  res.status(200).json({
-    message: "List was successfully deleted.",
-  });
+  res.status(200).json({ message: "List was successfully deleted." });
 });

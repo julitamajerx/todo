@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { USER_LOGIN_URL, USER_LOGOUT_URL } from '../shared/constants/urls';
 import { User } from '../shared/models/user';
 import { ToastrService } from 'ngx-toastr';
+import { TaskService } from './task-service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,7 @@ export class LoginService {
   private http = inject(HttpClient);
   private router = inject(Router);
   private toastr = inject(ToastrService);
+  private taskService = inject(TaskService);
 
   public login(credentials: UserCredentials) {
     this.http
@@ -49,6 +51,7 @@ export class LoginService {
 
   private clearSession() {
     this.userSignal.set(null);
+    this.taskService.hideTaskDescription();
     localStorage.removeItem('User');
     this.router.navigateByUrl('/login');
   }

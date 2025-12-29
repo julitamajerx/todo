@@ -9,6 +9,7 @@ export interface Task {
   isDeleted: boolean;
   list: Types.ObjectId;
   tags: Types.ObjectId[];
+  user: Types.ObjectId;
 }
 
 export const TaskSchema = new Schema<Task>(
@@ -20,6 +21,7 @@ export const TaskSchema = new Schema<Task>(
     isDeleted: { type: Boolean },
     list: { type: Types.ObjectId, ref: "list" },
     tags: [{ type: Types.ObjectId, ref: "tag" }],
+    user: { type: Types.ObjectId, ref: "user", required: true },
   },
   {
     toJSON: {

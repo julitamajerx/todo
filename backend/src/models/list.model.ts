@@ -1,13 +1,15 @@
-import { Schema, model } from "mongoose";
+import { Schema, Types, model } from "mongoose";
 
 export interface List {
   id: number;
   name: string;
+  user: Types.ObjectId;
 }
 
 export const ListSchema = new Schema<List>(
   {
     name: { type: String, required: true },
+    user: { type: Types.ObjectId, ref: "user", required: true },
   },
   {
     toJSON: {
