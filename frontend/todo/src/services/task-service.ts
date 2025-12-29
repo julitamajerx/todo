@@ -7,6 +7,7 @@ import {
   TASK_URL_COMPLETE,
   TASK_URL_CREATE,
   TASK_URL_DELETE,
+  TASK_URL_RECOVER,
   TASK_URL_UPDATE,
   TASKS_URL,
 } from '../shared/constants/urls';
@@ -135,6 +136,16 @@ export class TaskService {
       next: () => {
         this.tasks.update((current) => current.filter((t) => t._id !== taskId));
         this.toastr.success('Task successfully completed.', 'Task');
+      },
+      error: (err) => this.toastr.error(err.message, 'Task'),
+    });
+  }
+
+  public recoverTask(taskId: string) {
+    this.http.patch<ActionResponse<Task>>(`${TASK_URL_RECOVER}/${taskId}`, {}).subscribe({
+      next: () => {
+        this.tasks.update((current) => current.filter((t) => t._id !== taskId));
+        this.toastr.success('Task successfully recovered.', 'Task');
       },
       error: (err) => this.toastr.error(err.message, 'Task'),
     });

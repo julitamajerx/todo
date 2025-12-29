@@ -47,6 +47,9 @@ export class TasksList {
     if (isChecked) {
       this.taskService.completeTask(taskId);
       this.taskService.hideTaskDescription();
+    } else {
+      this.taskService.recoverTask(taskId);
+      this.taskService.hideTaskDescription();
     }
   }
 

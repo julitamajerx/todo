@@ -132,8 +132,23 @@ export class TaskDetails implements OnInit {
   protected completeTask(event: Event) {
     const isChecked = (event.target as HTMLInputElement).checked;
     const taskId = this.task()?._id;
-    if (isChecked && taskId) {
-      this.taskService.completeTask(taskId);
+
+    if (taskId) {
+      if (isChecked) {
+        this.taskService.completeTask(taskId);
+        this.taskService.hideTaskDescription();
+      } else {
+        this.taskService.recoverTask(taskId);
+        this.taskService.hideTaskDescription();
+      }
+    }
+  }
+
+  protected recoverTask() {
+    const taskId = this.task()?._id;
+
+    if (taskId) {
+      this.taskService.recoverTask(taskId);
       this.taskService.hideTaskDescription();
     }
   }

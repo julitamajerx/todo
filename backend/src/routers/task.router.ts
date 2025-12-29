@@ -15,6 +15,8 @@ router.patch("/delete/:taskId", TaskController.deleteTask);
 
 router.patch("/complete/:taskId", TaskController.completeTask);
 
+router.patch("/recover/:taskId", TaskController.recoverTask);
+
 router.patch("/update/:taskId", TaskController.updateTask);
 
 export default router;

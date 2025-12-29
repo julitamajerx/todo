@@ -6,6 +6,7 @@ export const TASK_URL_CREATE = TASKS_URL + '/create';
 export const TASK_URL_DELETE = TASKS_URL + '/delete';
 export const TASK_URL_COMPLETE = TASKS_URL + '/complete';
 export const TASK_URL_UPDATE = TASKS_URL + '/update';
+export const TASK_URL_RECOVER = TASKS_URL + '/recover';
 
 export const TAGS_URL = BASE_URL + '/api/tags';
 export const TAGS_URL_CREATE = TAGS_URL + '/create';

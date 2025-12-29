@@ -4,7 +4,12 @@
       <div class="container">
         <ul>
           <li>
-            <input type="checkbox" class="task-check" (change)="completeTask($event)" />
+            <input
+              type="checkbox"
+              [checked]="task()?.isCompleted"
+              class="task-check"
+              (change)="completeTask($event)"
+            />
           </li>
           <li>
             <button
@@ -34,9 +39,15 @@
       <app-spinner></app-spinner>
       <div class="title">
         <h3>{{ task()?.name }}</h3>
-        <button class="img-button" type="submit" [disabled]="taskForm.invalid">
-          <img src="save.png" alt="save" width="29px" height="29px" />
-        </button>
+        @if (task()?.isCompleted || task()?.isDeleted) {
+          <button class="img-button" type="button" (click)="recoverTask()">
+            <img src="arrows.png" alt="recover" width="29px" height="29px" />
+          </button>
+        } @else {
+          <button class="img-button" type="submit" [disabled]="taskForm.invalid">
+            <img src="save.png" alt="save" width="29px" height="29px" />
+          </button>
+        }
       </div>
 
       <div class="flex-container">

@@ -154,6 +154,23 @@ export const completeTask = asyncHandler(async (req: any, res) => {
   res.status(200).json({ message: "Task was successfully completed." });
 });
 
+export const recoverTask = asyncHandler(async (req: any, res) => {
+  const userId = req.user.id;
+  const taskId = req.params.taskId;
+
+  const taskRecover = await TaskModel.findOne({ _id: taskId, user: userId });
+
+  if (!taskRecover) {
+    throw new AppError(404, "Task not found.");
+  }
+
+  taskRecover.isCompleted = false;
+  taskRecover.isDeleted = false;
+  await taskRecover.save();
+
+  res.status(200).json({ message: "Task was successfully recovered." });
+});
+
 export const updateTask = asyncHandler(async (req: any, res) => {
   const userId = req.user.id;
   const { taskId } = req.params;
