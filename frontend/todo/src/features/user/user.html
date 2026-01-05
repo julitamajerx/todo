@@ -1,9 +1,9 @@
 <div class="wrapper">
   <img class="avatar" src="avatar.jpg" alt="avatar" />
   <div class="info-wrapper">
-    @if (loginService.user(); as user) {
+    @if (userService.user(); as user) {
       <span class="name">{{ user.name }}</span>
-      <button class="logout" (click)="loginService.logout()">Log Out</button>
+      <button class="logout" (click)="userService.logout()">Log Out</button>
     } @else {
       <span class="name">Nie jesteś zalogowany</span>
     }

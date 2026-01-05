@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { LoginService } from '../../services/login-service';
+import { UserService } from '../../services/user-service';
 
 @Component({
   selector: 'app-user',
@@ -8,5 +8,5 @@ import { LoginService } from '../../services/login-service';
   styleUrl: './user.css',
 })
 export class User {
-  protected loginService = inject(LoginService);
+  protected userService = inject(UserService);
 }

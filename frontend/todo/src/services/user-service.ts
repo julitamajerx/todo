@@ -1,16 +1,21 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { LoginResponse, UserCredentials } from '../shared/interfaces/login-response.interface';
+import {
+  LoginResponse,
+  NewUserInput,
+  UserCredentials,
+} from '../shared/interfaces/login-response.interface';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { USER_LOGIN_URL, USER_LOGOUT_URL } from '../shared/constants/urls';
+import { USER_LOGIN_URL, USER_LOGOUT_URL, USER_REGISTER_URL } from '../shared/constants/urls';
 import { User } from '../shared/models/user';
 import { ToastrService } from 'ngx-toastr';
 import { TaskService } from './task-service';
+import { MessageResponse } from '../shared/interfaces/generic-response.interface';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LoginService {
+export class UserService {
   private userSignal = signal<User | null>(this.getUserFromStorage());
   public user = this.userSignal.asReadonly();
 
@@ -37,9 +42,20 @@ export class LoginService {
         },
         error: (err) => {
           this.toastr.error(err.message, 'Login error');
-          console.log(err.message);
         },
       });
+  }
+
+  public register(input: NewUserInput) {
+    this.http.post<MessageResponse>(USER_REGISTER_URL, input).subscribe({
+      next: (response) => {
+        this.router.navigateByUrl('/login');
+        this.toastr.success(response.message, 'Register');
+      },
+      error: (err) => {
+        this.toastr.error(err.message, 'Register error');
+      },
+    });
   }
 
   public logout() {

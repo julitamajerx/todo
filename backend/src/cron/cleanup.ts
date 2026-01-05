@@ -3,7 +3,7 @@ import { TaskModel } from "../models/task.model";
 
 export const initCleanupJob = () => {
   cron.schedule("0 3 * * *", async () => {
-    console.log("--- Rozpoczynam nocne czyszczenie starych zadań ---");
+    console.log("--- Starting nightly cleanup of old tasks ---");
 
     try {
       const thirtyDaysAgo = new Date();
@@ -14,10 +14,10 @@ export const initCleanupJob = () => {
       });
 
       console.log(
-        `Czyszczenie zakończone. Usunięto zadań: ${result.deletedCount}`
+        `Cleanup completed. Deleted tasks count: ${result.deletedCount}`
       );
     } catch (error) {
-      console.error("Błąd podczas czyszczenia bazy:", error);
+      console.error("Error during database cleanup:", error);
     }
   });
 };

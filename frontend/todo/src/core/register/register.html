@@ -1,7 +1,11 @@
 <div class="container">
   <div class="wrapper">
-    <h1>todo</h1>
-    <form [formGroup]="loginFrom" (ngSubmit)="onSubmit()">
+    <h1>Sign up</h1>
+    <form [formGroup]="registerFrom" (ngSubmit)="onSubmit()">
+      <div class="form-element">
+        <label for="name">Name: </label>
+        <input id="name" type="text" formControlName="name" />
+      </div>
       <div class="form-element">
         <label for="email">Email: </label>
         <input id="email" type="text" formControlName="email" />
@@ -10,8 +14,7 @@
         <label for="password">Password: </label>
         <input id="password" type="password" formControlName="password" />
       </div>
-      <button type="submit" [disabled]="!loginFrom.valid">Submit</button>
+      <button type="submit" [disabled]="!registerFrom.valid">Submit</button>
     </form>
-    <div class="sign-in">New user? <a routerLink="/register">Sign in here</a></div>
   </div>
 </div>

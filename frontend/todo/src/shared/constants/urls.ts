@@ -19,3 +19,4 @@ export const LISTS_URL_DELETE = LISTS_URL + '/delete';
 export const USER_URL = BASE_URL + '/api/user';
 export const USER_LOGIN_URL = USER_URL + '/login';
 export const USER_LOGOUT_URL = USER_URL + '/logout';
+export const USER_REGISTER_URL = USER_URL + '/register';
