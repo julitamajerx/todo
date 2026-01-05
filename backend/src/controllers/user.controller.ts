@@ -34,7 +34,23 @@ export const login = asyncHandler(async (req, res) => {
 });
 
 export const register = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  let { name, email, password } = req.body;
+
+  const cleanName = name?.trim();
+  const cleanEmail = email?.trim();
+  const cleanPassword = password?.trim();
+
+  if (!cleanName || cleanName.length === 0) {
+    throw new AppError(400, "Name cannot be empty or just spaces");
+  }
+
+  if (!cleanEmail || cleanEmail.length === 0) {
+    throw new AppError(400, "Email cannot be empty");
+  }
+
+  if (!cleanPassword || cleanPassword.length === 0) {
+    throw new AppError(400, "Password cannot be empty");
+  }
 
   const user = await UserModel.findOne({ email });
 
@@ -45,8 +61,8 @@ export const register = asyncHandler(async (req, res) => {
   const encryptedPassword = await bcrypt.hash(password, 10);
 
   const newUser = new UserModel({
-    name,
-    email,
+    name: cleanName,
+    email: cleanEmail,
     password: encryptedPassword,
   });
 

@@ -18,7 +18,7 @@ export class Register {
       validators: [Validators.required, Validators.email],
       nonNullable: true,
     }),
-    password: new FormControl('', { validators: [Validators.required], nonNullable: true }),
+    password: new FormControl('', { validators: [Validators.required, Validators.minLength(6)], nonNullable: true }),
   });
 
   onSubmit() {
