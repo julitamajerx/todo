@@ -53,6 +53,14 @@ export class TasksList {
     }
   }
 
+  protected onPrev() {
+    this.taskService.changePage(-1);
+  }
+
+  protected onNext() {
+    this.taskService.changePage(1);
+  }
+
   private capitalize(text: string): string {
     if (!text) return '';
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();

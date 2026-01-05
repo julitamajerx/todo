@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { Task } from '../shared/models/task';
 import { TaskSort } from '../shared/enums/task-sort-enum';
 import { HttpClient } from '@angular/common/http';
@@ -31,9 +31,16 @@ export class TaskService {
   public currentSort = signal<TaskSort>(TaskSort.Inbox);
   public currentTag = signal<string | null>(null);
   public currentList = signal<string | null>(null);
+  public currentPage = signal<number>(1);
+  public totalItems = signal<number>(0);
 
   private http = inject(HttpClient);
   private toastr = inject(ToastrService);
+  private limit = 12;
+
+  public totalPages = computed(() => {
+    return Math.ceil(this.totalItems() / this.limit);
+  });
 
   constructor() {
     this.setupTaskLoading();
@@ -55,10 +62,10 @@ export class TaskService {
       .subscribe();
   }
 
-  public getAllTasks(page = 1, limit = 15) {
+  public getAllTasks() {
     const params: TaskQueryParams = {
-      page,
-      limit,
+      page: this.currentPage(),
+      limit: this.limit,
       sortBy: this.currentSort(),
     };
 
@@ -69,6 +76,14 @@ export class TaskService {
     if (list !== null) params['list'] = list;
 
     this.http.get<TasksResponse>(TASKS_URL, { params }).subscribe((response) => {
+      this.totalItems.set(response.total);
+
+      if (this.currentPage() > 1 && this.currentPage() > this.totalPages()) {
+        this.currentPage.set(this.totalPages());
+        this.getAllTasks();
+        return;
+      }
+
       const mapped = response.tasks.map((task) => ({
         ...task,
         dueDate: new Date(task.dueDate),
@@ -84,16 +99,19 @@ export class TaskService {
 
   public setTag(tagName: string | null) {
     this.currentTag.set(tagName);
+    this.currentPage.set(1);
     this.getAllTasks();
   }
 
   public setList(listName: string | null) {
     this.currentList.set(listName);
+    this.currentPage.set(1);
     this.getAllTasks();
   }
 
   public setSort(sort: TaskSort) {
     this.currentSort.set(sort);
+    this.currentPage.set(1);
     this.getAllTasks();
   }
 
@@ -114,7 +132,12 @@ export class TaskService {
   public createTask(task: Task) {
     this.http.post<ActionResponse<Task>>(TASK_URL_CREATE, task).subscribe({
       next: (response) => {
-        this.tasks.update((current) => [...current, response.data]);
+        this.tasks.update((current) => {
+          const newTaskList = [response.data, ...current];
+
+          return newTaskList.length > 12 ? newTaskList.slice(0, 12) : newTaskList;
+        });
+        this.totalItems.update((total) => total + 1);
         this.toastr.success(response.message, 'Task');
       },
       error: (err) => this.toastr.error(err.message, 'Task'),
@@ -126,6 +149,7 @@ export class TaskService {
       next: (response) => {
         this.tasks.update((current) => current.filter((t) => t._id !== taskId));
         this.toastr.success(response.message, 'Task');
+        this.getAllTasks();
       },
       error: (err) => this.toastr.error(err.message, 'Task'),
     });
@@ -136,6 +160,7 @@ export class TaskService {
       next: (response) => {
         this.tasks.update((current) => current.filter((t) => t._id !== taskId));
         this.toastr.success(response.message, 'Task');
+        this.getAllTasks();
       },
       error: (err) => this.toastr.error(err.message, 'Task'),
     });
@@ -168,6 +193,15 @@ export class TaskService {
       },
       error: (err) => this.toastr.error(err.message, 'Task'),
     });
+  }
+
+  public changePage(delta: number) {
+    const nextPage = this.currentPage() + delta;
+
+    if (nextPage >= 1 && nextPage <= this.totalPages()) {
+      this.currentPage.set(nextPage);
+      this.getAllTasks();
+    }
   }
 
   public checkDate(date: Date): boolean {

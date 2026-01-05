@@ -83,6 +83,7 @@ export const getTasks = asyncHandler(async (req: any, res) => {
   const tasks = await TaskModel.find(filter)
     .populate("list")
     .populate("tags")
+    .sort({ createdAt: -1 })
     .skip((page - 1) * limit)
     .limit(limit)
     .lean();
@@ -195,6 +196,6 @@ export const updateTask = asyncHandler(async (req: any, res) => {
 function getPagination(req: any) {
   return {
     page: parseInt(req.query.page as string) || 1,
-    limit: parseInt(req.query.limit as string) || 15,
+    limit: parseInt(req.query.limit as string) || 12,
   };
 }

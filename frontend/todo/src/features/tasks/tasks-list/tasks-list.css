@@ -76,6 +76,29 @@ input::placeholder {
   color: red;
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.pagination button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  width: 30px;
+  border: none;
+  background-color: var(--secondary-color);
+  color: white;
+  border-radius: 5px;
+  padding-bottom: 4px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
 @media (max-width: 870px) {
   .wrapper {
     border-right: none;

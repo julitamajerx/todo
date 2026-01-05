@@ -24,6 +24,7 @@ export const TaskSchema = new Schema<Task>(
     user: { type: Types.ObjectId, ref: "user", required: true },
   },
   {
+    timestamps: true,
     toJSON: {
       virtuals: true,
     },

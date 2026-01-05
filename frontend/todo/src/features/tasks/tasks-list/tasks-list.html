@@ -53,5 +53,15 @@
         </div>
       </div>
     }
+
+    <div class="pagination">
+      <button (click)="onPrev()" [disabled]="taskService.currentPage() === 1">←</button>
+
+      <span> {{ taskService.currentPage() }} / {{ taskService.totalPages() }} </span>
+
+      <button (click)="onNext()" [disabled]="taskService.currentPage() >= taskService.totalPages()">
+        →
+      </button>
+    </div>
   </div>
 </div>
