@@ -3,7 +3,7 @@ import * as TagController from "../controllers/tag.controller";
 
 const router = Router();
 
-router.get("/seed", TagController.seedTags);
+//router.get("/seed", TagController.seedTags);
 
 router.get("/", TagController.getTags);
 

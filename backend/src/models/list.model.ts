@@ -1,7 +1,7 @@
 import { Schema, Types, model } from "mongoose";
 
 export interface List {
-  id: number;
+  id: string;
   name: string;
   user: Types.ObjectId;
 }

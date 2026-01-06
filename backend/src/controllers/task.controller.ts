@@ -1,42 +1,44 @@
 import { TaskSort } from "../enums/task-sort-enum";
-import { sample_tasks } from "../data";
+// import { sample_tasks } from "../data";
 import asyncHandler from "express-async-handler";
 import mongoose from "mongoose";
 import { TaskModel } from "../models/task.model";
 import { ListModel } from "../models/list.model";
 import { TagModel } from "../models/tag.model";
 import { AppError } from "../errors/app-error";
+import { Request, Response } from "express";
 
-export const seedTasks = asyncHandler(async (req: any, res) => {
-  const userId = req.user.id;
-  const taskCount = await TaskModel.countDocuments({ user: userId });
 
-  if (taskCount > 0) {
-    res.send("Tasks have already been seeded.");
-    return;
-  }
+// export const seedTasks = asyncHandler(async (req: any, res) => {
+//   const userId = req.user.id;
+//   const taskCount = await TaskModel.countDocuments({ user: userId });
 
-  const tags = await TagModel.find({ user: userId });
-  const lists = await ListModel.find({ user: userId });
+//   if (taskCount > 0) {
+//     res.send("Tasks have already been seeded.");
+//     return;
+//   }
 
-  const tasksWithUser = sample_tasks.map((task) => {
-    return {
-      ...task,
-      user: userId,
-      list: task.list !== undefined ? lists[task.list]?._id : null,
-      tags: task.tags
-        ? task.tags
-            .map((tagIndex: number) => tags[tagIndex]?._id)
-            .filter((t: any) => t)
-        : [],
-    };
-  });
+//   const tags = await TagModel.find({ user: userId });
+//   const lists = await ListModel.find({ user: userId });
 
-  await TaskModel.create(tasksWithUser);
-  res.send("Tasks seed is done.");
-});
+//   const tasksWithUser = sample_tasks.map((task) => {
+//     return {
+//       ...task,
+//       user: userId,
+//       list: task.list !== undefined ? lists[task.list]?._id : null,
+//       tags: task.tags
+//         ? task.tags
+//             .map((tagIndex: number) => tags[tagIndex]?._id)
+//             .filter((t: any) => t)
+//         : [],
+//     };
+//   });
 
-export const getTasks = asyncHandler(async (req: any, res) => {
+//   await TaskModel.create(tasksWithUser);
+//   res.send("Tasks seed is done.");
+// });
+
+export const getTasks = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user.id;
   const { page, limit } = getPagination(req);
   const sortBy = req.query.sortBy || TaskSort.Inbox;
@@ -88,10 +90,10 @@ export const getTasks = asyncHandler(async (req: any, res) => {
     .limit(limit)
     .lean();
 
-  res.send({ total, page, limit, tasks });
+  res.status(200).json({ total, page, limit, tasks });
 });
 
-export const getTaskById = asyncHandler(async (req: any, res) => {
+export const getTaskById = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user.id;
   const taskId = req.params.taskId;
 
@@ -104,10 +106,10 @@ export const getTaskById = asyncHandler(async (req: any, res) => {
     throw new AppError(404, "Task not found");
   }
 
-  res.send(task);
+  res.status(200).json(task);
 });
 
-export const createTask = asyncHandler(async (req: any, res) => {
+export const createTask = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user.id;
 
   if (!req.body.name) {
@@ -123,7 +125,7 @@ export const createTask = asyncHandler(async (req: any, res) => {
   res.status(201).json({ message: "New task created.", data: savedTask });
 });
 
-export const deleteTask = asyncHandler(async (req: any, res) => {
+export const deleteTask = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user.id;
   const taskId = req.params.taskId;
 
@@ -139,7 +141,7 @@ export const deleteTask = asyncHandler(async (req: any, res) => {
   res.status(200).json({ message: "Task was successfully deleted." });
 });
 
-export const completeTask = asyncHandler(async (req: any, res) => {
+export const completeTask = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user.id;
   const taskId = req.params.taskId;
 
@@ -155,7 +157,7 @@ export const completeTask = asyncHandler(async (req: any, res) => {
   res.status(200).json({ message: "Task was successfully completed." });
 });
 
-export const recoverTask = asyncHandler(async (req: any, res) => {
+export const recoverTask = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user.id;
   const taskId = req.params.taskId;
 
@@ -172,7 +174,7 @@ export const recoverTask = asyncHandler(async (req: any, res) => {
   res.status(200).json({ message: "Task was successfully recovered." });
 });
 
-export const updateTask = asyncHandler(async (req: any, res) => {
+export const updateTask = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user.id;
   const { taskId } = req.params;
 
@@ -193,7 +195,7 @@ export const updateTask = asyncHandler(async (req: any, res) => {
     .json({ data: updatedTask, message: "Task was successfully updated." });
 });
 
-function getPagination(req: any) {
+function getPagination(req: Request) {
   return {
     page: parseInt(req.query.page as string) || 1,
     limit: parseInt(req.query.limit as string) || 12,

@@ -1,39 +1,40 @@
-import { sample_tags } from "../data";
+// import { sample_tags } from "../data";
 import asyncHandler from "express-async-handler";
 import { TagModel } from "../models/tag.model";
 import { AppError } from "../errors/app-error";
 import { TaskModel } from "../models/task.model";
+import { Request, Response } from "express";
 
-export const seedTags = asyncHandler(async (req, res) => {
-  const tagCount = await TagModel.countDocuments();
+// export const seedTags = asyncHandler(async (req, res) => {
+//   const tagCount = await TagModel.countDocuments();
 
-  if (tagCount > 0) {
-    res.send("Tag have been already seeded.");
-    return;
-  }
+//   if (tagCount > 0) {
+//     res.send("Tag have been already seeded.");
+//     return;
+//   }
 
-  await TagModel.create(sample_tags);
-  res.send("Tag seed is done.");
-});
+//   await TagModel.create(sample_tags);
+//   res.send("Tag seed is done.");
+// });
 
-export const getTags = asyncHandler(async (req: any, res) => {
+export const getTags = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user.id;
   const tags = await TagModel.find({ user: userId });
   const all = req.query.all === "true";
 
   if (!tags || tags.length === 0) {
-    res.send([]);
+    res.status(200).json([]);
     return;
   }
   if (all) {
-    res.send(tags);
+    res.status(200).json(tags);
   } else {
     const limit = 2;
-    res.send(tags.slice(0, limit));
+    res.status(200).json(tags.slice(0, limit));
   }
 });
 
-export const createTag = asyncHandler(async (req: any, res) => {
+export const createTag = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user.id;
 
   const tagCount = await TagModel.countDocuments({ user: userId });
@@ -41,7 +42,7 @@ export const createTag = asyncHandler(async (req: any, res) => {
   if (tagCount >= 5) {
     throw new AppError(
       403,
-      "Tag limit reached. You can only have up to 5 lists per account."
+      "Tag limit reached. You can only have up to 5 tags per account."
     );
   }
 
@@ -66,7 +67,7 @@ export const createTag = asyncHandler(async (req: any, res) => {
   });
 });
 
-export const deleteTag = asyncHandler(async (req: any, res) => {
+export const deleteTag = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user.id;
   const tagId = req.params.tagId;
 

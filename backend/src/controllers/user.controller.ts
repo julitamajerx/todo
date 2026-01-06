@@ -1,4 +1,5 @@
 import asyncHandler from "express-async-handler";
+import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { AppError } from "../errors/app-error";
 import { UserModel } from "../models/user.model";
@@ -6,7 +7,7 @@ import bcrypt from "bcryptjs";
 import cloudinary from "../configs/cloudinary.config";
 import fs from "fs";
 
-export const login = asyncHandler(async (req, res) => {
+export const login = asyncHandler(async (req: Request, res:Response) => {
   const { email, password } = req.body;
   const user = await UserModel.findOne({ email });
 
@@ -27,7 +28,7 @@ export const login = asyncHandler(async (req, res) => {
     maxAge: 30 * 24 * 60 * 60 * 1000,
   });
 
-  res.send({
+  res.status(200).json({
     id: user.id,
     email: user.email,
     name: user.name,
@@ -36,78 +37,78 @@ export const login = asyncHandler(async (req, res) => {
   });
 });
 
-export const register = asyncHandler(async (req, res) => {
-  let { name, email, password } = req.body;
+export const register = asyncHandler(async (req: Request, res:Response) => {
+  const { name, email, password } = req.body;
   const file = req.file;
 
-  const cleanupFile = () => {
+  try {
+    const cleanName = name?.trim();
+    const cleanEmail = email?.trim();
+    const cleanPassword = password?.trim();
+
+    if (!cleanName) {
+      throw new AppError(400, "Name cannot be empty or just spaces");
+    }
+
+    if (!cleanEmail) {
+      throw new AppError(400, "Email cannot be empty");
+    }
+
+    if (!cleanPassword) {
+      throw new AppError(400, "Password cannot be empty");
+    }
+
+    const userExists = await UserModel.findOne({ email: cleanEmail });
+    if (userExists) {
+      throw new AppError(409, "User with this email already exists");
+    }
+
+    let avatarUrl = "";
+    if (file) {
+      try {
+        const uploadRes = await cloudinary.uploader.upload(file.path, {
+          folder: "avatars",
+          transformation: [
+            { width: 60, height: 60, crop: "fill", gravity: "face" },
+            { quality: "auto", fetch_format: "auto" },
+          ],
+        });
+        avatarUrl = uploadRes.secure_url;
+      } catch (error) {
+        throw new AppError(
+          500,
+          "Error. We couldn't upload your photo. Try again later"
+        );
+      }
+    }
+
+    const encryptedPassword = await bcrypt.hash(cleanPassword, 10);
+
+    const newUser = new UserModel({
+      name: cleanName,
+      email: cleanEmail,
+      password: encryptedPassword,
+      avatarUrl: avatarUrl,
+    });
+
+    await newUser.save();
+    res.status(201).json({ message: "New account created. You can log in." });
+  } finally {
     if (file && fs.existsSync(file.path)) {
-      fs.unlinkSync(file.path);
-    }
-  };
-
-  const cleanName = name?.trim();
-  const cleanEmail = email?.trim();
-  const cleanPassword = password?.trim();
-
-  if (!cleanName || cleanName.length === 0) {
-    cleanupFile();
-    throw new AppError(400, "Name cannot be empty or just spaces");
-  }
-
-  if (!cleanEmail || cleanEmail.length === 0) {
-    cleanupFile();
-    throw new AppError(400, "Email cannot be empty");
-  }
-
-  if (!cleanPassword || cleanPassword.length === 0) {
-    cleanupFile();
-    throw new AppError(400, "Password cannot be empty");
-  }
-
-  const user = await UserModel.findOne({ email });
-
-  if (user) {
-    cleanupFile();
-    throw new AppError(401, "User with this email already exist.");
-  }
-
-  let avatarUrl = "";
-  if (file) {
-    try {
-      const uploadRes = await cloudinary.uploader.upload(file.path, {
-        folder: "avatars",
-        transformation: [
-          { width: 60, height: 60, crop: "fill", gravity: "face" },
-          { quality: "auto", fetch_format: "auto" },
-        ],
-      });
-
-      avatarUrl = uploadRes.secure_url;
-    } catch (error) {
-      throw new AppError(
-        500,
-        "Error. We couldn't upload your photo. Try again later"
-      );
-    } finally {
-      cleanupFile();
+      try {
+        fs.unlinkSync(file.path);
+      } catch (err) {
+        console.error("Cleanup error:", err);
+      }
     }
   }
-
-  const encryptedPassword = await bcrypt.hash(password, 10);
-
-  const newUser = new UserModel({
-    name: cleanName,
-    email: cleanEmail,
-    password: encryptedPassword,
-    avatarUrl: avatarUrl,
-  });
-
-  await newUser.save();
-  res.status(201).json({ message: "New account created. You can log in." });
 });
 
-export const logout = asyncHandler(async (req, res) => {
-  res.clearCookie("access_token");
-  res.send({ message: "Logged out" });
+export const logout = asyncHandler(async (req: Request, res: Response) => {
+  res.clearCookie("access_token", {
+    httpOnly: true,
+    secure: false, // na prod true
+    sameSite: "lax",
+  });
+  res.status(200).json({ message: "Logged out successfully" });
 });

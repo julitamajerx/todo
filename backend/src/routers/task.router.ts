@@ -3,7 +3,7 @@ import * as TaskController from "../controllers/task.controller";
 
 const router = Router();
 
-router.get("/seed", TaskController.seedTasks);
+//router.get("/seed", TaskController.seedTasks);
 
 router.get("/", TaskController.getTasks);
 

@@ -1,40 +1,41 @@
-import { sample_lists } from "../data";
+// import { sample_lists } from "../data";
 import asyncHandler from "express-async-handler";
 import { ListModel } from "../models/list.model";
 import { AppError } from "../errors/app-error";
 import { TaskModel } from "../models/task.model";
+import { Request, Response } from "express";
 
-export const seedList = asyncHandler(async (req, res) => {
-  const listCount = await ListModel.countDocuments();
+// export const seedList = asyncHandler(async (req, res) => {
+//   const listCount = await ListModel.countDocuments();
 
-  if (listCount > 0) {
-    res.send("List have been already seeded.");
-    return;
-  }
+//   if (listCount > 0) {
+//     res.send("List have been already seeded.");
+//     return;
+//   }
 
-  await ListModel.create(sample_lists);
-  res.send("List seed is done.");
-});
+//   await ListModel.create(sample_lists);
+//   res.send("List seed is done.");
+// });
 
-export const getLists = asyncHandler(async (req: any, res) => {
+export const getLists = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user.id;
   const lists = await ListModel.find({ user: userId });
   const all = req.query.all === "true";
 
   if (!lists || lists.length === 0) {
-    res.send([]);
+    res.status(200).json([]);
     return;
   }
 
   if (all) {
-    res.send(lists);
+    res.status(200).json(lists);
   } else {
     const limit = 2;
-    res.send(lists.slice(0, limit));
+    res.status(200).json(lists.slice(0, limit));
   }
 });
 
-export const createList = asyncHandler(async (req: any, res) => {
+export const createList = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user.id;
 
   const listCount = await ListModel.countDocuments({ user: userId });
@@ -63,7 +64,7 @@ export const createList = asyncHandler(async (req: any, res) => {
   });
 });
 
-export const deleteList = asyncHandler(async (req: any, res) => {
+export const deleteList = asyncHandler(async (req: Request, res: Response) => {
   const listId = req.params.listId;
   const userId = req.user.id;
 

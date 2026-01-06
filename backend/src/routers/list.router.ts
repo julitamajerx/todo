@@ -3,7 +3,7 @@ import * as ListController from "../controllers/list.controller";
 
 const router = Router();
 
-router.get("/seed", ListController.seedList);
+//router.get("/seed", ListController.seedList);
 
 router.get("/", ListController.getLists);
 

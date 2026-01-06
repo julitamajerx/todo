@@ -1,7 +1,7 @@
 import { Schema, Types, model } from "mongoose";
 
 export interface Tag {
-  id: number;
+  id: string;
   emoji: string;
   name: string;
   user: Types.ObjectId;

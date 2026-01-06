@@ -1,7 +1,7 @@
 import { Schema, Types, model } from "mongoose";
 
 export interface Task {
-  id: number;
+  id: string;
   name: string;
   description: string;
   dueDate: Date;
