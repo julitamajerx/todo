@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'https://todo-te3m.onrender.com';
 
 export const TASKS_URL = BASE_URL + '/api/tasks';
 export const TASK_BY_URL = TASKS_URL + '/';
