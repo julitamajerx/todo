@@ -11,7 +11,7 @@ import { NewUserInput } from '../../shared/interfaces/user-response.interface';
   styleUrl: './register.css',
 })
 export class Register {
-  protected selectedFileName: string = '';
+  protected selectedFileName = '';
 
   private selectedFile: File | null = null;
   private userService = inject(UserService);
