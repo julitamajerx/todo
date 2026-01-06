@@ -95,7 +95,6 @@ input:focus {
   flex-grow: 1;
 }
 
-
 button {
   background-color: var(--button-color);
   color: white;
