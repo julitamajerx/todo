@@ -7,7 +7,7 @@ import bcrypt from "bcryptjs";
 import cloudinary from "../configs/cloudinary.config";
 import fs from "fs";
 
-export const login = asyncHandler(async (req: Request, res:Response) => {
+export const login = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const user = await UserModel.findOne({ email });
 
@@ -23,8 +23,8 @@ export const login = asyncHandler(async (req: Request, res:Response) => {
 
   res.cookie("access_token", token, {
     httpOnly: true,
-    secure: false, //zmianka na prod na rtrue
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none",
     maxAge: 30 * 24 * 60 * 60 * 1000,
   });
 
@@ -37,7 +37,7 @@ export const login = asyncHandler(async (req: Request, res:Response) => {
   });
 });
 
-export const register = asyncHandler(async (req: Request, res:Response) => {
+export const register = asyncHandler(async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
   const file = req.file;
 
@@ -107,8 +107,8 @@ export const register = asyncHandler(async (req: Request, res:Response) => {
 export const logout = asyncHandler(async (req: Request, res: Response) => {
   res.clearCookie("access_token", {
     httpOnly: true,
-    secure: false, // na prod true
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none",
   });
   res.status(200).json({ message: "Logged out successfully" });
 });

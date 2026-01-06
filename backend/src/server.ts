@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:4200"],
+    origin: ["http://localhost:4200", "https://julitamajerx.github.io"],
   })
 );
 
@@ -33,10 +33,10 @@ app.use("/api/lists", authHandler, listRouter);
 app.use("/api/tags", authHandler, tagRouter);
 app.use("/api/user", userRouter);
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
-  console.log("Served on http://localhost:" + port);
+  console.log("Served on " + port);
 });
 
 app.use(errorMiddleware);
