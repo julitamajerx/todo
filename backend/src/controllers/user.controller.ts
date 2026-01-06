@@ -58,6 +58,10 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
       throw new AppError(400, "Password cannot be empty");
     }
 
+    if (!file) {
+      throw new AppError(400, "Profile picture cannot be empty");
+    }
+
     const userExists = await UserModel.findOne({ email: cleanEmail });
     if (userExists) {
       throw new AppError(409, "User with this email already exists");
