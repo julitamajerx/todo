@@ -170,6 +170,8 @@ export class TaskService {
     this.http.patch<ActionResponse<Task>>(`${TASK_URL_RECOVER}/${taskId}`, {}).subscribe({
       next: (response) => {
         this.tasks.update((current) => current.filter((t) => t._id !== taskId));
+        this.getAllTasks();
+
         this.toastr.success(response.message, 'Task');
       },
       error: (err) => this.toastr.error(err.message, 'Task'),

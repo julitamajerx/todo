@@ -1,9 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import {
-  LoginResponse,
-  NewUserInput,
-  UserCredentials,
-} from '../shared/interfaces/login-response.interface';
+import { LoginResponse, UserCredentials } from '../shared/interfaces/user-response.interface';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { USER_LOGIN_URL, USER_LOGOUT_URL, USER_REGISTER_URL } from '../shared/constants/urls';
@@ -33,6 +29,7 @@ export class UserService {
             id: response.id,
             email: response.email,
             name: response.name,
+            avatarUrl: response.avatarUrl,
           };
 
           this.userSignal.set(userData);
@@ -46,8 +43,8 @@ export class UserService {
       });
   }
 
-  public register(input: NewUserInput) {
-    this.http.post<MessageResponse>(USER_REGISTER_URL, input).subscribe({
+  public register(formData: FormData) {
+    this.http.post<MessageResponse>(USER_REGISTER_URL, formData).subscribe({
       next: (response) => {
         this.router.navigateByUrl('/login');
         this.toastr.success(response.message, 'Register');

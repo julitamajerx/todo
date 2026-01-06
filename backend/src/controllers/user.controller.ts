@@ -3,6 +3,8 @@ import jwt from "jsonwebtoken";
 import { AppError } from "../errors/app-error";
 import { UserModel } from "../models/user.model";
 import bcrypt from "bcryptjs";
+import cloudinary from "../configs/cloudinary.config";
+import fs from "fs";
 
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -29,33 +31,67 @@ export const login = asyncHandler(async (req, res) => {
     id: user.id,
     email: user.email,
     name: user.name,
+    avatarUrl: user.avatarUrl,
     message: "Logged in successfully.",
   });
 });
 
 export const register = asyncHandler(async (req, res) => {
   let { name, email, password } = req.body;
+  const file = req.file;
+
+  const cleanupFile = () => {
+    if (file && fs.existsSync(file.path)) {
+      fs.unlinkSync(file.path);
+    }
+  };
 
   const cleanName = name?.trim();
   const cleanEmail = email?.trim();
   const cleanPassword = password?.trim();
 
   if (!cleanName || cleanName.length === 0) {
+    cleanupFile();
     throw new AppError(400, "Name cannot be empty or just spaces");
   }
 
   if (!cleanEmail || cleanEmail.length === 0) {
+    cleanupFile();
     throw new AppError(400, "Email cannot be empty");
   }
 
   if (!cleanPassword || cleanPassword.length === 0) {
+    cleanupFile();
     throw new AppError(400, "Password cannot be empty");
   }
 
   const user = await UserModel.findOne({ email });
 
   if (user) {
+    cleanupFile();
     throw new AppError(401, "User with this email already exist.");
+  }
+
+  let avatarUrl = "";
+  if (file) {
+    try {
+      const uploadRes = await cloudinary.uploader.upload(file.path, {
+        folder: "avatars",
+        transformation: [
+          { width: 60, height: 60, crop: "fill", gravity: "face" },
+          { quality: "auto", fetch_format: "auto" },
+        ],
+      });
+
+      avatarUrl = uploadRes.secure_url;
+    } catch (error) {
+      throw new AppError(
+        500,
+        "Error. We couldn't upload your photo. Try again later"
+      );
+    } finally {
+      cleanupFile();
+    }
   }
 
   const encryptedPassword = await bcrypt.hash(password, 10);
@@ -64,9 +100,10 @@ export const register = asyncHandler(async (req, res) => {
     name: cleanName,
     email: cleanEmail,
     password: encryptedPassword,
+    avatarUrl: avatarUrl,
   });
 
-  const saveUser = await newUser.save();
+  await newUser.save();
   res.status(201).json({ message: "New account created. You can log in." });
 });
 

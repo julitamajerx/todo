@@ -6,14 +6,37 @@
         <label for="name">Name: </label>
         <input id="name" type="text" formControlName="name" />
       </div>
+      
       <div class="form-element">
         <label for="email">Email: </label>
         <input id="email" type="text" formControlName="email" />
       </div>
+
       <div class="form-element">
         <label for="password">Password: </label>
         <input id="password" type="password" formControlName="password" />
       </div>
+
+      <div class="form-element">
+        <label>Profile Picture:</label>
+        <div class="file-upload-container">
+          <button type="button" class="upload-btn" (click)="fileInput.click()">Choose File</button>
+
+          <span class="file-name">
+            {{ selectedFileName || 'No file chosen' }}
+          </span>
+
+          <input
+            #fileInput
+            id="avatar"
+            type="file"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+            style="display: none"
+          />
+        </div>
+      </div>
+
       <button type="submit" [disabled]="!registerFrom.valid">Submit</button>
     </form>
   </div>
