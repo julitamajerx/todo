@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../services/user-service';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NewUserInput } from '../../shared/interfaces/user-response.interface';
 
 @Component({
   selector: 'app-register',
@@ -38,7 +37,7 @@ export class Register {
 
   protected onSubmit() {
     if (this.registerFrom.valid) {
-      const userInput: NewUserInput = this.registerFrom.getRawValue();
+      const userInput = this.registerFrom.getRawValue();
 
       const formData = new FormData();
       formData.append('name', userInput.name);

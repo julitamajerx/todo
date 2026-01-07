@@ -16,8 +16,7 @@ import { Observable, filter, switchMap, tap } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { ActionResponse, MessageResponse } from '../shared/interfaces/generic-response.interface';
 import { ToastrService } from 'ngx-toastr';
-
-type TaskQueryParams = Record<string, string | number | boolean>;
+import { TaskQueryParams } from '../shared/types/task-query-params-type';
 
 @Injectable({
   providedIn: 'root',

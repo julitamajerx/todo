@@ -96,6 +96,7 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
     });
 
     await newUser.save();
+    
     res.status(201).json({ message: "New account created. You can log in." });
   } finally {
     if (file && fs.existsSync(file.path)) {
