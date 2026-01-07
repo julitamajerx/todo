@@ -4,11 +4,11 @@ import { TagService } from '../../services/tag-service';
 import { TaskService } from '../../services/task-service';
 import { Dialog } from '@angular/cdk/dialog';
 import { Dialog as DialogWindow } from '../../core/dialog/dialog';
-import { TagsManagement } from '../../core/dialog/tags-management/tags-management';
+import { TagManagement } from '../../core/dialog/tag-management/tag-management';
 
 @Component({
   selector: 'app-tags',
-  imports: [TagsManagement],
+  imports: [TagManagement],
   templateUrl: './tags.html',
   styleUrl: './tags.css',
 })

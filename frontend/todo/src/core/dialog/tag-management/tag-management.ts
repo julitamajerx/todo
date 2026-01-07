@@ -8,12 +8,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-tags-management',
+  selector: 'app-tag-management',
   imports: [PickerComponent, CommonModule, FormsModule],
-  templateUrl: './tags-management.html',
-  styleUrl: './tags-management.css',
+  templateUrl: './tag-management.html',
+  styleUrl: './tag-management.css',
 })
-export class TagsManagement {
+export class TagManagement {
   protected tags = signal<Tag[]>([]);
   protected openEmojiPicker = false;
   protected selectedEmoji = '';
