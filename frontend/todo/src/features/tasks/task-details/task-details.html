@@ -6,6 +6,8 @@
           <li>
             <input
               type="checkbox"
+              id="taskCompleted"
+              name="isCompleted"
               [checked]="task()?.isCompleted"
               class="task-check"
               (change)="completeTask($event)"
@@ -25,7 +27,14 @@
             </button>
           </li>
           <li>
-            <input #dateInput type="date" class="datepicker-input" formControlName="dueDate" />
+            <input
+              #dateInput
+              id="taskDueDate"
+              name="dueDate"
+              type="date"
+              class="datepicker-input"
+              formControlName="dueDate"
+            />
           </li>
           <li>
             <button type="button" class="img-button" (click)="deleteTask()">
@@ -67,9 +76,9 @@
       </div>
 
       <div class="flex-container">
-        <h4>List:</h4>
+        <label for="listSelect"><h4>List:</h4></label>
         <div class="select-wrapper">
-          <select formControlName="list">
+          <select id="listSelect" name="list" formControlName="list">
             <option [ngValue]="null">-- null --</option>
             @for (list of lists(); track list._id) {
               <option [ngValue]="list._id">{{ list.name }}</option>

@@ -1,12 +1,11 @@
 import { Component, effect, inject, input } from '@angular/core';
 import { Task } from '../../../shared/models/task';
 import { TaskService } from '../../../services/task-service';
-import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-tasks-list',
-  imports: [DatePipe, FormsModule],
+  imports: [FormsModule],
   templateUrl: './tasks-list.html',
   styleUrl: './tasks-list.css',
 })

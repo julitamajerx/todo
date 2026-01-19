@@ -1,5 +1,3 @@
-<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
-
 <div class="wrapper">
   <div>
     <h2>
@@ -15,13 +13,7 @@
 
   <form (ngSubmit)="onSubmit()" #taskForm="ngForm">
     <div class="add">
-      <input
-        for="text"
-        id="newTask"
-        name="newTask"
-        placeholder=" ✚ Add task..."
-        [(ngModel)]="model.name"
-      />
+      <input id="newTask" name="newTask" placeholder=" ✚ Add task..." [(ngModel)]="model.name" />
       <button class="img-button" type="submit" [disabled]="!taskForm.form.valid">
         <img src="save.png" alt="saveTask" width="29px" height="29px" />
       </button>
@@ -37,20 +29,18 @@
           [checked]="task.isCompleted"
           class="task-check"
           (change)="completeTask($event, task._id)"
+          [attr.aria-label]="task.name"
         />
 
-        <label
+        <span
+          class="task-name-label"
           tabindex="0"
           (click)="showTaskDescription(task._id)"
           (keydown.enter)="showTaskDescription(task._id)"
           (keydown.space)="showTaskDescription(task._id)"
         >
           {{ task.name }}
-        </label>
-
-        <div class="task-date" [class.task-date-late]="taskService.checkDate(task.dueDate)">
-          {{ task.dueDate | date: 'dd.MM.yyyy' }}
-        </div>
+        </span>
       </div>
     }
 

@@ -17,13 +17,10 @@ export class AddTags {
   constructor() {
     this.tagService.getAllTags();
 
-    effect(
-      () => {
-        this.tags.set(this.tagService.tags());
-        this.localSelectedTags.set(this.tagService.selectedTags());
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      this.tags.set(this.tagService.tags());
+      this.localSelectedTags.set(this.tagService.selectedTags());
+    });
   }
 
   protected onChange(value: string) {
